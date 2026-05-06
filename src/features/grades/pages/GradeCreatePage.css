@@ -1,0 +1,551 @@
+.grade-create {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: left;
+}
+
+.grade-create__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.grade-create__back:hover {
+  color: var(--color-primary);
+}
+
+.grade-create__intro {
+  margin-bottom: 1.5rem;
+}
+
+.grade-create__intro h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.grade-create__intro p {
+  margin: 0;
+  color: var(--color-text-secondary);
+  font-size: 0.9rem;
+}
+
+/* Tabs */
+.grade-create__tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--color-border);
+  margin-bottom: 0.75rem;
+}
+
+.grade-create__tab {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  margin-bottom: -2px;
+  padding: 0.7em 1.25em;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.grade-create__tab:hover:not(:disabled) {
+  color: var(--color-text);
+  border-color: #CBD5E1;
+}
+
+.grade-create__tab--active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+  font-weight: 600;
+}
+
+.grade-create__tab-description {
+  margin: 0 0 1.5rem;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.grade-create__error {
+  margin: 0 0 1.5rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  background-color: var(--color-error-bg);
+  border: 1px solid #FECACA;
+  color: var(--color-error);
+  font-size: 0.875rem;
+}
+
+.grade-create__card {
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Single form ── */
+.grade-create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.grade-create-form__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.grade-create-form__field label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: 0.01em;
+}
+
+.grade-create-form__field input,
+.grade-create-form__field select {
+  padding: 0.6em 0.85em;
+  font-size: 0.95rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-family: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.grade-create-form__field input:focus,
+.grade-create-form__field select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-tint);
+}
+
+.grade-create-form__field input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+.grade-create-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem 1.5rem;
+}
+
+.grade-create-form__score-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.grade-create-form__score-input {
+  width: 100px;
+  padding: 0.55em 0.75em !important;
+  font-size: 1.1rem !important;
+  font-weight: 700;
+  text-align: center;
+}
+
+.grade-create-form__score-input--invalid {
+  border-color: var(--color-error) !important;
+}
+
+.grade-create-form__score-input--invalid:focus {
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15) !important;
+}
+
+.grade-create-form__score-max {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.grade-create-form__badge {
+  display: inline-block;
+  padding: 0.3em 0.8em;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.grade-create-form__badge--s { background-color: #EDE9FE; color: #7C3AED; }
+.grade-create-form__badge--a { background-color: #DCFCE7; color: #16A34A; }
+.grade-create-form__badge--b { background-color: #DBEAFE; color: #2563EB; }
+.grade-create-form__badge--c { background-color: #FEF9C3; color: #A16207; }
+.grade-create-form__badge--d { background-color: #FFEDD5; color: #C2410C; }
+.grade-create-form__badge--f { background-color: #FEE2E2; color: #DC2626; }
+
+.grade-create-form__hint {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
+}
+
+.grade-create-form__field-error {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--color-error);
+  font-weight: 500;
+}
+
+.grade-create-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.grade-create-form__submit {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.grade-create-form__submit:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+/* ── Bulk form ── */
+.grade-bulk-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.grade-bulk-form__common {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background-color: #F8FAFC;
+}
+
+.grade-bulk-form__common-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.grade-bulk-form__common-field label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: 0.01em;
+}
+
+.grade-bulk-form__common-field select {
+  padding: 0.5em 0.75em;
+  font-size: 0.875rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-family: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.grade-bulk-form__common-field select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-tint);
+}
+
+.grade-bulk-form__hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.grade-bulk-form__rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.grade-bulk-form__row {
+  display: grid;
+  grid-template-columns: 1fr 100px 36px;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.grade-bulk-form__row--header {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+  padding: 0 0.2rem;
+}
+
+.grade-bulk-form__row input,
+.grade-bulk-form__row select {
+  padding: 0.5em 0.7em;
+  font-size: 0.875rem;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-family: inherit;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.grade-bulk-form__row input:focus,
+.grade-bulk-form__row select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-tint);
+}
+
+.grade-bulk-form__input--invalid {
+  border-color: var(--color-error) !important;
+}
+
+.grade-bulk-form__remove {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  font-size: 1rem;
+  border-radius: var(--radius-md);
+  background-color: transparent;
+  border: 1.5px solid var(--color-border);
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+}
+
+.grade-bulk-form__remove:hover:not(:disabled) {
+  border-color: #FECACA;
+  color: var(--color-error);
+  background-color: var(--color-error-bg);
+}
+
+.grade-bulk-form__add {
+  align-self: flex-start;
+  background-color: transparent;
+  border: 1.5px dashed var(--color-border);
+  color: var(--color-text-secondary);
+  font-size: 0.85rem;
+  border-radius: var(--radius-md);
+  padding: 0.5em 1em;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s, background-color 0.15s;
+}
+
+.grade-bulk-form__add:hover:not(:disabled) {
+  border-style: solid;
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
+}
+
+.grade-bulk-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.grade-bulk-form__submit {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.grade-bulk-form__submit:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+@media (max-width: 600px) {
+  .grade-bulk-form__common {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .grade-bulk-form__row:not(.grade-bulk-form__row--header) {
+    grid-template-columns: 1fr 80px 36px;
+  }
+}
+
+/* ── CSV form ── */
+.grade-csv-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.grade-csv-form__hint {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.grade-csv-form__hint code {
+  padding: 0.1em 0.35em;
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border-radius: var(--radius-sm);
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.grade-csv-form__hint-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.8rem;
+}
+
+.grade-csv-form__sample {
+  margin: 0.5rem 0 0;
+  padding: 0.85rem 1rem;
+  background-color: #F8FAFC;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+  overflow-x: auto;
+}
+
+.grade-csv-form__file-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.grade-csv-form__file {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.grade-csv-form__file-button {
+  display: inline-block;
+  padding: 0.5em 1em;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+}
+
+.grade-csv-form__file-button:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.grade-csv-form__file-name {
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.grade-csv-form__errors {
+  margin: 0;
+  padding: 0.75rem 1rem 0.75rem 2rem;
+  border-radius: var(--radius-md);
+  background-color: var(--color-error-bg);
+  border: 1px solid #FECACA;
+  color: var(--color-error);
+  font-size: 0.85rem;
+}
+
+.grade-csv-form__errors li {
+  margin-bottom: 0.25rem;
+}
+
+.grade-csv-form__preview {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.grade-csv-form__preview-count {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-text-secondary);
+}
+
+.grade-csv-form__preview-table-wrapper {
+  max-height: 320px;
+  overflow: auto;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+}
+
+.grade-csv-form__preview-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.grade-csv-form__preview-table th,
+.grade-csv-form__preview-table td {
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+}
+
+.grade-csv-form__preview-table thead th {
+  position: sticky;
+  top: 0;
+  background-color: #F8FAFC;
+  border-bottom: 1px solid var(--color-border);
+  font-weight: 600;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+}
+
+.grade-csv-form__preview-table tbody tr {
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.grade-csv-form__preview-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.grade-csv-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.grade-csv-form__submit {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+.grade-csv-form__submit:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
