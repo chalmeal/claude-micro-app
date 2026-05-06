@@ -90,3 +90,12 @@
   color: var(--color-primary);
   transform: translateX(3px);
 }
+
+@media (max-width: 767px) {
+  .admin-page {
+    padding: 1rem;
+  }
+  .admin-page__intro h1 {
+    font-size: 1.35rem;
+  }
+}

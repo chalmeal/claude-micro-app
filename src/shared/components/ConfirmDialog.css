@@ -7,7 +7,7 @@
   display: grid;
   place-items: center;
   padding: 1.5rem;
-  z-index: 200;
+  z-index: 300;
   animation: backdrop-in 0.15s ease;
 }
 

@@ -183,3 +183,9 @@
   cursor: not-allowed;
   box-shadow: none;
 }
+
+@media (max-width: 767px) {
+  .announcement-form-page {
+    padding: 1rem;
+  }
+}

@@ -311,3 +311,131 @@
   background-color: #FEE2E2;
   color: #DC2626;
 }
+
+@media (max-width: 767px) {
+  .grades-page {
+    padding: 1rem;
+  }
+  .grades-page__intro {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .grades-page__intro h1 {
+    font-size: 1.35rem;
+  }
+
+  /* ── Card layout ── */
+  .grade-list {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: visible;
+    border-radius: 0;
+  }
+  .grade-list__table thead {
+    display: none;
+  }
+  .grade-list__table,
+  .grade-list__table tbody {
+    display: block;
+  }
+  .grade-list__table td::before {
+    display: none;
+  }
+
+  /* Row → Card (CSS Grid) */
+  .grade-list__table tbody tr {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "name    score"
+      "subject badge"
+      "meta    badge";
+    column-gap: 0.875rem;
+    row-gap: 0.15rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(15, 23, 42, 0.07),
+                0 4px 12px rgba(15, 23, 42, 0.04);
+    padding: 0.875rem 1rem;
+    margin-bottom: 0.5rem;
+    transition: box-shadow 0.15s, background-color 0.12s;
+  }
+  .grade-list__table tbody tr:last-child {
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .grade-list__row--clickable:active {
+    background-color: var(--color-primary-light);
+    box-shadow: none;
+  }
+
+  /* 学生名 */
+  .grade-list__table td:nth-child(1) {
+    grid-area: name;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--color-text);
+    padding: 0;
+    border: none;
+  }
+  /* 科目 */
+  .grade-list__table td:nth-child(2) {
+    grid-area: subject;
+    font-size: 0.8rem;
+    color: var(--color-text-secondary);
+    padding: 0;
+    border: none;
+  }
+  /* 点数 */
+  .grade-list__table td:nth-child(3) {
+    grid-area: score;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--color-text);
+    font-variant-numeric: tabular-nums;
+    padding: 0;
+    border: none;
+    justify-self: end;
+    align-self: center;
+    min-width: 2.375rem;
+    text-align: center;
+  }
+  /* 評価バッジ */
+  .grade-list__table td:nth-child(4) {
+    grid-area: badge;
+    padding: 0;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+  }
+  .grade-list__table td:nth-child(4) .grade-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.375rem;
+    height: 2.375rem;
+    border-radius: 50%;
+    font-size: 1.05rem;
+    font-weight: 800;
+    padding: 0;
+    min-width: unset;
+    letter-spacing: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  }
+  /* 年度 — hidden */
+  .grade-list__table td:nth-child(5) {
+    display: none;
+  }
+  /* 学期 */
+  .grade-list__table td:nth-child(6) {
+    grid-area: meta;
+    font-size: 0.75rem;
+    color: var(--color-text-tertiary);
+    padding: 0;
+    border: none;
+  }
+}

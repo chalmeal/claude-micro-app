@@ -246,3 +246,9 @@
   cursor: not-allowed;
   box-shadow: none;
 }
+
+@media (max-width: 767px) {
+  .grade-edit {
+    padding: 1rem;
+  }
+}

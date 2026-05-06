@@ -35,15 +35,17 @@ const ICONS: Record<string, JSX.Element> = {
 type Props = {
   collapsed: boolean
   onToggle: () => void
+  mobileOpen: boolean
+  onMobileClose: () => void
 }
 
-export function Sidebar({ collapsed, onToggle }: Props) {
+export function Sidebar({ collapsed, onToggle, mobileOpen, onMobileClose }: Props) {
   const { isAdmin } = useAuth()
   const visibleNavigation = navigation.filter((item) => !item.adminOnly || isAdmin)
 
   return (
     <nav
-      className={`app-sidebar${collapsed ? ' app-sidebar--collapsed' : ''}`}
+      className={`app-sidebar${collapsed ? ' app-sidebar--collapsed' : ''}${mobileOpen ? ' app-sidebar--mobile-open' : ''}`}
       aria-label="メインナビゲーション"
     >
       <button
@@ -68,6 +70,7 @@ export function Sidebar({ collapsed, onToggle }: Props) {
               to={item.to}
               end={item.end}
               title={collapsed ? item.label : undefined}
+              onClick={onMobileClose}
               className={({ isActive }) =>
                 `app-sidebar__link${isActive ? ' app-sidebar__link--active' : ''}`
               }

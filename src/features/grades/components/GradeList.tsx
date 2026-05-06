@@ -57,16 +57,16 @@ export function GradeList({ grades }: Props) {
               onClick={() => navigate(`/grades/${grade.id}`)}
               onKeyDown={(e) => handleRowKeyDown(e, grade.id)}
             >
-              <td>{grade.studentName}</td>
-              <td>{grade.subject}</td>
-              <td className="grade-list__score">{grade.score}</td>
-              <td>
+              <td data-label="学生名">{grade.studentName}</td>
+              <td data-label="科目">{grade.subject}</td>
+              <td data-label="点数" className="grade-list__score">{grade.score}</td>
+              <td data-label="評価">
                 <span className={`grade-badge ${letterColors[grade.letter]}`}>
                   {grade.letter}
                 </span>
               </td>
-              <td className="grade-list__year">{grade.year}</td>
-              <td>{semesterLabel[grade.semester]}</td>
+              <td data-label="年度" className="grade-list__year">{grade.year}</td>
+              <td data-label="学期">{semesterLabel[grade.semester]}</td>
             </tr>
           ))}
         </tbody>

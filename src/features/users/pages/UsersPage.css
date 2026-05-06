@@ -281,3 +281,64 @@
 .status--inactive {
   color: var(--color-text-tertiary);
 }
+
+@media (max-width: 767px) {
+  .users-page {
+    padding: 1rem;
+  }
+  .users-page__intro {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .users-page__intro h1 {
+    font-size: 1.35rem;
+  }
+
+  /* Table → Card */
+  .user-list {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow: visible;
+    border-radius: 0;
+  }
+  .user-list__table thead {
+    display: none;
+  }
+  .user-list__table,
+  .user-list__table tbody {
+    display: block;
+  }
+  .user-list__table tbody tr {
+    display: block;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+  }
+  .user-list__table tbody tr:last-child {
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 0;
+  }
+  .user-list__table td {
+    display: flex;
+    align-items: center;
+    padding: 0.3rem 0;
+    border: none;
+    font-size: 0.875rem;
+  }
+  .user-list__table td::before {
+    content: attr(data-label);
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    min-width: 6.5rem;
+    flex-shrink: 0;
+  }
+  .user-list__email {
+    word-break: break-all;
+  }
+}

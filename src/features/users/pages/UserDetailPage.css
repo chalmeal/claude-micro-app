@@ -201,3 +201,9 @@
   border-color: var(--color-primary-hover);
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
 }
+
+@media (max-width: 767px) {
+  .user-detail {
+    padding: 1rem;
+  }
+}

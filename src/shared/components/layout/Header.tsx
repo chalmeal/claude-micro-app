@@ -3,7 +3,11 @@ import { appConfig } from '@/app/config'
 import { useAuth } from '@/features/auth'
 import { SettingsDialog } from '@/shared/components/SettingsDialog'
 
-export function Header() {
+type Props = {
+  onMenuClick: () => void
+}
+
+export function Header({ onMenuClick }: Props) {
   const { user, logout } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -30,7 +34,20 @@ export function Header() {
   return (
     <>
       <header className="app-header">
-        <span className="app-header__brand">{appConfig.name}</span>
+        <div className="app-header__left">
+          <button
+            className="app-header__menu-btn"
+            onClick={onMenuClick}
+            aria-label="メニューを開く"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <line x1="3" y1="12" x2="21" y2="12" />
+              <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+          </button>
+          <span className="app-header__brand">{appConfig.name}</span>
+        </div>
 
         <div className="app-header__user" ref={menuRef}>
           <button

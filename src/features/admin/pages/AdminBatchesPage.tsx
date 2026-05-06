@@ -97,11 +97,11 @@ export function AdminBatchesPage() {
                 const isRerunning = rerunning.has(job.id)
                 return (
                   <tr key={job.id}>
-                    <td className="admin-batches__name">
+                    <td data-label="バッチ名" className="admin-batches__name">
                       <span>{job.name}</span>
                       <span className="admin-batches__desc">{job.description}</span>
                     </td>
-                    <td>
+                    <td data-label="ステータス">
                       <span className="admin-batches__status" style={{ color: st.color }}>
                         <span
                           className={`admin-batches__dot${job.status === 'running' ? ' admin-batches__dot--pulse' : ''}`}
@@ -110,9 +110,9 @@ export function AdminBatchesPage() {
                         {st.label}
                       </span>
                     </td>
-                    <td className="admin-batches__muted">{job.lastRunAt ?? '—'}</td>
-                    <td className="admin-batches__muted">{formatDuration(job.lastDuration)}</td>
-                    <td className="admin-batches__muted">{scheduleLabel(job)}</td>
+                    <td data-label="最終実行" className="admin-batches__muted">{job.lastRunAt ?? '—'}</td>
+                    <td data-label="所要時間" className="admin-batches__muted">{formatDuration(job.lastDuration)}</td>
+                    <td data-label="スケジュール" className="admin-batches__muted">{scheduleLabel(job)}</td>
                     <td>
                       <div className="admin-batches__actions">
                         <button

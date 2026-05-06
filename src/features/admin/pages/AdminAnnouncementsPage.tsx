@@ -82,13 +82,13 @@ export function AdminAnnouncementsPage() {
               ) : (
                 list.map((item) => (
                   <tr key={item.id}>
-                    <td className="admin-announcements__title">{item.title}</td>
-                    <td>
+                    <td data-label="タイトル" className="admin-announcements__title">{item.title}</td>
+                    <td data-label="カテゴリ">
                       <span className={`announcement-badge announcement-badge--${item.category}`}>
                         {CATEGORY_LABELS[item.category]}
                       </span>
                     </td>
-                    <td className="admin-announcements__date">{item.date}</td>
+                    <td data-label="日付" className="admin-announcements__date">{item.date}</td>
                     <td className="admin-announcements__actions">
                       <Link
                         to={`/admin/announcements/${item.id}/edit`}

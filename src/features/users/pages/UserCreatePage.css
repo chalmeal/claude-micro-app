@@ -437,3 +437,9 @@
   background-color: var(--color-primary-hover);
   border-color: var(--color-primary-hover);
 }
+
+@media (max-width: 767px) {
+  .user-create {
+    padding: 1rem;
+  }
+}

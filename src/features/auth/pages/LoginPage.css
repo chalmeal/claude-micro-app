@@ -99,3 +99,14 @@
   border-color: var(--color-primary-hover);
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
 }
+
+@media (max-width: 767px) {
+  .login-page {
+    padding: 1.5rem;
+  }
+  .login-page__card {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 2rem 1.5rem;
+  }
+}

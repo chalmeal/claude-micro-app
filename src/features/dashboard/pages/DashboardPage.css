@@ -66,3 +66,12 @@
 .dashboard__view-all:hover {
   opacity: 0.75;
 }
+
+@media (max-width: 767px) {
+  .dashboard {
+    padding: 1rem;
+  }
+  .dashboard__intro h1 {
+    font-size: 1.35rem;
+  }
+}

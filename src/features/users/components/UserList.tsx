@@ -56,20 +56,20 @@ export function UserList({ users }: Props) {
               onClick={() => navigateToDetail(user.id)}
               onKeyDown={(e) => handleRowKeyDown(e, user.id)}
             >
-              <td>{user.name}</td>
-              <td className="user-list__email">{user.email}</td>
-              <td>
+              <td data-label="名前">{user.name}</td>
+              <td data-label="メールアドレス" className="user-list__email">{user.email}</td>
+              <td data-label="ロール">
                 <span className={`badge badge--role-${user.role}`}>
                   {roleLabel[user.role]}
                 </span>
               </td>
-              <td>
+              <td data-label="ステータス">
                 <span className={`status status--${user.status}`}>
                   <span className="status__dot" aria-hidden="true" />
                   {statusLabel[user.status]}
                 </span>
               </td>
-              <td className="user-list__date">{user.createdAt}</td>
+              <td data-label="登録日" className="user-list__date">{user.createdAt}</td>
             </tr>
           ))}
         </tbody>
