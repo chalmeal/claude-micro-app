@@ -7,6 +7,7 @@ import { GradesPage, GradeDetailPage, GradeEditPage, GradeCreatePage } from '@/f
 import { UsersPage, UserDetailPage, UserCreatePage } from '@/features/users'
 import { AppLayout } from '@/shared/components/layout/AppLayout'
 import { ProtectedRoute } from '@/shared/components/ProtectedRoute'
+import { AdminRoute } from '@/shared/components/AdminRoute'
 
 export const router = createBrowserRouter([
   {
@@ -23,18 +24,18 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <DashboardPage /> },
       { path: 'announcements', element: <AnnouncementsPage /> },
-      { path: 'admin', element: <AdminPage /> },
-      { path: 'admin/announcements', element: <AdminAnnouncementsPage /> },
-      { path: 'admin/announcements/new', element: <AdminAnnouncementFormPage /> },
-      { path: 'admin/announcements/:id/edit', element: <AdminAnnouncementFormPage /> },
-      { path: 'admin/batches', element: <AdminBatchesPage /> },
+      { path: 'admin', element: <AdminRoute><AdminPage /></AdminRoute> },
+      { path: 'admin/announcements', element: <AdminRoute><AdminAnnouncementsPage /></AdminRoute> },
+      { path: 'admin/announcements/new', element: <AdminRoute><AdminAnnouncementFormPage /></AdminRoute> },
+      { path: 'admin/announcements/:id/edit', element: <AdminRoute><AdminAnnouncementFormPage /></AdminRoute> },
+      { path: 'admin/batches', element: <AdminRoute><AdminBatchesPage /></AdminRoute> },
       { path: 'grades', element: <GradesPage /> },
       { path: 'grades/new', element: <GradeCreatePage /> },
       { path: 'grades/:id', element: <GradeDetailPage /> },
       { path: 'grades/:id/edit', element: <GradeEditPage /> },
-      { path: 'users', element: <UsersPage /> },
-      { path: 'users/new', element: <UserCreatePage /> },
-      { path: 'users/:id', element: <UserDetailPage /> },
+      { path: 'users', element: <AdminRoute><UsersPage /></AdminRoute> },
+      { path: 'users/new', element: <AdminRoute><UserCreatePage /></AdminRoute> },
+      { path: 'users/:id', element: <AdminRoute><UserDetailPage /></AdminRoute> },
     ],
   },
   {

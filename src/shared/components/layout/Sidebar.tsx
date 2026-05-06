@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import { navigation } from '@/app/navigation'
+import { useAuth } from '@/features/auth'
 
 const ICONS: Record<string, JSX.Element> = {
   dashboard: (
@@ -37,6 +38,9 @@ type Props = {
 }
 
 export function Sidebar({ collapsed, onToggle }: Props) {
+  const { isAdmin } = useAuth()
+  const visibleNavigation = navigation.filter((item) => !item.adminOnly || isAdmin)
+
   return (
     <nav
       className={`app-sidebar${collapsed ? ' app-sidebar--collapsed' : ''}`}
@@ -58,7 +62,7 @@ export function Sidebar({ collapsed, onToggle }: Props) {
       </button>
 
       <ul className="app-sidebar__list">
-        {navigation.map((item) => (
+        {visibleNavigation.map((item) => (
           <li key={item.to}>
             <NavLink
               to={item.to}

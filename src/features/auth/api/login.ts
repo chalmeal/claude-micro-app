@@ -14,6 +14,7 @@ export async function login(credentials: LoginCredentials): Promise<User> {
   return {
     id: crypto.randomUUID(),
     email: credentials.email,
+    role: credentials.email.toLowerCase().includes('admin') ? 'admin' : 'user',
   }
 }
 
