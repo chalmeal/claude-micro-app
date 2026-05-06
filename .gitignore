@@ -12,6 +12,9 @@ dist-ssr
 *.local
 *.tsbuildinfo
 
+# Claude Code
+.claude/settings.local.json
+
 # Editor
 .vscode/*
 !.vscode/extensions.json

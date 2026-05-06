@@ -4,29 +4,55 @@
 
 ## プロジェクト概要
 
-Vite + React 18 + TypeScript で構築した小規模アプリケーション。Claude Code による AI 駆動セットアップ・機能追加を前提としています。
+**npm workspaces** によるモノレポ構成。現時点では `frontend` パッケージのみ実装済み。`backend` は今後追加予定。
+
+## モノレポ構成
+
+```
+claude-micro-app/          # ルート(workspaces 管理)
+├── package.json           # npm workspaces の定義
+├── frontend/              # React アプリ(Vite + React 18 + TypeScript)
+│   ├── package.json
+│   ├── index.html
+│   ├── vite.config.ts
+│   ├── tsconfig*.json
+│   ├── eslint.config.js
+│   └── src/
+└── backend/               # (未実装)将来のバックエンド
+```
 
 ## 開発コマンド
 
+### ルートから全体を操作
+
 | コマンド | 説明 |
 | --- | --- |
-| `npm run dev` | 開発サーバ起動(http://localhost:5173) |
-| `npm run build` | `tsc -b` による型チェック後に Vite で本番ビルド |
-| `npm run lint` | ESLint(flat config)で静的解析 |
-| `npm run preview` | ビルド成果物のローカルプレビュー |
+| `npm run dev` | frontend 開発サーバ起動(http://localhost:5173) |
+| `npm run build` | frontend 本番ビルド |
+| `npm run lint` | frontend ESLint 実行 |
+| `npm run preview` | frontend ビルド成果物のローカルプレビュー |
+
+### frontend ディレクトリで直接実行する場合
+
+```bash
+cd frontend
+npm run dev / build / lint / preview
+```
 
 変更後は最低限 `npm run lint` と `npm run build` の両方を通すこと。
 
-## アーキテクチャ
+## frontend アーキテクチャ
 
 **features-based(機能スライス型)** を採用。1機能 = 1フォルダで凝集度を高く保つことを最優先する。
 
 ### ディレクトリ構成
 
 ```
-src/
-├── App.tsx                                  # ルート画面のレイアウト
-├── main.tsx                                 # エントリ + ErrorBoundary
+frontend/src/
+├── app/                                     # ルーター・ナビゲーション設定
+│   ├── config.ts
+│   ├── navigation.ts
+│   └── router.tsx
 ├── features/                                # 機能スライス
 │   └── <feature>/
 │       ├── components/                      # 機能のUI
@@ -34,11 +60,16 @@ src/
 │       ├── types.ts                         # (必要時)機能の型定義
 │       ├── api.ts                           # (必要時)機能のAPI呼び出し
 │       └── index.ts                         # 公開API(barrel)
-└── shared/                                  # 機能横断の共通部品
-    └── components/
+├── shared/                                  # 機能横断の共通部品
+│   ├── api/
+│   ├── components/
+│   ├── hooks/
+│   └── types.ts
+├── index.css
+└── main.tsx                                 # エントリ + ErrorBoundary
 ```
 
-将来的に汎用 UI 部品が増えたら `src/components/ui/`(Button, Input など)を新設する。
+将来的に汎用 UI 部品が増えたら `frontend/src/components/ui/`(Button, Input など)を新設する。
 
 ### レイヤー間の依存ルール
 
@@ -49,7 +80,7 @@ src/
 
 ### パスエイリアス
 
-`@/*` → `src/*` を設定済み([tsconfig.app.json](tsconfig.app.json), [vite.config.ts](vite.config.ts))。深い相対パス(`../../`)は使わず、エイリアスを使う。
+`@/*` → `src/*` を設定済み([frontend/tsconfig.app.json](frontend/tsconfig.app.json), [frontend/vite.config.ts](frontend/vite.config.ts))。深い相対パス(`../../`)は使わず、エイリアスを使う。
 
 ```ts
 import { Counter } from '@/features/counter'
@@ -67,22 +98,22 @@ import { ErrorBoundary } from '@/shared/components/ErrorBoundary'
 
 ### スタイル
 
-- 現在は素の CSS(`App.css`, `index.css`)。コンポーネントスコープのスタイルが必要になったら CSS Modules を検討する
+- 現在は素の CSS(`frontend/src/index.css`)。コンポーネントスコープのスタイルが必要になったら CSS Modules を検討する
 
 ### エラーハンドリング
 
-- アプリ全体は [src/shared/components/ErrorBoundary.tsx](src/shared/components/ErrorBoundary.tsx) で [src/main.tsx](src/main.tsx) からラップ済み
+- アプリ全体は [frontend/src/shared/components/ErrorBoundary.tsx](frontend/src/shared/components/ErrorBoundary.tsx) で [frontend/src/main.tsx](frontend/src/main.tsx) からラップ済み
 - 機能スコープでフォールバックUIが必要な場合は、その機能内に追加の ErrorBoundary を配置する
 
-## 機能を追加するときの手順
+## 機能を追加するときの手順(frontend)
 
-1. `src/features/<feature>/` を作成
+1. `frontend/src/features/<feature>/` を作成
 2. `hooks/` にロジック、`components/` に UI を配置
 3. `index.ts` で外部公開する API(コンポーネント・フック)を再エクスポート
 4. 利用側は `import { X } from '@/features/<feature>'` で参照
-5. `npm run lint` と `npm run build` を通す
+5. ルートから `npm run lint` と `npm run build` を通す
 
-参考実装: [src/features/counter/](src/features/counter/)
+参考実装: [frontend/src/features/counter/](frontend/src/features/counter/)
 
 ## やらないこと
 
