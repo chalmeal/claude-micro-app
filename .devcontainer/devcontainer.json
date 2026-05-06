@@ -1,0 +1,10 @@
+{
+    "name": "claude-micro-app",
+    "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+    "workspaceFolder": "/workspaces/claude-micro-app",
+    "features": {
+      "ghcr.io/devcontainers/features/node:1": {},
+      "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
+    "postCreateCommand": "npm install && bash .devcontainer/install.sh",
+  }

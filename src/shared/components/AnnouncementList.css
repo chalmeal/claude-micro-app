@@ -1,0 +1,167 @@
+/* Announcement list */
+.announcement-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.announcement-list__empty {
+  margin: 0;
+  padding: 2.5rem;
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-tertiary);
+  text-align: center;
+  font-size: 0.875rem;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Announcement item */
+.announcement-item {
+  display: flex;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.announcement-item:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* Colored left accent bar */
+.announcement-item__accent {
+  flex-shrink: 0;
+  width: 4px;
+}
+
+.announcement-item__accent--important  { background-color: #EF4444; }
+.announcement-item__accent--info        { background-color: var(--color-primary); }
+.announcement-item__accent--maintenance { background-color: #F59E0B; }
+
+.announcement-item__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Toggle button — entire header row is clickable */
+.announcement-item__toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  padding: 1.1rem 1.25rem;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  transition: background-color 0.15s;
+}
+
+.announcement-item__toggle:hover {
+  background-color: var(--color-primary-light);
+}
+
+.announcement-item__header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.announcement-item__date {
+  margin-left: auto;
+  font-size: 0.78rem;
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.announcement-item__title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Chevron icon */
+.announcement-item__chevron {
+  flex-shrink: 0;
+  color: var(--color-text-tertiary);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.announcement-item__chevron--open {
+  transform: rotate(180deg);
+}
+
+/* Expandable content */
+.announcement-item__content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.announcement-item__content--open {
+  grid-template-rows: 1fr;
+}
+
+.announcement-item__content-inner {
+  overflow: hidden;
+  min-height: 0;
+}
+
+.announcement-item__text {
+  margin: 0;
+  padding: 0.9rem 1.25rem 1.1rem;
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  border-top: 1px solid var(--color-border-subtle);
+}
+
+/* Category badge */
+.announcement-badge {
+  display: inline-block;
+  padding: 0.18em 0.6em;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  flex-shrink: 0;
+}
+
+.announcement-badge--important   { background-color: #FEF2F2; color: #EF4444; }
+.announcement-badge--info        { background-color: var(--color-primary-tint); color: var(--color-primary); }
+.announcement-badge--maintenance { background-color: #FFFBEB; color: #D97706; }
+
+/* Skeleton */
+.announcement-item--skeleton {
+  height: 62px;
+  background: linear-gradient(90deg, #F1F5F9 0%, #E2E8F0 50%, #F1F5F9 100%);
+  background-size: 200% 100%;
+  animation: announcement-skeleton-pulse 1.4s infinite;
+  border: 1px solid var(--color-border);
+  box-shadow: none;
+}
+
+@keyframes announcement-skeleton-pulse {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}

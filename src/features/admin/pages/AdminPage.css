@@ -1,0 +1,92 @@
+.admin-page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: left;
+}
+
+.admin-page__intro {
+  margin-bottom: 2rem;
+}
+
+.admin-page__intro h1 {
+  margin: 0 0 0.25rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.admin-page__intro p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+}
+
+.admin-page__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+/* Card */
+.admin-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  color: inherit;
+  transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+}
+
+.admin-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--color-primary-tint);
+}
+
+.admin-card__icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.admin-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-card__title {
+  margin: 0 0 0.2rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+}
+
+.admin-card__desc {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--color-text-secondary);
+}
+
+.admin-card__arrow {
+  color: var(--color-text-tertiary);
+  flex-shrink: 0;
+  transition: color 0.15s, transform 0.2s;
+}
+
+.admin-card:hover .admin-card__arrow {
+  color: var(--color-primary);
+  transform: translateX(3px);
+}
