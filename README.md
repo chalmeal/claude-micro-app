@@ -1,72 +1,109 @@
 # claude-micro-app
 
-Claude Code + React Micro application
+Claude Code + React / Hono のフルスタック Micro アプリケーション
 
-## はじめに
+## 概要
 
-本リポジトリはClaude Codeを使用してReact Micro applicationを作成します。AI駆動によるセットアップを行うことができ、プロジェクトを立ち上げを迅速に行うことができます。
+npm workspaces によるモノレポ構成。フロントエンド（React）とバックエンド（Hono + MySQL）で構成されます。
 
 ## 環境構築
+
+Dev Container（Docker Compose）での起動を推奨します。VS Code の「Reopen in Container」で起動すると、MySQL を含む開発環境が自動的にセットアップされます。
+
+コンテナ起動後に依存関係をインストールします。
 
 ```bash
 npm install
 ```
 
-## 実行
+## 開発サーバの起動
 
 ```bash
+# フロントエンド（http://localhost:5173）
 npm run dev
+
+# バックエンド（http://localhost:3000）
+npm run dev:backend
 ```
 
-## アーキテクチャ
-
-本リポジトリは小規模アプリ向けに **features-based(機能スライス型)** アーキテクチャを採用しています。1つの機能(feature)ごとに 1 フォルダを割り当て、UI・ロジック・型などの関心事を機能単位で凝集させます。
-
-### ディレクトリ構成
-
-```
-src/
-├── App.tsx                                  # ルート画面のレイアウト
-├── main.tsx                                 # エントリ + ErrorBoundary
-├── features/                                # 機能スライス
-│   └── counter/
-│       ├── components/Counter.tsx           # 機能のUI
-│       ├── hooks/useCounter.ts              # 機能のロジック
-│       └── index.ts                         # 機能の公開API(barrel)
-└── shared/                                  # 機能横断の共通部品
-    └── components/ErrorBoundary.tsx
-```
-
-### 各レイヤーの責務
-
-| レイヤー | 責務 | 例 |
-| --- | --- | --- |
-| `features/<feature>/` | 1機能で閉じる UI・ロジック・型・API 呼び出し | `features/counter/` |
-| `shared/` | 複数 feature で共有する純粋な部品やユーティリティ | `ErrorBoundary` |
-| `components/ui/`(必要時に新設) | デザインシステム的な汎用 UI 部品 | `Button`, `Input` |
-| `App.tsx` / `main.tsx` | アプリ全体の構成・初期化 | ルーティング、Provider |
-
-### 機能を追加するときのルール
-
-- 新機能は `src/features/<feature>/` に 1 フォルダで追加し、`components/`・`hooks/`・必要なら `types.ts` / `api.ts` を同梱する
-- 機能の外部公開 API は `features/<feature>/index.ts`(barrel)に集約する
-- features 同士の直接 import は避け、共有が必要なら `shared/` に切り出す
-- 汎用 UI 部品が増えてきたら `src/components/ui/` を新設する
-
-### パスエイリアス
-
-`@/*` → `src/*` のエイリアスを設定済みです。深い相対パスは避け、エイリアスを使用してください。
-
-```ts
-import { Counter } from '@/features/counter'
-import { ErrorBoundary } from '@/shared/components/ErrorBoundary'
-```
-
-## スクリプト
+## スクリプト一覧
 
 | コマンド | 説明 |
 | --- | --- |
-| `npm run dev` | 開発サーバを起動(http://localhost:5173) |
-| `npm run build` | 型チェック + 本番ビルド |
-| `npm run lint` | ESLint による静的解析 |
-| `npm run preview` | ビルド成果物のローカルプレビュー |
+| `npm run dev` | フロントエンド開発サーバを起動 |
+| `npm run dev:backend` | バックエンド開発サーバを起動 |
+| `npm run build` | フロントエンド + バックエンドを本番ビルド |
+| `npm run lint` | フロントエンド ESLint を実行 |
+| `npm run preview` | フロントエンドビルド成果物のローカルプレビュー |
+
+## API ドキュメント
+
+バックエンド起動後、以下の URL で Swagger UI を確認できます。
+
+| URL | 内容 |
+| --- | --- |
+| http://localhost:3000/docs | Swagger UI |
+| http://localhost:3000/openapi.json | OpenAPI スペック（JSON） |
+
+「Authorize」ボタンに `/api/auth/login` で取得した JWT を入力することで、認証が必要なエンドポイントも試せます。
+
+## アーキテクチャ
+
+### モノレポ構成
+
+```
+claude-micro-app/
+├── package.json        # npm workspaces の定義
+├── frontend/           # React アプリ（Vite + React 18 + TypeScript）
+└── backend/            # Hono API サーバ（Node.js + TypeScript）
+```
+
+### フロントエンド
+
+**features-based（機能スライス型）** アーキテクチャを採用。1機能 = 1フォルダで凝集度を高く保ちます。
+
+```
+frontend/src/
+├── app/                # ルーター・ナビゲーション設定
+├── features/           # 機能スライス（機能ごとに components / hooks / index.ts）
+├── shared/             # 機能横断の共通部品
+├── index.css
+└── main.tsx            # エントリ + ErrorBoundary
+```
+
+### バックエンド
+
+**features-based** で統一。各機能が routes / service / repository の 3 層で構成されます。
+
+```
+backend/src/
+├── features/           # 機能スライス（routes / service / repository）
+│   ├── auth/           # 認証・パスワード変更
+│   ├── users/          # ユーザー管理（管理者専用）
+│   ├── grades/         # 成績管理
+│   ├── announcements/  # お知らせ管理
+│   └── batches/        # バッチジョブ管理（管理者専用）
+├── db/                 # Drizzle ORM スキーマ・接続設定
+├── shared/             # 共通ミドルウェア・エラー・型定義
+├── lib/                # JWT・パスワードユーティリティ
+├── app.ts              # Hono アプリ生成・ルーティング登録
+└── index.ts            # サーバ起動エントリ
+```
+
+### 技術スタック
+
+| 項目 | フロントエンド | バックエンド |
+| --- | --- | --- |
+| 言語 | TypeScript | TypeScript |
+| フレームワーク | React 18 | Hono |
+| ビルド | Vite | tsc |
+| DB | — | MySQL 8.0 + Drizzle ORM |
+| 認証 | — | JWT（Bearer トークン） |
+| バリデーション | — | Zod |
+| API ドキュメント | — | Swagger UI（`@hono/zod-openapi`） |
+
+### 認証フロー
+
+1. `POST /api/auth/login` でメールアドレスとパスワードを送信して JWT を取得
+2. 以降のリクエストは `Authorization: Bearer <token>` ヘッダで認証
+3. 管理者専用エンドポイントはさらに `role: admin` を検証
