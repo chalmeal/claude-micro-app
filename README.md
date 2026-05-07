@@ -10,20 +10,66 @@ npm workspaces によるモノレポ構成。フロントエンド（React）と
 
 Dev Container（Docker Compose）での起動を推奨します。VS Code の「Reopen in Container」で起動すると、MySQL を含む開発環境が自動的にセットアップされます。
 
-コンテナ起動後に依存関係をインストールします。
+## 初回セットアップ
+
+コンテナ起動後、以下の手順を順番に実行してください。
+
+### 1. 依存関係のインストール
 
 ```bash
 npm install
 ```
 
-## 開発サーバの起動
+### 2. DB マイグレーション
+
+Drizzle のマイグレーションを適用してテーブルを作成します。
 
 ```bash
-# フロントエンド（http://localhost:5173）
-npm run dev
+npm run db:migrate -w backend
+```
 
+### 3. 初期データの投入
+
+ユーザー 50 件・お知らせ 15 件・成績 3,000 件のサンプルデータを投入します。
+
+```bash
+npm run db:seed -w backend
+```
+
+### 4. 開発サーバの起動
+
+フロントエンドとバックエンドをそれぞれ別ターミナルで起動します。
+
+```bash
 # バックエンド（http://localhost:3000）
 npm run dev:backend
+
+# フロントエンド（http://localhost:5173）
+npm run dev
+```
+
+### 5. ログイン
+
+ブラウザで http://localhost:5173 を開き、以下のアカウントでログインします。
+
+| メールアドレス | パスワード | ロール |
+| --- | --- | --- |
+| `admin@example.com` | `password123` | 管理者 |
+| `taro.yamada@example.com` | `password123` | メンバー |
+
+> シードで作成したすべてのユーザーのパスワードは `password123` です。  
+> ログイン後、「パスワード変更」から変更できます。
+
+---
+
+## 開発サーバの起動（2 回目以降）
+
+```bash
+# バックエンド（http://localhost:3000）
+npm run dev:backend
+
+# フロントエンド（http://localhost:5173）
+npm run dev
 ```
 
 ## スクリプト一覧
@@ -35,6 +81,10 @@ npm run dev:backend
 | `npm run build` | フロントエンド + バックエンドを本番ビルド |
 | `npm run lint` | フロントエンド ESLint を実行 |
 | `npm run preview` | フロントエンドビルド成果物のローカルプレビュー |
+| `npm run db:migrate -w backend` | DB マイグレーションを適用 |
+| `npm run db:seed -w backend` | サンプルデータを投入 |
+| `npm run db:generate -w backend` | スキーマ変更からマイグレーションファイルを生成 |
+| `npm run db:studio -w backend` | Drizzle Studio（DB GUI）を起動 |
 
 ## API ドキュメント
 

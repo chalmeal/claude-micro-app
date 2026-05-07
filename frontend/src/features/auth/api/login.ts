@@ -1,34 +1,27 @@
+import { apiFetch, setToken } from '@/shared/api/client'
 import type { LoginCredentials, User } from '@/features/auth/types'
 
+type LoginResponse = {
+  token: string
+  user: { id: string; name: string; email: string; role: 'admin' | 'member' }
+}
+
 export async function login(credentials: LoginCredentials): Promise<User> {
-  await new Promise((resolve) => setTimeout(resolve, 500))
-
-  if (!credentials.email || !credentials.password) {
-    throw new Error('メールアドレスとパスワードを入力してください')
-  }
-
-  if (credentials.password.length < 4) {
-    throw new Error('パスワードは4文字以上で入力してください')
-  }
-
-  return {
-    id: crypto.randomUUID(),
-    email: credentials.email,
-    role: credentials.email.toLowerCase().includes('admin') ? 'admin' : 'user',
-  }
+  const res = await apiFetch<LoginResponse>('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify(credentials),
+  })
+  setToken(res.token)
+  return { id: res.user.id, name: res.user.name, email: res.user.email, role: res.user.role }
 }
 
 export async function logout(): Promise<void> {
-  await new Promise((resolve) => setTimeout(resolve, 100))
+  // no backend endpoint; token cleared by AuthProvider
 }
 
 export async function changePassword(currentPassword: string, newPassword: string): Promise<void> {
-  await new Promise((resolve) => setTimeout(resolve, 600))
-
-  if (currentPassword.length < 4) {
-    throw new Error('現在のパスワードが正しくありません')
-  }
-  if (newPassword.length < 8) {
-    throw new Error('新しいパスワードは8文字以上で入力してください')
-  }
+  await apiFetch('/auth/change-password', {
+    method: 'POST',
+    body: JSON.stringify({ currentPassword, newPassword }),
+  })
 }

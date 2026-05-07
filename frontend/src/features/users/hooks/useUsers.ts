@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getUsers } from '@/features/users/api/getUsers'
+import { isAbortError } from '@/shared/api/client'
 import type { User } from '@/features/users/types'
 
 type UsersData = {
@@ -14,25 +15,22 @@ export function useUsers(): UsersData {
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
-    let cancelled = false
+    const controller = new AbortController()
 
     async function load() {
       try {
-        const data = await getUsers()
-        if (!cancelled) setUsers(data)
+        const data = await getUsers(controller.signal)
+        setUsers(data)
+        setLoading(false)
       } catch (err) {
-        if (!cancelled) {
-          setError(err instanceof Error ? err : new Error(String(err)))
-        }
-      } finally {
-        if (!cancelled) setLoading(false)
+        if (isAbortError(err)) return
+        setError(err instanceof Error ? err : new Error(String(err)))
+        setLoading(false)
       }
     }
 
     load()
-    return () => {
-      cancelled = true
-    }
+    return () => controller.abort()
   }, [])
 
   return { users, loading, error }

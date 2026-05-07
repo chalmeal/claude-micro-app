@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getGradeById, getGradesByStudentAndSubject } from '@/features/grades/api/getGrades'
+import { isAbortError } from '@/shared/api/client'
 import type { Grade } from '@/features/grades/types'
 
 type GradeData = {
@@ -19,41 +20,35 @@ export function useGrade(id: string | undefined): GradeData {
 
   useEffect(() => {
     if (!id) return
-
-    let cancelled = false
+    const controller = new AbortController()
+    const { signal } = controller
 
     async function load() {
       try {
-        const data = await getGradeById(id!)
-        if (!cancelled) {
-          setGrade(data)
-          setError(null)
-        }
-        if (data && !cancelled) {
-          const allTerms = await getGradesByStudentAndSubject(data.studentId, data.subject)
-          if (!cancelled) {
-            setAllTermGrades(allTerms)
-            const currentIndex = allTerms.findIndex((g) => g.id === data.id)
-            setPreviousGrade(
-              currentIndex >= 0 && currentIndex < allTerms.length - 1
-                ? allTerms[currentIndex + 1]
-                : null,
-            )
-          }
+        const data = await getGradeById(id!, signal)
+        setGrade(data)
+        setError(null)
+
+        if (data) {
+          const allTerms = await getGradesByStudentAndSubject(data.studentId, data.subject, signal)
+          setAllTermGrades(allTerms)
+          const currentIndex = allTerms.findIndex((g) => g.id === data.id)
+          setPreviousGrade(
+            currentIndex >= 0 && currentIndex < allTerms.length - 1
+              ? allTerms[currentIndex + 1]
+              : null,
+          )
         }
       } catch (err) {
-        if (!cancelled) {
-          setError(err instanceof Error ? err : new Error(String(err)))
-        }
+        if (isAbortError(err)) return
+        setError(err instanceof Error ? err : new Error(String(err)))
       } finally {
-        if (!cancelled) setLoading(false)
+        if (!signal.aborted) setLoading(false)
       }
     }
 
     load()
-    return () => {
-      cancelled = true
-    }
+    return () => controller.abort()
   }, [id])
 
   if (!id)

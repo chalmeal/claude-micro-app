@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { Announcement } from '@/shared/types'
 import { getDashboardAnnouncements } from '@/features/dashboard/api/getDashboardData'
+import { isAbortError } from '@/shared/api/client'
 
 type DashboardData = {
   announcements: Announcement[]
@@ -14,22 +15,20 @@ export function useDashboard(): DashboardData {
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
-    let cancelled = false
+    const controller = new AbortController()
 
-    getDashboardAnnouncements()
+    getDashboardAnnouncements(controller.signal)
       .then((data) => {
-        if (!cancelled) setAnnouncements(data)
+        setAnnouncements(data)
+        setLoading(false)
       })
       .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err : new Error(String(err)))
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false)
+        if (isAbortError(err)) return
+        setError(err instanceof Error ? err : new Error(String(err)))
+        setLoading(false)
       })
 
-    return () => {
-      cancelled = true
-    }
+    return () => controller.abort()
   }, [])
 
   return { announcements, loading, error }

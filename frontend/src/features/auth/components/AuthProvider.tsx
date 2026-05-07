@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import * as authApi from '@/features/auth/api/login'
+import { clearToken } from '@/shared/api/client'
 import { AuthContext, type AuthContextValue } from '@/features/auth/hooks/authContext'
 import type { LoginCredentials, User } from '@/features/auth/types'
 
@@ -32,6 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(async () => {
     await authApi.logout()
+    clearToken()
     setUser(null)
   }, [])
 

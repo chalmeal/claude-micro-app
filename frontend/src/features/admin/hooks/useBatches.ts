@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { BatchJob } from '@/features/admin/types'
 import { getBatches } from '@/features/admin/api/batches'
+import { isAbortError } from '@/shared/api/client'
 
 type Result = {
   batches: BatchJob[]
@@ -15,23 +16,22 @@ export function useBatches(): Result {
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
-    let cancelled = false
+    const controller = new AbortController()
 
     async function load() {
       try {
-        const data = await getBatches()
-        if (!cancelled) setBatches(data)
+        const data = await getBatches(controller.signal)
+        setBatches(data)
+        setLoading(false)
       } catch (err) {
-        if (!cancelled) setError(err instanceof Error ? err : new Error(String(err)))
-      } finally {
-        if (!cancelled) setLoading(false)
+        if (isAbortError(err)) return
+        setError(err instanceof Error ? err : new Error(String(err)))
+        setLoading(false)
       }
     }
 
     load()
-    return () => {
-      cancelled = true
-    }
+    return () => controller.abort()
   }, [])
 
   return { batches, loading, error, setBatches }

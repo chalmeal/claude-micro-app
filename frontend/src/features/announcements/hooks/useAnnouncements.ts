@@ -4,6 +4,7 @@ import {
   getAnnouncements,
   getRecentAnnouncements,
 } from '@/features/announcements/api/getAnnouncements'
+import { isAbortError } from '@/shared/api/client'
 
 type AnnouncementsData = {
   announcements: Announcement[]
@@ -12,36 +13,37 @@ type AnnouncementsData = {
 }
 
 export function useAnnouncements(): AnnouncementsData {
-  return useAnnouncementsBase(() => getAnnouncements())
+  return useAnnouncementsBase((signal) => getAnnouncements(signal))
 }
 
 export function useRecentAnnouncements(limit = 5): AnnouncementsData {
-  return useAnnouncementsBase(() => getRecentAnnouncements(limit))
+  return useAnnouncementsBase((signal) => getRecentAnnouncements(limit, signal))
 }
 
-function useAnnouncementsBase(fetcher: () => Promise<Announcement[]>): AnnouncementsData {
+function useAnnouncementsBase(
+  fetcher: (signal: AbortSignal) => Promise<Announcement[]>,
+): AnnouncementsData {
   const [announcements, setAnnouncements] = useState<Announcement[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
-    let cancelled = false
+    const controller = new AbortController()
 
     async function load() {
       try {
-        const data = await fetcher()
-        if (!cancelled) setAnnouncements(data)
+        const data = await fetcher(controller.signal)
+        setAnnouncements(data)
+        setLoading(false)
       } catch (err) {
-        if (!cancelled) setError(err instanceof Error ? err : new Error(String(err)))
-      } finally {
-        if (!cancelled) setLoading(false)
+        if (isAbortError(err)) return
+        setError(err instanceof Error ? err : new Error(String(err)))
+        setLoading(false)
       }
     }
 
     load()
-    return () => {
-      cancelled = true
-    }
+    return () => controller.abort()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

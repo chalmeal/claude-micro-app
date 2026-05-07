@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { getUserById } from '@/features/users/api/getUsers'
+import { isAbortError } from '@/shared/api/client'
 import type { User } from '@/features/users/types'
 
 type UserData = {
@@ -17,29 +18,23 @@ export function useUser(id: string | undefined): UserData {
 
   useEffect(() => {
     if (!id) return
-
-    let cancelled = false
+    const controller = new AbortController()
 
     async function load() {
       try {
-        const data = await getUserById(id!)
-        if (!cancelled) {
-          setUser(data)
-          setError(null)
-          setLoading(false)
-        }
+        const data = await getUserById(id!, controller.signal)
+        setUser(data)
+        setError(null)
+        setLoading(false)
       } catch (err) {
-        if (!cancelled) {
-          setError(err instanceof Error ? err : new Error(String(err)))
-          setLoading(false)
-        }
+        if (isAbortError(err)) return
+        setError(err instanceof Error ? err : new Error(String(err)))
+        setLoading(false)
       }
     }
 
     load()
-    return () => {
-      cancelled = true
-    }
+    return () => controller.abort()
   }, [id, reloadCounter])
 
   const refetch = useCallback(() => {
