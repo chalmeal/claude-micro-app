@@ -56,6 +56,7 @@ export function useGrade(id: string | undefined): GradeData {
     }
   }, [id])
 
-  if (!id) return { grade: null, previousGrade: null, allTermGrades: [], loading: false, error: null }
+  if (!id)
+    return { grade: null, previousGrade: null, allTermGrades: [], loading: false, error: null }
   return { grade, previousGrade, allTermGrades, loading, error }
 }

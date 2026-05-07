@@ -3,7 +3,7 @@
   display: grid;
   place-items: center;
   padding: 2rem;
-  background: linear-gradient(135deg, #EFF6FF 0%, #F1F5F9 50%, #EEF2FF 100%);
+  background: linear-gradient(135deg, #eff6ff 0%, #f1f5f9 50%, #eef2ff 100%);
 }
 
 .login-page__card {
@@ -58,7 +58,9 @@
   border: 1.5px solid var(--color-border);
   background-color: var(--color-surface);
   color: var(--color-text);
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .login-form__field input:focus {
@@ -76,13 +78,13 @@
   padding: 0.65em 0.9em;
   border-radius: var(--radius-md);
   background-color: var(--color-error-bg);
-  border: 1px solid #FECACA;
+  border: 1px solid #fecaca;
   color: var(--color-error);
   font-size: 0.85rem;
 }
 
 /* Override global button for login submit */
-.login-form button[type='submit'] {
+.login-form button[type="submit"] {
   width: 100%;
   padding: 0.7em 1em;
   font-size: 0.95rem;
@@ -94,7 +96,7 @@
   margin-top: 0.25rem;
 }
 
-.login-form button[type='submit']:hover:not(:disabled) {
+.login-form button[type="submit"]:hover:not(:disabled) {
   background-color: var(--color-primary-hover);
   border-color: var(--color-primary-hover);
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);

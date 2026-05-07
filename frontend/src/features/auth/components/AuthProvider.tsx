@@ -1,15 +1,6 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import * as authApi from '@/features/auth/api/login'
-import {
-  AuthContext,
-  type AuthContextValue,
-} from '@/features/auth/hooks/authContext'
+import { AuthContext, type AuthContextValue } from '@/features/auth/hooks/authContext'
 import type { LoginCredentials, User } from '@/features/auth/types'
 
 const STORAGE_KEY = 'claude-micro-app:auth-user'
@@ -44,12 +35,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null)
   }, [])
 
-  const changePassword = useCallback(
-    async (currentPassword: string, newPassword: string) => {
-      await authApi.changePassword(currentPassword, newPassword)
-    },
-    [],
-  )
+  const changePassword = useCallback(async (currentPassword: string, newPassword: string) => {
+    await authApi.changePassword(currentPassword, newPassword)
+  }, [])
 
   const value = useMemo<AuthContextValue>(
     () => ({

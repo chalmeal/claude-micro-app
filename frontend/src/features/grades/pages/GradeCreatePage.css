@@ -58,12 +58,14 @@
   font-weight: 500;
   color: var(--color-text-secondary);
   cursor: pointer;
-  transition: color 0.15s, border-color 0.15s;
+  transition:
+    color 0.15s,
+    border-color 0.15s;
 }
 
 .grade-create__tab:hover:not(:disabled) {
   color: var(--color-text);
-  border-color: #CBD5E1;
+  border-color: #cbd5e1;
 }
 
 .grade-create__tab--active {
@@ -83,7 +85,7 @@
   padding: 0.75rem 1rem;
   border-radius: var(--radius-md);
   background-color: var(--color-error-bg);
-  border: 1px solid #FECACA;
+  border: 1px solid #fecaca;
   color: var(--color-error);
   font-size: 0.875rem;
 }
@@ -125,7 +127,9 @@
   background-color: var(--color-surface);
   color: var(--color-text);
   font-family: inherit;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .grade-create-form__field input:focus,
@@ -180,12 +184,30 @@
   font-weight: 700;
 }
 
-.grade-create-form__badge--s { background-color: #EDE9FE; color: #7C3AED; }
-.grade-create-form__badge--a { background-color: #DCFCE7; color: #16A34A; }
-.grade-create-form__badge--b { background-color: #DBEAFE; color: #2563EB; }
-.grade-create-form__badge--c { background-color: #FEF9C3; color: #A16207; }
-.grade-create-form__badge--d { background-color: #FFEDD5; color: #C2410C; }
-.grade-create-form__badge--f { background-color: #FEE2E2; color: #DC2626; }
+.grade-create-form__badge--s {
+  background-color: #ede9fe;
+  color: #7c3aed;
+}
+.grade-create-form__badge--a {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+.grade-create-form__badge--b {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+.grade-create-form__badge--c {
+  background-color: #fef9c3;
+  color: #a16207;
+}
+.grade-create-form__badge--d {
+  background-color: #ffedd5;
+  color: #c2410c;
+}
+.grade-create-form__badge--f {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
 
 .grade-create-form__hint {
   margin: 0;
@@ -234,7 +256,7 @@
   padding: 1rem 1.25rem;
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
-  background-color: #F8FAFC;
+  background-color: #f8fafc;
 }
 
 .grade-bulk-form__common-field {
@@ -258,7 +280,9 @@
   background-color: var(--color-surface);
   color: var(--color-text);
   font-family: inherit;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .grade-bulk-form__common-field select:focus {
@@ -306,7 +330,9 @@
   font-family: inherit;
   width: 100%;
   box-sizing: border-box;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .grade-bulk-form__row input:focus,
@@ -333,7 +359,7 @@
 }
 
 .grade-bulk-form__remove:hover:not(:disabled) {
-  border-color: #FECACA;
+  border-color: #fecaca;
   color: var(--color-error);
   background-color: var(--color-error-bg);
 }
@@ -347,7 +373,10 @@
   border-radius: var(--radius-md);
   padding: 0.5em 1em;
   cursor: pointer;
-  transition: border-color 0.15s, color 0.15s, background-color 0.15s;
+  transition:
+    border-color 0.15s,
+    color 0.15s,
+    background-color 0.15s;
 }
 
 .grade-bulk-form__add:hover:not(:disabled) {
@@ -416,7 +445,7 @@
 .grade-csv-form__sample {
   margin: 0.5rem 0 0;
   padding: 0.85rem 1rem;
-  background-color: #F8FAFC;
+  background-color: #f8fafc;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   font-size: 0.8rem;
@@ -452,7 +481,9 @@
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: border-color 0.15s, background-color 0.15s;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
 }
 
 .grade-csv-form__file-button:hover {
@@ -471,7 +502,7 @@
   padding: 0.75rem 1rem 0.75rem 2rem;
   border-radius: var(--radius-md);
   background-color: var(--color-error-bg);
-  border: 1px solid #FECACA;
+  border: 1px solid #fecaca;
   color: var(--color-error);
   font-size: 0.85rem;
 }
@@ -514,7 +545,7 @@
 .grade-csv-form__preview-table thead th {
   position: sticky;
   top: 0;
-  background-color: #F8FAFC;
+  background-color: #f8fafc;
   border-bottom: 1px solid var(--color-border);
   font-weight: 600;
   font-size: 0.72rem;

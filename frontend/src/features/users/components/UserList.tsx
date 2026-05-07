@@ -57,11 +57,11 @@ export function UserList({ users }: Props) {
               onKeyDown={(e) => handleRowKeyDown(e, user.id)}
             >
               <td data-label="名前">{user.name}</td>
-              <td data-label="メールアドレス" className="user-list__email">{user.email}</td>
+              <td data-label="メールアドレス" className="user-list__email">
+                {user.email}
+              </td>
               <td data-label="ロール">
-                <span className={`badge badge--role-${user.role}`}>
-                  {roleLabel[user.role]}
-                </span>
+                <span className={`badge badge--role-${user.role}`}>{roleLabel[user.role]}</span>
               </td>
               <td data-label="ステータス">
                 <span className={`status status--${user.status}`}>
@@ -69,7 +69,9 @@ export function UserList({ users }: Props) {
                   {statusLabel[user.status]}
                 </span>
               </td>
-              <td data-label="登録日" className="user-list__date">{user.createdAt}</td>
+              <td data-label="登録日" className="user-list__date">
+                {user.createdAt}
+              </td>
             </tr>
           ))}
         </tbody>

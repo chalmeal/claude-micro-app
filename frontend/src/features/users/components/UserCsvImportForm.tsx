@@ -28,9 +28,7 @@ export function UserCsvImportForm({ onSubmit, onCancel, submitting }: Props) {
       setParseErrors(result.errors)
     } catch (err) {
       setParseErrors([
-        `ファイルの読み込みに失敗しました: ${
-          err instanceof Error ? err.message : String(err)
-        }`,
+        `ファイルの読み込みに失敗しました: ${err instanceof Error ? err.message : String(err)}`,
       ])
     }
   }
@@ -60,9 +58,7 @@ export function UserCsvImportForm({ onSubmit, onCancel, submitting }: Props) {
           className="csv-form__file"
         />
         <span className="csv-form__file-button">ファイルを選択</span>
-        <span className="csv-form__file-name">
-          {fileName || '選択されていません'}
-        </span>
+        <span className="csv-form__file-name">{fileName || '選択されていません'}</span>
       </label>
 
       {parseErrors.length > 0 && (
@@ -75,9 +71,7 @@ export function UserCsvImportForm({ onSubmit, onCancel, submitting }: Props) {
 
       {rows.length > 0 && (
         <div className="csv-form__preview">
-          <p className="csv-form__preview-count">
-            {rows.length} 件のユーザーが取り込まれます
-          </p>
+          <p className="csv-form__preview-count">{rows.length} 件のユーザーが取り込まれます</p>
           <div className="csv-form__preview-table-wrapper">
             <table className="csv-form__preview-table">
               <thead>
@@ -112,11 +106,7 @@ export function UserCsvImportForm({ onSubmit, onCancel, submitting }: Props) {
           className="csv-form__submit"
           disabled={rows.length === 0 || submitting}
         >
-          {submitting
-            ? '登録中...'
-            : rows.length > 0
-              ? `${rows.length} 件を登録`
-              : '登録'}
+          {submitting ? '登録中...' : rows.length > 0 ? `${rows.length} 件を登録` : '登録'}
         </button>
       </div>
     </form>

@@ -28,7 +28,8 @@ export const authService = {
     if (!user) throw new UnauthorizedError()
     const valid = await comparePassword(input.currentPassword, user.passwordHash)
     if (!valid) throw new BadRequestError('Current password is incorrect')
-    if (input.newPassword.length < 8) throw new BadRequestError('Password must be at least 8 characters')
+    if (input.newPassword.length < 8)
+      throw new BadRequestError('Password must be at least 8 characters')
     const passwordHash = await hashPassword(input.newPassword)
     await authRepository.updatePasswordHash(user.id, passwordHash)
   },

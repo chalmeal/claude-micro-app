@@ -19,7 +19,10 @@ export const announcementsRepository = {
 
   create: async (data: NewAnnouncement): Promise<Announcement> => {
     await db.insert(announcements).values(data)
-    const [created] = await db.select().from(announcements).where(eq(announcements.id, data.id as string))
+    const [created] = await db
+      .select()
+      .from(announcements)
+      .where(eq(announcements.id, data.id as string))
     return created
   },
 

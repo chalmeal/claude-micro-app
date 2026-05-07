@@ -46,14 +46,16 @@ export function GradeCsvImportForm({ onSubmit, submitting }: Props) {
   return (
     <form className="grade-csv-form" onSubmit={handleSubmit}>
       <div className="grade-csv-form__hint">
-        ヘッダー行に <code>studentName,subject,score,year,semester</code> を含む CSV ファイルを選択してください。
+        ヘッダー行に <code>studentName,subject,score,year,semester</code> を含む CSV
+        ファイルを選択してください。
         <br />
         例:
         <pre className="grade-csv-form__sample">{`studentName,subject,score,year,semester
 田中 太郎,数学I,85,2024,spring
 鈴木 花子,英語,72,2024,fall`}</pre>
         <p className="grade-csv-form__hint-note">
-          semester は <code>spring</code>（前期）または <code>fall</code>（後期）を指定してください。
+          semester は <code>spring</code>（前期）または <code>fall</code>
+          （後期）を指定してください。
         </p>
       </div>
 
@@ -65,9 +67,7 @@ export function GradeCsvImportForm({ onSubmit, submitting }: Props) {
           className="grade-csv-form__file"
         />
         <span className="grade-csv-form__file-button">ファイルを選択</span>
-        <span className="grade-csv-form__file-name">
-          {fileName || '選択されていません'}
-        </span>
+        <span className="grade-csv-form__file-name">{fileName || '選択されていません'}</span>
       </label>
 
       {parseErrors.length > 0 && (
@@ -80,9 +80,7 @@ export function GradeCsvImportForm({ onSubmit, submitting }: Props) {
 
       {rows.length > 0 && (
         <div className="grade-csv-form__preview">
-          <p className="grade-csv-form__preview-count">
-            {rows.length} 件の成績が取り込まれます
-          </p>
+          <p className="grade-csv-form__preview-count">{rows.length} 件の成績が取り込まれます</p>
           <div className="grade-csv-form__preview-table-wrapper">
             <table className="grade-csv-form__preview-table">
               <thead>
@@ -116,11 +114,7 @@ export function GradeCsvImportForm({ onSubmit, submitting }: Props) {
           className="grade-csv-form__submit"
           disabled={rows.length === 0 || submitting}
         >
-          {submitting
-            ? '登録中...'
-            : rows.length > 0
-              ? `${rows.length} 件を登録`
-              : '登録'}
+          {submitting ? '登録中...' : rows.length > 0 ? `${rows.length} 件を登録` : '登録'}
         </button>
       </div>
     </form>

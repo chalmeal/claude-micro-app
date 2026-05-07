@@ -77,7 +77,11 @@ describe('gradesService.create', () => {
 describe('gradesService.update', () => {
   it('score 更新時に letter を再計算する', async () => {
     vi.mocked(repo.gradesRepository.findById).mockResolvedValue(mockGrade)
-    vi.mocked(repo.gradesRepository.update).mockResolvedValue({ ...mockGrade, score: 55, letter: 'D' })
+    vi.mocked(repo.gradesRepository.update).mockResolvedValue({
+      ...mockGrade,
+      score: 55,
+      letter: 'D',
+    })
 
     const result = await gradesService.update('grade-1', 55)
 

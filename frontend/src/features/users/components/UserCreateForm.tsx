@@ -17,10 +17,7 @@ const initialValues: CreateUserInput = {
 export function UserCreateForm({ onSubmit, onCancel, submitting }: Props) {
   const [values, setValues] = useState<CreateUserInput>(initialValues)
 
-  function update<K extends keyof CreateUserInput>(
-    key: K,
-    value: CreateUserInput[K],
-  ) {
+  function update<K extends keyof CreateUserInput>(key: K, value: CreateUserInput[K]) {
     setValues((prev) => ({ ...prev, [key]: value }))
   }
 
@@ -60,9 +57,7 @@ export function UserCreateForm({ onSubmit, onCancel, submitting }: Props) {
         <select
           id="create-role"
           value={values.role}
-          onChange={(e) =>
-            update('role', e.target.value as CreateUserInput['role'])
-          }
+          onChange={(e) => update('role', e.target.value as CreateUserInput['role'])}
         >
           <option value="member">メンバー</option>
           <option value="admin">管理者</option>
@@ -74,9 +69,7 @@ export function UserCreateForm({ onSubmit, onCancel, submitting }: Props) {
         <select
           id="create-status"
           value={values.status}
-          onChange={(e) =>
-            update('status', e.target.value as CreateUserInput['status'])
-          }
+          onChange={(e) => update('status', e.target.value as CreateUserInput['status'])}
         >
           <option value="active">有効</option>
           <option value="inactive">無効</option>
@@ -87,11 +80,7 @@ export function UserCreateForm({ onSubmit, onCancel, submitting }: Props) {
         <button type="button" onClick={onCancel} disabled={submitting}>
           キャンセル
         </button>
-        <button
-          type="submit"
-          className="user-create-form__submit"
-          disabled={submitting}
-        >
+        <button type="submit" className="user-create-form__submit" disabled={submitting}>
           {submitting ? '登録中...' : '登録'}
         </button>
       </div>

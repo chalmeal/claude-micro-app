@@ -38,10 +38,7 @@ export function GradeEditPage() {
 
   const parsedScore = parseInt(scoreInput, 10)
   const isValidScore =
-    !isNaN(parsedScore) &&
-    Number.isInteger(parsedScore) &&
-    parsedScore >= 0 &&
-    parsedScore <= 100
+    !isNaN(parsedScore) && Number.isInteger(parsedScore) && parsedScore >= 0 && parsedScore <= 100
   const previewLetter = isValidScore ? scoreToLetter(parsedScore) : null
   const isDirty = isValidScore && grade !== null && parsedScore !== grade.score
 
@@ -138,17 +135,10 @@ export function GradeEditPage() {
             </div>
 
             <div className="grade-edit__actions">
-              <Link
-                to={`/grades/${grade.id}`}
-                className="grade-edit__cancel"
-              >
+              <Link to={`/grades/${grade.id}`} className="grade-edit__cancel">
                 キャンセル
               </Link>
-              <button
-                type="submit"
-                className="grade-edit__submit"
-                disabled={!isDirty || saving}
-              >
+              <button type="submit" className="grade-edit__submit" disabled={!isDirty || saving}>
                 {saving ? '保存中...' : '保存'}
               </button>
             </div>

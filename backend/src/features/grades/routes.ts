@@ -54,7 +54,8 @@ const createGradeRoute = createRoute({
   path: '/',
   tags: ['Grades'],
   summary: '成績登録',
-  description: '学生の成績を新規登録します。スコアに応じて評価（S/A/B/C/D/F）が自動で付与されます。',
+  description:
+    '学生の成績を新規登録します。スコアに応じて評価（S/A/B/C/D/F）が自動で付与されます。',
   security,
   request: {
     body: {

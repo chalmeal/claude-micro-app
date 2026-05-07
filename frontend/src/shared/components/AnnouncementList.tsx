@@ -57,7 +57,9 @@ function AnnouncementItem({ item }: { item: Announcement }) {
           </svg>
         </button>
 
-        <div className={`announcement-item__content${expanded ? ' announcement-item__content--open' : ''}`}>
+        <div
+          className={`announcement-item__content${expanded ? ' announcement-item__content--open' : ''}`}
+        >
           <div className="announcement-item__content-inner">
             <p className="announcement-item__text">{item.body}</p>
           </div>

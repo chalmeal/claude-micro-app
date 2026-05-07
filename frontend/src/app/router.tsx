@@ -1,6 +1,11 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
 import { LoginPage } from '@/features/auth'
-import { AdminPage, AdminAnnouncementsPage, AdminAnnouncementFormPage, AdminBatchesPage } from '@/features/admin'
+import {
+  AdminPage,
+  AdminAnnouncementsPage,
+  AdminAnnouncementFormPage,
+  AdminBatchesPage,
+} from '@/features/admin'
 import { AnnouncementsPage } from '@/features/announcements'
 import { DashboardPage } from '@/features/dashboard'
 import { GradesPage, GradeDetailPage, GradeEditPage, GradeCreatePage } from '@/features/grades'
@@ -24,18 +29,74 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <DashboardPage /> },
       { path: 'announcements', element: <AnnouncementsPage /> },
-      { path: 'admin', element: <AdminRoute><AdminPage /></AdminRoute> },
-      { path: 'admin/announcements', element: <AdminRoute><AdminAnnouncementsPage /></AdminRoute> },
-      { path: 'admin/announcements/new', element: <AdminRoute><AdminAnnouncementFormPage /></AdminRoute> },
-      { path: 'admin/announcements/:id/edit', element: <AdminRoute><AdminAnnouncementFormPage /></AdminRoute> },
-      { path: 'admin/batches', element: <AdminRoute><AdminBatchesPage /></AdminRoute> },
+      {
+        path: 'admin',
+        element: (
+          <AdminRoute>
+            <AdminPage />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: 'admin/announcements',
+        element: (
+          <AdminRoute>
+            <AdminAnnouncementsPage />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: 'admin/announcements/new',
+        element: (
+          <AdminRoute>
+            <AdminAnnouncementFormPage />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: 'admin/announcements/:id/edit',
+        element: (
+          <AdminRoute>
+            <AdminAnnouncementFormPage />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: 'admin/batches',
+        element: (
+          <AdminRoute>
+            <AdminBatchesPage />
+          </AdminRoute>
+        ),
+      },
       { path: 'grades', element: <GradesPage /> },
       { path: 'grades/new', element: <GradeCreatePage /> },
       { path: 'grades/:id', element: <GradeDetailPage /> },
       { path: 'grades/:id/edit', element: <GradeEditPage /> },
-      { path: 'users', element: <AdminRoute><UsersPage /></AdminRoute> },
-      { path: 'users/new', element: <AdminRoute><UserCreatePage /></AdminRoute> },
-      { path: 'users/:id', element: <AdminRoute><UserDetailPage /></AdminRoute> },
+      {
+        path: 'users',
+        element: (
+          <AdminRoute>
+            <UsersPage />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: 'users/new',
+        element: (
+          <AdminRoute>
+            <UserCreatePage />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: 'users/:id',
+        element: (
+          <AdminRoute>
+            <UserDetailPage />
+          </AdminRoute>
+        ),
+      },
     ],
   },
   {

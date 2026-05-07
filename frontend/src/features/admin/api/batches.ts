@@ -78,7 +78,11 @@ const RUNS: Record<string, BatchRun[]> = {
       logs: [
         { timestamp: '03:00:00', level: 'info', message: 'バッチ処理を開始します' },
         { timestamp: '03:00:01', level: 'info', message: 'データベース接続を確立しました' },
-        { timestamp: '03:00:02', level: 'info', message: 'ユーザーレコード 1,284 件を取得しました' },
+        {
+          timestamp: '03:00:02',
+          level: 'info',
+          message: 'ユーザーレコード 1,284 件を取得しました',
+        },
         { timestamp: '03:00:10', level: 'info', message: '差分 32 件を更新しました' },
         { timestamp: '03:00:12', level: 'info', message: 'バッチ処理が正常に完了しました' },
       ],
@@ -115,10 +119,14 @@ const RUNS: Record<string, BatchRun[]> = {
       status: 'failed',
       duration: 31,
       logs: [
-        { timestamp: '06:00:00', level: 'info',  message: 'バッチ処理を開始します' },
-        { timestamp: '06:00:01', level: 'info',  message: 'レポートデータを収集中...' },
-        { timestamp: '06:00:15', level: 'warn',  message: 'メールサーバーへの接続が遅延しています' },
-        { timestamp: '06:00:30', level: 'error', message: 'メールサーバーへの接続がタイムアウトしました (smtp.example.com:587)' },
+        { timestamp: '06:00:00', level: 'info', message: 'バッチ処理を開始します' },
+        { timestamp: '06:00:01', level: 'info', message: 'レポートデータを収集中...' },
+        { timestamp: '06:00:15', level: 'warn', message: 'メールサーバーへの接続が遅延しています' },
+        {
+          timestamp: '06:00:30',
+          level: 'error',
+          message: 'メールサーバーへの接続がタイムアウトしました (smtp.example.com:587)',
+        },
         { timestamp: '06:00:31', level: 'error', message: 'バッチ処理が失敗しました' },
       ],
     },
@@ -172,7 +180,11 @@ const RUNS: Record<string, BatchRun[]> = {
       logs: [
         { timestamp: '01:00:00', level: 'info', message: 'バックアップを開始します' },
         { timestamp: '01:00:10', level: 'info', message: 'データベースダンプを作成中...' },
-        { timestamp: '01:00:45', level: 'info', message: 'ストレージへのアップロード完了 (2.3 GB)' },
+        {
+          timestamp: '01:00:45',
+          level: 'info',
+          message: 'ストレージへのアップロード完了 (2.3 GB)',
+        },
         { timestamp: '01:00:47', level: 'info', message: 'バックアップが正常に完了しました' },
       ],
     },
@@ -196,15 +208,17 @@ export async function rerunBatch(batchId: string): Promise<void> {
   const now = new Date().toISOString().replace('T', ' ').slice(0, 19)
   store = store.map((b) =>
     b.id === batchId
-      ? { ...b, status: 'success', lastRunAt: now, lastDuration: Math.floor(Math.random() * 20) + 5 }
+      ? {
+          ...b,
+          status: 'success',
+          lastRunAt: now,
+          lastDuration: Math.floor(Math.random() * 20) + 5,
+        }
       : b,
   )
 }
 
-export async function updateBatchSchedule(
-  batchId: string,
-  schedule: BatchSchedule,
-): Promise<void> {
+export async function updateBatchSchedule(batchId: string, schedule: BatchSchedule): Promise<void> {
   await new Promise((r) => setTimeout(r, D))
   store = store.map((b) =>
     b.id === batchId ? { ...b, schedule, nextRunAt: computeNextRunAt(schedule) } : b,

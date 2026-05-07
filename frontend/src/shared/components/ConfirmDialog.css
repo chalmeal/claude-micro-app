@@ -12,8 +12,12 @@
 }
 
 @keyframes backdrop-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .confirm-dialog {
@@ -22,7 +26,9 @@
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg), 0 24px 48px rgba(15, 23, 42, 0.12);
+  box-shadow:
+    var(--shadow-lg),
+    0 24px 48px rgba(15, 23, 42, 0.12);
   padding: 1.75rem 1.75rem 1.5rem;
   animation: dialog-in 0.18s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -69,12 +75,14 @@
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
-  transition: background-color 0.15s, border-color 0.15s;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
 }
 
 .confirm-dialog__cancel:hover {
-  background-color: #F8FAFC;
-  border-color: #CBD5E1;
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
 }
 
 .confirm-dialog__confirm {
@@ -88,7 +96,9 @@
   font-family: inherit;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
-  transition: background-color 0.15s, box-shadow 0.15s;
+  transition:
+    background-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .confirm-dialog__confirm:hover {
@@ -104,7 +114,7 @@
 }
 
 .confirm-dialog__confirm--danger:hover {
-  background-color: #B91C1C;
-  border-color: #B91C1C;
+  background-color: #b91c1c;
+  border-color: #b91c1c;
   box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
 }

@@ -62,9 +62,7 @@ export async function getAnnouncementById(id: string): Promise<Announcement | un
   return store.find((a) => a.id === id)
 }
 
-export async function createAnnouncement(
-  data: Omit<Announcement, 'id'>,
-): Promise<Announcement> {
+export async function createAnnouncement(data: Omit<Announcement, 'id'>): Promise<Announcement> {
   await new Promise((r) => setTimeout(r, DELAY))
   const item: Announcement = { ...data, id: crypto.randomUUID() }
   store = [item, ...store]

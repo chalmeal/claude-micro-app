@@ -29,7 +29,9 @@ export function useBatches(): Result {
     }
 
     load()
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   return { batches, loading, error, setBatches }

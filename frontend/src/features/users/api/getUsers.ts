@@ -1,17 +1,41 @@
-import type {
-  CreateUserInput,
-  UpdateUserPatch,
-  User,
-} from '@/features/users/types'
+import type { CreateUserInput, UpdateUserPatch, User } from '@/features/users/types'
 
 const FAMILY_NAMES = [
-  '田中', '鈴木', '佐藤', '高橋', '山田', '伊藤', '渡辺', '中村',
-  '小林', '加藤', '吉田', '山本', '松本', '井上', '木村', '林',
+  '田中',
+  '鈴木',
+  '佐藤',
+  '高橋',
+  '山田',
+  '伊藤',
+  '渡辺',
+  '中村',
+  '小林',
+  '加藤',
+  '吉田',
+  '山本',
+  '松本',
+  '井上',
+  '木村',
+  '林',
 ]
 
 const GIVEN_NAMES = [
-  '太郎', '花子', '次郎', '三郎', '美咲', '健', '由美', '大輔',
-  'さくら', '翔', '美穂', '亮', '結衣', '優', '智子', '健太',
+  '太郎',
+  '花子',
+  '次郎',
+  '三郎',
+  '美咲',
+  '健',
+  '由美',
+  '大輔',
+  'さくら',
+  '翔',
+  '美穂',
+  '亮',
+  '結衣',
+  '優',
+  '智子',
+  '健太',
 ]
 
 function pad(n: number) {
@@ -44,10 +68,7 @@ export async function getUserById(id: string): Promise<User | null> {
   return MOCK_USERS.find((u) => u.id === id) ?? null
 }
 
-export async function updateUser(
-  id: string,
-  patch: UpdateUserPatch,
-): Promise<User> {
+export async function updateUser(id: string, patch: UpdateUserPatch): Promise<User> {
   await new Promise((resolve) => setTimeout(resolve, 300))
   const target = MOCK_USERS.find((u) => u.id === id)
   if (!target) {
@@ -65,8 +86,7 @@ export async function createUser(input: CreateUserInput): Promise<User> {
     throw new Error('このメールアドレスは既に使用されています')
   }
 
-  const nextId =
-    MOCK_USERS.reduce((max, u) => Math.max(max, Number(u.id)), 0) + 1
+  const nextId = MOCK_USERS.reduce((max, u) => Math.max(max, Number(u.id)), 0) + 1
   const today = new Date().toISOString().slice(0, 10)
 
   const newUser: User = {
@@ -100,21 +120,16 @@ export async function createUsers(inputs: CreateUserInput[]): Promise<User[]> {
       throw new Error(`${rowLabel}: メールアドレスが入力されていません`)
     }
     if (seen.has(input.email)) {
-      throw new Error(
-        `${rowLabel}: メールアドレス ${input.email} が入力内で重複しています`,
-      )
+      throw new Error(`${rowLabel}: メールアドレス ${input.email} が入力内で重複しています`)
     }
     seen.add(input.email)
     if (MOCK_USERS.some((u) => u.email === input.email)) {
-      throw new Error(
-        `${rowLabel}: メールアドレス ${input.email} は既に使用されています`,
-      )
+      throw new Error(`${rowLabel}: メールアドレス ${input.email} は既に使用されています`)
     }
   }
 
   const today = new Date().toISOString().slice(0, 10)
-  let nextId =
-    MOCK_USERS.reduce((max, u) => Math.max(max, Number(u.id)), 0) + 1
+  let nextId = MOCK_USERS.reduce((max, u) => Math.max(max, Number(u.id)), 0) + 1
 
   const newUsers: User[] = inputs.map((input) => ({
     id: String(nextId++),

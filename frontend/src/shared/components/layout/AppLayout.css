@@ -3,8 +3,8 @@
   grid-template-columns: auto 1fr;
   grid-template-rows: 56px 1fr;
   grid-template-areas:
-    'header header'
-    'sidebar main';
+    "header header"
+    "sidebar main";
   height: 100vh;
 }
 
@@ -64,7 +64,7 @@
 }
 
 .app-header__brand::before {
-  content: '';
+  content: "";
   display: inline-block;
   width: 7px;
   height: 7px;
@@ -90,7 +90,10 @@
   font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.15s, border-color 0.15s, transform 0.15s;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s,
+    transform 0.15s;
 }
 
 .app-header__avatar:hover {
@@ -176,7 +179,9 @@
   font-weight: 500;
   cursor: pointer;
   text-align: left;
-  transition: background-color 0.15s, color 0.15s;
+  transition:
+    background-color 0.15s,
+    color 0.15s;
 }
 
 .app-header__dropdown-item:hover {
@@ -216,8 +221,9 @@
   flex-direction: column;
   gap: 0.25rem;
   overflow: hidden;
-  transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-              padding 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .app-sidebar--collapsed {
@@ -239,7 +245,10 @@
   background-color: transparent;
   color: var(--color-text-tertiary);
   cursor: pointer;
-  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    border-color 0.15s;
 }
 
 .app-sidebar__toggle:hover {
@@ -275,8 +284,11 @@
   text-decoration: none;
   white-space: nowrap;
   overflow: hidden;
-  transition: background-color 0.15s, color 0.15s, gap 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-              padding 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    gap 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .app-sidebar__link:hover {
@@ -314,8 +326,9 @@
   overflow: hidden;
   max-width: 180px;
   opacity: 1;
-  transition: max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.15s ease;
+  transition:
+    max-width 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.15s ease;
 }
 
 .app-sidebar--collapsed .app-sidebar__label {
@@ -329,8 +342,8 @@
   .app-layout {
     grid-template-columns: 1fr;
     grid-template-areas:
-      'header'
-      'main';
+      "header"
+      "main";
   }
 
   .app-header__menu-btn {
@@ -378,8 +391,12 @@
   }
 
   @keyframes backdrop-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
 }
 

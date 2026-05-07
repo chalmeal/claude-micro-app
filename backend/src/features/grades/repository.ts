@@ -35,11 +35,17 @@ export const gradesRepository = {
 
   create: async (data: NewGrade): Promise<Grade> => {
     await db.insert(grades).values(data)
-    const [created] = await db.select().from(grades).where(eq(grades.id, data.id as string))
+    const [created] = await db
+      .select()
+      .from(grades)
+      .where(eq(grades.id, data.id as string))
     return created
   },
 
-  update: async (id: string, data: Partial<Pick<Grade, 'score' | 'letter'>>): Promise<Grade | undefined> => {
+  update: async (
+    id: string,
+    data: Partial<Pick<Grade, 'score' | 'letter'>>,
+  ): Promise<Grade | undefined> => {
     await db.update(grades).set(data).where(eq(grades.id, id))
     const [updated] = await db.select().from(grades).where(eq(grades.id, id))
     return updated

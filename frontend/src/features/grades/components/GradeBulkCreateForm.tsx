@@ -65,7 +65,9 @@ export function GradeBulkCreateForm({ onSubmit, submitting }: Props) {
             disabled={submitting}
           >
             {SUBJECTS.map((s) => (
-              <option key={s} value={s}>{s}</option>
+              <option key={s} value={s}>
+                {s}
+              </option>
             ))}
           </select>
         </div>
@@ -78,7 +80,9 @@ export function GradeBulkCreateForm({ onSubmit, submitting }: Props) {
             disabled={submitting}
           >
             {YEARS.map((y) => (
-              <option key={y} value={y}>{y}年度</option>
+              <option key={y} value={y}>
+                {y}年度
+              </option>
             ))}
           </select>
         </div>
@@ -96,9 +100,7 @@ export function GradeBulkCreateForm({ onSubmit, submitting }: Props) {
         </div>
       </div>
 
-      <p className="grade-bulk-form__hint">
-        学生名が空の行は無視されます。
-      </p>
+      <p className="grade-bulk-form__hint">学生名が空の行は無視されます。</p>
 
       <datalist id="gbc-student-list">
         {STUDENT_NAMES.map((s) => (
@@ -116,8 +118,7 @@ export function GradeBulkCreateForm({ onSubmit, submitting }: Props) {
         {rows.map((row) => {
           const parsedScore = parseInt(row.scoreInput, 10)
           const isValidScore =
-            row.scoreInput === '' ||
-            (!isNaN(parsedScore) && parsedScore >= 0 && parsedScore <= 100)
+            row.scoreInput === '' || (!isNaN(parsedScore) && parsedScore >= 0 && parsedScore <= 100)
 
           return (
             <div key={row._key} className="grade-bulk-form__row">

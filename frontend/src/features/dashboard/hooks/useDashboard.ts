@@ -17,13 +17,19 @@ export function useDashboard(): DashboardData {
     let cancelled = false
 
     getDashboardAnnouncements()
-      .then((data) => { if (!cancelled) setAnnouncements(data) })
+      .then((data) => {
+        if (!cancelled) setAnnouncements(data)
+      })
       .catch((err) => {
         if (!cancelled) setError(err instanceof Error ? err : new Error(String(err)))
       })
-      .finally(() => { if (!cancelled) setLoading(false) })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
 
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [])
 
   return { announcements, loading, error }

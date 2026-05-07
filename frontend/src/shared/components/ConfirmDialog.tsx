@@ -34,15 +34,21 @@ export function ConfirmDialog({
   return (
     <div
       className="confirm-backdrop"
-      onMouseDown={(e) => { if (e.target === e.currentTarget) onCancel() }}
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onCancel()
+      }}
       aria-modal="true"
       role="alertdialog"
       aria-labelledby="confirm-title"
       aria-describedby="confirm-message"
     >
       <div className="confirm-dialog">
-        <h2 id="confirm-title" className="confirm-dialog__title">{title}</h2>
-        <p id="confirm-message" className="confirm-dialog__message">{message}</p>
+        <h2 id="confirm-title" className="confirm-dialog__title">
+          {title}
+        </h2>
+        <p id="confirm-message" className="confirm-dialog__message">
+          {message}
+        </p>
         <div className="confirm-dialog__actions">
           <button
             ref={cancelRef}

@@ -50,7 +50,9 @@ export function AdminAnnouncementFormPage() {
     }
 
     load()
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [id, isEdit, navigate])
 
   function set<K extends keyof FormValues>(key: K, value: FormValues[K]) {
@@ -61,9 +63,18 @@ export function AdminAnnouncementFormPage() {
     e.preventDefault()
     setError('')
 
-    if (!values.title.trim()) { setError('タイトルを入力してください'); return }
-    if (!values.body.trim())  { setError('本文を入力してください'); return }
-    if (!values.date)         { setError('日付を入力してください'); return }
+    if (!values.title.trim()) {
+      setError('タイトルを入力してください')
+      return
+    }
+    if (!values.body.trim()) {
+      setError('本文を入力してください')
+      return
+    }
+    if (!values.date) {
+      setError('日付を入力してください')
+      return
+    }
 
     setSubmitting(true)
     try {
@@ -99,7 +110,9 @@ export function AdminAnnouncementFormPage() {
       ) : (
         <div className="announcement-form-page__card">
           {error && (
-            <p className="announcement-form-page__error" role="alert">{error}</p>
+            <p className="announcement-form-page__error" role="alert">
+              {error}
+            </p>
           )}
 
           <form className="announcement-form" onSubmit={handleSubmit}>
@@ -161,11 +174,7 @@ export function AdminAnnouncementFormPage() {
               <Link to="/admin/announcements" className="announcement-form__cancel">
                 キャンセル
               </Link>
-              <button
-                type="submit"
-                className="announcement-form__submit"
-                disabled={submitting}
-              >
+              <button type="submit" className="announcement-form__submit" disabled={submitting}>
                 {submitting ? '保存中…' : isEdit ? '更新する' : '作成する'}
               </button>
             </div>

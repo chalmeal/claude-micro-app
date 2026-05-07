@@ -90,9 +90,7 @@ export function UserCreatePage() {
             type="button"
             role="tab"
             aria-selected={mode === tab.value}
-            className={`user-create__tab${
-              mode === tab.value ? ' user-create__tab--active' : ''
-            }`}
+            className={`user-create__tab${mode === tab.value ? ' user-create__tab--active' : ''}`}
             onClick={() => handleTabChange(tab.value)}
           >
             {tab.label}

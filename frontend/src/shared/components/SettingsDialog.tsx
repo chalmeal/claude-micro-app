@@ -62,7 +62,9 @@ export function SettingsDialog({ onClose }: Props) {
   return (
     <div
       className="settings-backdrop"
-      onMouseDown={(e) => { if (e.target === e.currentTarget) onClose() }}
+      onMouseDown={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
       aria-modal="true"
       role="dialog"
       aria-label="設定"
@@ -70,12 +72,18 @@ export function SettingsDialog({ onClose }: Props) {
       <div className="settings-dialog" ref={dialogRef} tabIndex={-1}>
         <div className="settings-dialog__header">
           <h2 className="settings-dialog__title">設定</h2>
-          <button
-            className="settings-dialog__close"
-            onClick={onClose}
-            aria-label="閉じる"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <button className="settings-dialog__close" onClick={onClose} aria-label="閉じる">
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
               <line x1="18" y1="6" x2="6" y2="18" />
               <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
@@ -88,9 +96,7 @@ export function SettingsDialog({ onClose }: Props) {
             <h3 className="settings-section__title">アカウント</h3>
             <div className="settings-section__card">
               <div className="settings-row">
-                <div className="settings-row__avatar">
-                  {user?.email?.[0]?.toUpperCase() ?? '?'}
-                </div>
+                <div className="settings-row__avatar">{user?.email?.[0]?.toUpperCase() ?? '?'}</div>
                 <div className="settings-row__info">
                   <span className="settings-row__label">メールアドレス</span>
                   <span className="settings-row__value">{user?.email}</span>
@@ -106,15 +112,23 @@ export function SettingsDialog({ onClose }: Props) {
               <form className="password-form" onSubmit={handleChangePassword}>
                 {status === 'success' && (
                   <p className="password-form__success">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                    <svg
+                      width="15"
+                      height="15"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
                       <polyline points="20 6 9 17 4 12" />
                     </svg>
                     パスワードを変更しました
                   </p>
                 )}
-                {status === 'error' && (
-                  <p className="password-form__error">{errorMessage}</p>
-                )}
+                {status === 'error' && <p className="password-form__error">{errorMessage}</p>}
 
                 <div className="password-form__field">
                   <label htmlFor="current-password">現在のパスワード</label>

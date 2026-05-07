@@ -46,17 +46,20 @@ describe('authService.login', () => {
     vi.mocked(repo.authRepository.findByEmail).mockResolvedValue(mockUser)
     vi.mocked(password.comparePassword).mockResolvedValue(false)
 
-    await expect(authService.login({ email: 'test@example.com', password: 'wrong' })).rejects.toThrow(
-      'Invalid email or password',
-    )
+    await expect(
+      authService.login({ email: 'test@example.com', password: 'wrong' }),
+    ).rejects.toThrow('Invalid email or password')
   })
 
   it('inactive ユーザー → UnauthorizedError', async () => {
-    vi.mocked(repo.authRepository.findByEmail).mockResolvedValue({ ...mockUser, status: 'inactive' })
+    vi.mocked(repo.authRepository.findByEmail).mockResolvedValue({
+      ...mockUser,
+      status: 'inactive',
+    })
 
-    await expect(authService.login({ email: 'test@example.com', password: 'pass' })).rejects.toThrow(
-      'Invalid email or password',
-    )
+    await expect(
+      authService.login({ email: 'test@example.com', password: 'pass' }),
+    ).rejects.toThrow('Invalid email or password')
   })
 })
 
@@ -68,7 +71,11 @@ describe('authService.changePassword', () => {
     vi.mocked(password.comparePassword).mockResolvedValue(false)
 
     await expect(
-      authService.changePassword({ userId: 'user-1', currentPassword: 'wrong', newPassword: 'newpass123' }),
+      authService.changePassword({
+        userId: 'user-1',
+        currentPassword: 'wrong',
+        newPassword: 'newpass123',
+      }),
     ).rejects.toThrow('Current password is incorrect')
   })
 
@@ -77,7 +84,11 @@ describe('authService.changePassword', () => {
     vi.mocked(password.comparePassword).mockResolvedValue(true)
 
     await expect(
-      authService.changePassword({ userId: 'user-1', currentPassword: 'current', newPassword: 'short' }),
+      authService.changePassword({
+        userId: 'user-1',
+        currentPassword: 'current',
+        newPassword: 'short',
+      }),
     ).rejects.toThrow('Password must be at least 8 characters')
   })
 
@@ -87,7 +98,11 @@ describe('authService.changePassword', () => {
     vi.mocked(password.hashPassword).mockResolvedValue('new_hash')
     vi.mocked(repo.authRepository.updatePasswordHash).mockResolvedValue()
 
-    await authService.changePassword({ userId: 'user-1', currentPassword: 'current', newPassword: 'newpass123' })
+    await authService.changePassword({
+      userId: 'user-1',
+      currentPassword: 'current',
+      newPassword: 'newpass123',
+    })
 
     expect(repo.authRepository.updatePasswordHash).toHaveBeenCalledWith('user-1', 'new_hash')
   })

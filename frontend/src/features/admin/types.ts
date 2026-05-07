@@ -3,8 +3,8 @@ export type BatchFrequency = 'hourly' | 'daily' | 'weekly' | 'monthly'
 
 export type BatchSchedule = {
   frequency: BatchFrequency
-  time: string        // 'HH:MM'（hourly 以外で使用）
-  dayOfWeek?: number  // 0=日 〜 6=土（weekly 用）
+  time: string // 'HH:MM'（hourly 以外で使用）
+  dayOfWeek?: number // 0=日 〜 6=土（weekly 用）
   dayOfMonth?: number // 1〜31（monthly 用）
 }
 

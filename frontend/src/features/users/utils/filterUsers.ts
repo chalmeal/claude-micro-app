@@ -6,8 +6,7 @@ export function filterUsers(users: User[], filters: UserFilters): User[] {
   return users.filter((user) => {
     if (keyword) {
       const matchesKeyword =
-        user.name.toLowerCase().includes(keyword) ||
-        user.email.toLowerCase().includes(keyword)
+        user.name.toLowerCase().includes(keyword) || user.email.toLowerCase().includes(keyword)
       if (!matchesKeyword) return false
     }
 

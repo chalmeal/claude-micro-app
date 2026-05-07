@@ -59,13 +59,15 @@ export function GradeList({ grades }: Props) {
             >
               <td data-label="学生名">{grade.studentName}</td>
               <td data-label="科目">{grade.subject}</td>
-              <td data-label="点数" className="grade-list__score">{grade.score}</td>
-              <td data-label="評価">
-                <span className={`grade-badge ${letterColors[grade.letter]}`}>
-                  {grade.letter}
-                </span>
+              <td data-label="点数" className="grade-list__score">
+                {grade.score}
               </td>
-              <td data-label="年度" className="grade-list__year">{grade.year}</td>
+              <td data-label="評価">
+                <span className={`grade-badge ${letterColors[grade.letter]}`}>{grade.letter}</span>
+              </td>
+              <td data-label="年度" className="grade-list__year">
+                {grade.year}
+              </td>
               <td data-label="学期">{semesterLabel[grade.semester]}</td>
             </tr>
           ))}

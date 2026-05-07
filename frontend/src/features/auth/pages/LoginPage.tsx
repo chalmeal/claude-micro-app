@@ -12,8 +12,7 @@ export function LoginPage() {
   const location = useLocation()
   const { isAuthenticated } = useAuth()
 
-  const redirectTo =
-    (location.state as LocationState | null)?.from?.pathname ?? '/'
+  const redirectTo = (location.state as LocationState | null)?.from?.pathname ?? '/'
 
   if (isAuthenticated) {
     return <Navigate to={redirectTo} replace />

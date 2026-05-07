@@ -12,10 +12,7 @@ export function AnnouncementsPage() {
   const topRef = useRef<HTMLDivElement>(null)
 
   const totalPages = Math.ceil(announcements.length / PAGE_SIZE)
-  const pageItems = announcements.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE,
-  )
+  const pageItems = announcements.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 
   function handlePageChange(page: number) {
     setCurrentPage(page)

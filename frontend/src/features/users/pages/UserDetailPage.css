@@ -26,7 +26,7 @@
   padding: 0.75rem 1rem;
   border-radius: var(--radius-md);
   background-color: var(--color-error-bg);
-  border: 1px solid #FECACA;
+  border: 1px solid #fecaca;
   color: var(--color-error);
   font-size: 0.875rem;
 }
@@ -45,7 +45,7 @@
 .user-detail__skeleton-block {
   height: 20px;
   border-radius: var(--radius-sm);
-  background: linear-gradient(90deg, #F1F5F9 0%, #E2E8F0 50%, #F1F5F9 100%);
+  background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
   background-size: 200% 100%;
   animation: skeleton-pulse 1.4s infinite;
 }
@@ -98,7 +98,7 @@
   border-radius: 50%;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, var(--color-primary) 0%, #3B82F6 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, #3b82f6 100%);
   color: #fff;
   font-size: 1.25rem;
   font-weight: 700;
@@ -135,7 +135,6 @@
   padding: 0.9rem 0;
 }
 
-
 .user-detail__row dt {
   font-size: 0.8rem;
   font-weight: 600;
@@ -157,7 +156,9 @@
   color: var(--color-text);
   font-family: inherit;
   min-width: 140px;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .user-detail__field-select:focus {
@@ -176,7 +177,7 @@
   padding: 0.6em 0.9em;
   border-radius: var(--radius-md);
   background-color: var(--color-error-bg);
-  border: 1px solid #FECACA;
+  border: 1px solid #fecaca;
   color: var(--color-error);
   font-size: 0.85rem;
 }

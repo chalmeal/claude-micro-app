@@ -2,11 +2,7 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { updateUser } from '@/features/users/api/getUsers'
 import { useUser } from '@/features/users/hooks/useUser'
-import type {
-  UpdateUserPatch,
-  UserRole,
-  UserStatus,
-} from '@/features/users/types'
+import type { UpdateUserPatch, UserRole, UserStatus } from '@/features/users/types'
 import { useSnackbar } from '@/shared/hooks/useSnackbar'
 import './UserDetailPage.css'
 
@@ -62,14 +58,10 @@ export function UserDetailPage() {
     }
     if (draftStatus !== undefined && draftStatus !== user.status) {
       patch.status = draftStatus
-      changes.push(
-        `ステータス: ${statusLabel[user.status]} → ${statusLabel[draftStatus]}`,
-      )
+      changes.push(`ステータス: ${statusLabel[user.status]} → ${statusLabel[draftStatus]}`)
     }
 
-    const ok = window.confirm(
-      `次の項目を更新します:\n${changes.join('\n')}\n\nよろしいですか?`,
-    )
+    const ok = window.confirm(`次の項目を更新します:\n${changes.join('\n')}\n\nよろしいですか?`)
     if (!ok) return
 
     setUpdating(true)
@@ -144,9 +136,7 @@ export function UserDetailPage() {
                 <select
                   className="user-detail__field-select"
                   value={formRole}
-                  onChange={(e) =>
-                    setDraftRole(e.target.value as UserRole)
-                  }
+                  onChange={(e) => setDraftRole(e.target.value as UserRole)}
                   disabled={updating}
                   aria-label="ロールを変更"
                 >
@@ -161,9 +151,7 @@ export function UserDetailPage() {
                 <select
                   className="user-detail__field-select"
                   value={formStatus}
-                  onChange={(e) =>
-                    setDraftStatus(e.target.value as UserStatus)
-                  }
+                  onChange={(e) => setDraftStatus(e.target.value as UserStatus)}
                   disabled={updating}
                   aria-label="ステータスを変更"
                 >
@@ -179,11 +167,7 @@ export function UserDetailPage() {
           </dl>
 
           <footer className="user-detail__actions">
-            <button
-              type="button"
-              onClick={handleReset}
-              disabled={!isDirty || updating}
-            >
+            <button type="button" onClick={handleReset} disabled={!isDirty || updating}>
               リセット
             </button>
             <button

@@ -1,16 +1,44 @@
 import { scoreToLetter, type CreateGradeInput, type Grade } from '@/features/grades/types'
 
 const SUBJECTS = [
-  '数学I', '数学II', '英語', '国語', '物理',
-  '化学', '生物', '歴史', '経済学', 'プログラミング入門',
-  'データ構造', 'アルゴリズム論', '線形代数', '統計学', '情報倫理',
+  '数学I',
+  '数学II',
+  '英語',
+  '国語',
+  '物理',
+  '化学',
+  '生物',
+  '歴史',
+  '経済学',
+  'プログラミング入門',
+  'データ構造',
+  'アルゴリズム論',
+  '線形代数',
+  '統計学',
+  '情報倫理',
 ]
 
 const STUDENT_NAMES = [
-  '田中 太郎', '鈴木 花子', '佐藤 次郎', '高橋 美咲', '山田 健',
-  '伊藤 由美', '渡辺 大輔', '中村 さくら', '小林 翔', '加藤 美穂',
-  '吉田 亮', '山本 結衣', '松本 優', '井上 智子', '木村 健太',
-  '林 奈々', '清水 浩', '池田 麻衣', '橋本 拓也', '石田 愛',
+  '田中 太郎',
+  '鈴木 花子',
+  '佐藤 次郎',
+  '高橋 美咲',
+  '山田 健',
+  '伊藤 由美',
+  '渡辺 大輔',
+  '中村 さくら',
+  '小林 翔',
+  '加藤 美穂',
+  '吉田 亮',
+  '山本 結衣',
+  '松本 優',
+  '井上 智子',
+  '木村 健太',
+  '林 奈々',
+  '清水 浩',
+  '池田 麻衣',
+  '橋本 拓也',
+  '石田 愛',
 ]
 
 const YEARS = [2023, 2024] as const
@@ -60,12 +88,12 @@ export async function getGradesByStudentAndSubject(
   subject: string,
 ): Promise<Grade[]> {
   await new Promise((resolve) => setTimeout(resolve, 100))
-  return MOCK_GRADES
-    .filter((g) => g.studentId === studentId && g.subject === subject)
-    .sort((a, b) => {
+  return MOCK_GRADES.filter((g) => g.studentId === studentId && g.subject === subject).sort(
+    (a, b) => {
       if (b.year !== a.year) return b.year - a.year
       return a.semester === 'fall' ? -1 : 1
-    })
+    },
+  )
 }
 
 export async function deleteGrade(id: string): Promise<void> {
@@ -108,13 +136,13 @@ export async function createGrade(input: CreateGradeInput): Promise<Grade> {
     )
   }
 
-  const studentEntry = STUDENT_NAMES
-    .map((name, i) => ({ id: String(i + 1), name }))
-    .find((s) => s.name === input.studentName.trim())
-
-  const studentId = studentEntry?.id ?? String(
-    Math.max(...MOCK_GRADES.map((g) => Number(g.studentId)), STUDENT_NAMES.length) + 1,
+  const studentEntry = STUDENT_NAMES.map((name, i) => ({ id: String(i + 1), name })).find(
+    (s) => s.name === input.studentName.trim(),
   )
+
+  const studentId =
+    studentEntry?.id ??
+    String(Math.max(...MOCK_GRADES.map((g) => Number(g.studentId)), STUDENT_NAMES.length) + 1)
 
   const nextId = String(MOCK_GRADES.reduce((max, g) => Math.max(max, Number(g.id)), 0) + 1)
   const score = input.score
@@ -163,13 +191,13 @@ export async function createGrades(inputs: CreateGradeInput[]): Promise<Grade[]>
   }
 
   for (const input of inputs) {
-    const studentEntry = STUDENT_NAMES
-      .map((name, idx) => ({ id: String(idx + 1), name }))
-      .find((s) => s.name === input.studentName.trim())
-
-    const studentId = studentEntry?.id ?? String(
-      Math.max(...MOCK_GRADES.map((g) => Number(g.studentId)), STUDENT_NAMES.length) + 1,
+    const studentEntry = STUDENT_NAMES.map((name, idx) => ({ id: String(idx + 1), name })).find(
+      (s) => s.name === input.studentName.trim(),
     )
+
+    const studentId =
+      studentEntry?.id ??
+      String(Math.max(...MOCK_GRADES.map((g) => Number(g.studentId)), STUDENT_NAMES.length) + 1)
 
     const nextId = String(MOCK_GRADES.reduce((max, g) => Math.max(max, Number(g.id)), 0) + 1)
     const score = input.score

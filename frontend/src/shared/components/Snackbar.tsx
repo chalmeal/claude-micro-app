@@ -22,7 +22,7 @@ export function SnackbarProvider({ children }: Props) {
     const id = ++idRef.current
     setItems((prev) => [...prev, { id, message, variant, hiding: false }])
     setTimeout(() => {
-      setItems((prev) => prev.map((item) => item.id === id ? { ...item, hiding: true } : item))
+      setItems((prev) => prev.map((item) => (item.id === id ? { ...item, hiding: true } : item)))
     }, DISPLAY_DURATION - HIDE_DURATION)
     setTimeout(() => {
       setItems((prev) => prev.filter((item) => item.id !== id))

@@ -34,7 +34,7 @@
   padding: 0.75rem 1rem;
   border-radius: var(--radius-md);
   background-color: var(--color-error-bg);
-  border: 1px solid #FECACA;
+  border: 1px solid #fecaca;
   color: var(--color-error);
   font-size: 0.875rem;
 }
@@ -53,14 +53,18 @@
 .announcement-form-page__skeleton-row {
   height: 44px;
   border-radius: var(--radius-md);
-  background: linear-gradient(90deg, #F1F5F9 0%, #E2E8F0 50%, #F1F5F9 100%);
+  background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
   background-size: 200% 100%;
   animation: skeleton-pulse 1.4s infinite;
 }
 
 @keyframes skeleton-pulse {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .announcement-form-page__card {
@@ -107,7 +111,9 @@
   border: 1.5px solid var(--color-border);
   background-color: var(--color-surface);
   color: var(--color-text);
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .announcement-form__field input:focus,
@@ -152,12 +158,14 @@
   font-size: 0.875rem;
   font-weight: 500;
   text-decoration: none;
-  transition: background-color 0.15s, border-color 0.15s;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
 }
 
 .announcement-form__cancel:hover {
-  background-color: #F8FAFC;
-  border-color: #CBD5E1;
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
 }
 
 .announcement-form__submit {
@@ -170,7 +178,9 @@
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
-  transition: background-color 0.15s, box-shadow 0.15s;
+  transition:
+    background-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .announcement-form__submit:hover:not(:disabled) {

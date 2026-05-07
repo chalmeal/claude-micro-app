@@ -34,7 +34,11 @@ describe('usersService.create', () => {
 
     expect(result.email).toBe('alice@example.com')
     expect(repo.usersRepository.create).toHaveBeenCalledWith(
-      expect.objectContaining({ email: 'alice@example.com', passwordHash: 'hashed', role: 'member' }),
+      expect.objectContaining({
+        email: 'alice@example.com',
+        passwordHash: 'hashed',
+        role: 'member',
+      }),
     )
   })
 
@@ -42,7 +46,11 @@ describe('usersService.create', () => {
     vi.mocked(repo.usersRepository.findByEmail).mockResolvedValue(mockUser)
 
     await expect(
-      usersService.create({ name: 'Bob', email: 'alice@example.com', temporaryPassword: 'password123' }),
+      usersService.create({
+        name: 'Bob',
+        email: 'alice@example.com',
+        temporaryPassword: 'password123',
+      }),
     ).rejects.toThrow('Email already in use')
   })
 })
@@ -59,16 +67,25 @@ describe('usersService.update', () => {
   it('存在しない ID → NotFoundError', async () => {
     vi.mocked(repo.usersRepository.findById).mockResolvedValue(undefined)
 
-    await expect(usersService.update('no-such-id', { role: 'admin' })).rejects.toThrow('User not found')
+    await expect(usersService.update('no-such-id', { role: 'admin' })).rejects.toThrow(
+      'User not found',
+    )
   })
 
   it('role と status を更新できる', async () => {
     vi.mocked(repo.usersRepository.findById).mockResolvedValue(mockUser)
-    vi.mocked(repo.usersRepository.update).mockResolvedValue({ ...mockUser, role: 'admin', status: 'inactive' })
+    vi.mocked(repo.usersRepository.update).mockResolvedValue({
+      ...mockUser,
+      role: 'admin',
+      status: 'inactive',
+    })
 
     const result = await usersService.update('user-1', { role: 'admin', status: 'inactive' })
 
     expect(result?.role).toBe('admin')
-    expect(repo.usersRepository.update).toHaveBeenCalledWith('user-1', { role: 'admin', status: 'inactive' })
+    expect(repo.usersRepository.update).toHaveBeenCalledWith('user-1', {
+      role: 'admin',
+      status: 'inactive',
+    })
   })
 })

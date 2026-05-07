@@ -12,8 +12,12 @@
 }
 
 @keyframes backdrop-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .settings-dialog {
@@ -23,7 +27,9 @@
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg), 0 24px 48px rgba(15, 23, 42, 0.12);
+  box-shadow:
+    var(--shadow-lg),
+    0 24px 48px rgba(15, 23, 42, 0.12);
   display: flex;
   flex-direction: column;
   outline: none;
@@ -71,11 +77,14 @@
   background: transparent;
   color: var(--color-text-tertiary);
   cursor: pointer;
-  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    border-color 0.15s;
 }
 
 .settings-dialog__close:hover {
-  background-color: #F1F5F9;
+  background-color: #f1f5f9;
   color: var(--color-text);
   border-color: var(--color-border);
 }
@@ -118,7 +127,7 @@
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-primary) 0%, #3B82F6 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, #3b82f6 100%);
   color: #fff;
   font-size: 1rem;
   font-weight: 700;
@@ -168,7 +177,7 @@
   padding: 0.65rem 0.9rem;
   border-radius: var(--radius-md);
   background-color: var(--color-success-bg);
-  border: 1px solid #A7F3D0;
+  border: 1px solid #a7f3d0;
   color: var(--color-success);
   font-size: 0.875rem;
   font-weight: 500;
@@ -179,7 +188,7 @@
   padding: 0.65rem 0.9rem;
   border-radius: var(--radius-md);
   background-color: var(--color-error-bg);
-  border: 1px solid #FECACA;
+  border: 1px solid #fecaca;
   color: var(--color-error);
   font-size: 0.875rem;
 }
@@ -205,7 +214,9 @@
   border: 1.5px solid var(--color-border);
   background-color: var(--color-surface);
   color: var(--color-text);
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .password-form__field input:focus {
@@ -240,7 +251,9 @@
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
-  transition: background-color 0.15s, box-shadow 0.15s;
+  transition:
+    background-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .password-form__submit:hover:not(:disabled) {
@@ -273,10 +286,12 @@
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.15s, border-color 0.15s;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
 }
 
 .settings-dialog__cancel:hover {
-  background-color: #F8FAFC;
-  border-color: #CBD5E1;
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
 }

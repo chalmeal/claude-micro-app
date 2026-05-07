@@ -11,6 +11,11 @@
     "dev:backend": "npm run dev -w backend",
     "build": "npm run build -w frontend && npm run build -w backend",
     "lint": "npm run lint -w frontend",
-    "preview": "npm run preview -w frontend"
+    "preview": "npm run preview -w frontend",
+    "format": "biome format --write .",
+    "format:check": "biome format ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.14"
   }
 }

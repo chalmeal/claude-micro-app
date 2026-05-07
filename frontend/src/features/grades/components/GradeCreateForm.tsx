@@ -1,6 +1,11 @@
 import { useState, type FormEvent } from 'react'
 import { getStudentNames, getSubjects } from '@/features/grades/api/getGrades'
-import { scoreToLetter, type CreateGradeInput, type GradeLetter, type Semester } from '@/features/grades/types'
+import {
+  scoreToLetter,
+  type CreateGradeInput,
+  type GradeLetter,
+  type Semester,
+} from '@/features/grades/types'
 
 type Props = {
   onSubmit: (input: CreateGradeInput) => void
@@ -59,7 +64,9 @@ export function GradeCreateForm({ onSubmit, submitting }: Props) {
             disabled={submitting}
           >
             {YEARS.map((y) => (
-              <option key={y} value={y}>{y}年度</option>
+              <option key={y} value={y}>
+                {y}年度
+              </option>
             ))}
           </select>
         </div>
@@ -104,7 +111,9 @@ export function GradeCreateForm({ onSubmit, submitting }: Props) {
             disabled={submitting}
           >
             {SUBJECTS.map((s) => (
-              <option key={s} value={s}>{s}</option>
+              <option key={s} value={s}>
+                {s}
+              </option>
             ))}
           </select>
         </div>
@@ -141,7 +150,6 @@ export function GradeCreateForm({ onSubmit, submitting }: Props) {
           </p>
         )}
       </div>
-
 
       <div className="grade-create-form__actions">
         <button

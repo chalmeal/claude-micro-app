@@ -16,7 +16,10 @@ export const batchesRepository = {
 
   create: async (data: NewBatch): Promise<Batch> => {
     await db.insert(batches).values(data)
-    const [created] = await db.select().from(batches).where(eq(batches.id, data.id as string))
+    const [created] = await db
+      .select()
+      .from(batches)
+      .where(eq(batches.id, data.id as string))
     return created
   },
 

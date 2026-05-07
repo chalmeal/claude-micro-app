@@ -20,7 +20,10 @@ export const usersRepository = {
 
   create: async (data: NewUser): Promise<User> => {
     await db.insert(users).values(data)
-    const [created] = await db.select().from(users).where(eq(users.id, data.id as string))
+    const [created] = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, data.id as string))
     return created
   },
 

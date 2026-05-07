@@ -27,7 +27,7 @@
   padding: 0.75rem 1rem;
   border-radius: var(--radius-md);
   background-color: var(--color-error-bg);
-  border: 1px solid #FECACA;
+  border: 1px solid #fecaca;
   color: var(--color-error);
   font-size: 0.875rem;
 }
@@ -46,7 +46,7 @@
 .grade-edit__skeleton-block {
   height: 20px;
   border-radius: var(--radius-sm);
-  background: linear-gradient(90deg, #F1F5F9 0%, #E2E8F0 50%, #F1F5F9 100%);
+  background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
   background-size: 200% 100%;
   animation: skeleton-pulse 1.4s infinite;
 }
@@ -138,7 +138,9 @@
   color: var(--color-text);
   font-family: inherit;
   text-align: center;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .grade-edit__input:focus {
@@ -173,12 +175,30 @@
   font-weight: 700;
 }
 
-.grade-edit__badge--s { background-color: #EDE9FE; color: #7C3AED; }
-.grade-edit__badge--a { background-color: #DCFCE7; color: #16A34A; }
-.grade-edit__badge--b { background-color: #DBEAFE; color: #2563EB; }
-.grade-edit__badge--c { background-color: #FEF9C3; color: #A16207; }
-.grade-edit__badge--d { background-color: #FFEDD5; color: #C2410C; }
-.grade-edit__badge--f { background-color: #FEE2E2; color: #DC2626; }
+.grade-edit__badge--s {
+  background-color: #ede9fe;
+  color: #7c3aed;
+}
+.grade-edit__badge--a {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+.grade-edit__badge--b {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+.grade-edit__badge--c {
+  background-color: #fef9c3;
+  color: #a16207;
+}
+.grade-edit__badge--d {
+  background-color: #ffedd5;
+  color: #c2410c;
+}
+.grade-edit__badge--f {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
 
 .grade-edit__hint {
   margin: 0;
@@ -232,7 +252,9 @@
   font-family: inherit;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
-  transition: background-color 0.15s, box-shadow 0.15s;
+  transition:
+    background-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .grade-edit__submit:hover:not(:disabled) {

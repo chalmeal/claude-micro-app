@@ -9,18 +9,19 @@ type Props = {
 }
 
 const STATUS_LABEL = { success: '正常', failed: '失敗', running: '実行中' } as const
-const LEVEL_LABEL  = { info: 'INFO', warn: 'WARN', error: 'ERROR' } as const
+const LEVEL_LABEL = { info: 'INFO', warn: 'WARN', error: 'ERROR' } as const
 
 function formatDuration(sec: number | null): string {
   if (sec === null) return '—'
   if (sec < 60) return `${sec}秒`
-  const m = Math.floor(sec / 60), s = sec % 60
+  const m = Math.floor(sec / 60),
+    s = sec % 60
   return s ? `${m}分${s}秒` : `${m}分`
 }
 
 export function BatchLogModal({ batch, onClose }: Props) {
   const backdropRef = useRef<HTMLDivElement>(null)
-  const [runs, setRuns]       = useState<BatchRun[]>([])
+  const [runs, setRuns] = useState<BatchRun[]>([])
   const [loading, setLoading] = useState(true)
   const [openRun, setOpenRun] = useState<string | null>(null)
 
@@ -28,14 +29,22 @@ export function BatchLogModal({ batch, onClose }: Props) {
     let cancelled = false
     async function load() {
       const data = await getBatchRuns(batch.id)
-      if (!cancelled) { setRuns(data); setLoading(false); if (data[0]) setOpenRun(data[0].id) }
+      if (!cancelled) {
+        setRuns(data)
+        setLoading(false)
+        if (data[0]) setOpenRun(data[0].id)
+      }
     }
     load()
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+    }
   }, [batch.id])
 
   useEffect(() => {
-    const fn = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    const fn = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
     document.addEventListener('keydown', fn)
     return () => document.removeEventListener('keydown', fn)
   }, [onClose])
@@ -44,7 +53,9 @@ export function BatchLogModal({ batch, onClose }: Props) {
     <div
       className="batch-modal-backdrop"
       ref={backdropRef}
-      onMouseDown={(e) => { if (e.target === backdropRef.current) onClose() }}
+      onMouseDown={(e) => {
+        if (e.target === backdropRef.current) onClose()
+      }}
     >
       <div className="batch-modal batch-modal--lg" role="dialog" aria-modal="true" tabIndex={-1}>
         <div className="batch-modal__header">
@@ -53,7 +64,19 @@ export function BatchLogModal({ batch, onClose }: Props) {
             <span className="batch-modal__subtitle">{batch.name}</span>
           </div>
           <button className="batch-modal__close" onClick={onClose} aria-label="閉じる">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            <svg
+              width="18"
+              height="18"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
           </button>
         </div>
 
@@ -79,10 +102,16 @@ export function BatchLogModal({ batch, onClose }: Props) {
                       </div>
                       <svg
                         className={`batch-log__run-chevron${isOpen ? ' batch-log__run-chevron--open' : ''}`}
-                        width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
                       >
-                        <polyline points="6 9 12 15 18 9"/>
+                        <polyline points="6 9 12 15 18 9" />
                       </svg>
                     </div>
                     {isOpen && (
@@ -108,7 +137,9 @@ export function BatchLogModal({ batch, onClose }: Props) {
         </div>
 
         <div className="batch-modal__footer">
-          <button className="batch-modal__cancel" onClick={onClose}>閉じる</button>
+          <button className="batch-modal__cancel" onClick={onClose}>
+            閉じる
+          </button>
         </div>
       </div>
     </div>
@@ -122,11 +153,25 @@ function StatusBadge({ status, label }: { status: BatchRun['status']; label: str
     running: '#2563EB',
   }
   return (
-    <span style={{
-      display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-      fontSize: '0.75rem', fontWeight: 600, color: colors[status],
-    }}>
-      <span style={{ width: 7, height: 7, borderRadius: '50%', background: colors[status], display: 'inline-block' }} />
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: '0.35rem',
+        fontSize: '0.75rem',
+        fontWeight: 600,
+        color: colors[status],
+      }}
+    >
+      <span
+        style={{
+          width: 7,
+          height: 7,
+          borderRadius: '50%',
+          background: colors[status],
+          display: 'inline-block',
+        }}
+      />
       {label}
     </span>
   )

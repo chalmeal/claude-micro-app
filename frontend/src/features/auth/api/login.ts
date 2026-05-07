@@ -22,10 +22,7 @@ export async function logout(): Promise<void> {
   await new Promise((resolve) => setTimeout(resolve, 100))
 }
 
-export async function changePassword(
-  currentPassword: string,
-  newPassword: string,
-): Promise<void> {
+export async function changePassword(currentPassword: string, newPassword: string): Promise<void> {
   await new Promise((resolve) => setTimeout(resolve, 600))
 
   if (currentPassword.length < 4) {

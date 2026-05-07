@@ -115,9 +115,10 @@ announcementsRoutes.use(authMiddleware)
 
 announcementsRoutes.openapi(listAnnouncementsRoute, async (c) => {
   const { limit } = c.req.valid('query')
-  const items = limit && limit > 0
-    ? await announcementsService.getRecent(limit)
-    : await announcementsService.getAll()
+  const items =
+    limit && limit > 0
+      ? await announcementsService.getRecent(limit)
+      : await announcementsService.getAll()
   return c.json(items, 200)
 })
 

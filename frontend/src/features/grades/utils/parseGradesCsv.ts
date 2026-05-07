@@ -37,9 +37,7 @@ function parseLine(line: string): string[] {
 }
 
 export function parseGradesCsv(text: string): ParseGradesResult {
-  const lines = text
-    .split(/\r?\n/)
-    .filter((l) => l.trim().length > 0)
+  const lines = text.split(/\r?\n/).filter((l) => l.trim().length > 0)
 
   if (lines.length === 0) {
     return { rows: [], errors: ['CSV が空です'] }
@@ -99,7 +97,9 @@ export function parseGradesCsv(text: string): ParseGradesResult {
 
     const semesterRaw = cols[idx.semester] ?? ''
     if (semesterRaw !== 'spring' && semesterRaw !== 'fall') {
-      errors.push(`${lineNo} 行目: semester は spring / fall のいずれかを指定してください (現在: "${semesterRaw}")`)
+      errors.push(
+        `${lineNo} 行目: semester は spring / fall のいずれかを指定してください (現在: "${semesterRaw}")`,
+      )
       continue
     }
 

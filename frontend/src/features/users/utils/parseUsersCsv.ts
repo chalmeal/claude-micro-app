@@ -74,11 +74,15 @@ export function parseUsersCsv(text: string): ParseResult {
     const status = cols[idx.status]
 
     if (role !== 'admin' && role !== 'member') {
-      errors.push(`${lineNo} 行目: role は admin / member のいずれかを指定してください (現在: "${role ?? ''}")`)
+      errors.push(
+        `${lineNo} 行目: role は admin / member のいずれかを指定してください (現在: "${role ?? ''}")`,
+      )
       continue
     }
     if (status !== 'active' && status !== 'inactive') {
-      errors.push(`${lineNo} 行目: status は active / inactive のいずれかを指定してください (現在: "${status ?? ''}")`)
+      errors.push(
+        `${lineNo} 行目: status は active / inactive のいずれかを指定してください (現在: "${status ?? ''}")`,
+      )
       continue
     }
 

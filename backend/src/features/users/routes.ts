@@ -52,7 +52,8 @@ const createUserRoute = createRoute({
   path: '/',
   tags: ['Users'],
   summary: 'ユーザー作成',
-  description: '新規ユーザーを作成します。初期パスワードは一時パスワードとして設定されます。管理者のみ実行可能です。',
+  description:
+    '新規ユーザーを作成します。初期パスワードは一時パスワードとして設定されます。管理者のみ実行可能です。',
   security,
   request: {
     body: {
@@ -82,7 +83,8 @@ const updateUserRoute = createRoute({
   path: '/{id}',
   tags: ['Users'],
   summary: 'ユーザー更新',
-  description: '指定した ID のユーザーのロールまたはステータスを更新します。管理者のみ実行可能です。',
+  description:
+    '指定した ID のユーザーのロールまたはステータスを更新します。管理者のみ実行可能です。',
   security,
   request: {
     params: z.object({ id: z.string() }),

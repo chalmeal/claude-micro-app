@@ -34,12 +34,16 @@ function loadSavedState(): SavedState | null {
 export function GradesPage() {
   const { grades, loading, error, search } = useGrades()
 
-  const [draft, setDraft] = useState<GradeFilters>(() => loadSavedState()?.filters ?? emptyGradeFilters)
-  const [filters, setFilters] = useState<GradeFilters>(() => loadSavedState()?.filters ?? emptyGradeFilters)
+  const [draft, setDraft] = useState<GradeFilters>(
+    () => loadSavedState()?.filters ?? emptyGradeFilters,
+  )
+  const [filters, setFilters] = useState<GradeFilters>(
+    () => loadSavedState()?.filters ?? emptyGradeFilters,
+  )
   const [hasSearched, setHasSearched] = useState(false)
   const [yearError, setYearError] = useState(false)
   const [currentPage, setCurrentPage] = useState(() => loadSavedState()?.currentPage ?? 1)
-  const [shouldRestore] = useState(() => !!(loadSavedState()?.filters.year))
+  const [shouldRestore] = useState(() => !!loadSavedState()?.filters.year)
 
   const subjects = useMemo(() => getSubjects(), [])
 
@@ -55,7 +59,9 @@ export function GradesPage() {
     if (!hasSearched) return
     try {
       sessionStorage.setItem(STORAGE_KEY, JSON.stringify({ filters, currentPage }))
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }, [hasSearched, filters, currentPage])
 
   const filtered = useMemo(() => {
@@ -63,10 +69,8 @@ export function GradesPage() {
     return grades.filter((g) => {
       if (filters.keyword) {
         const kw = filters.keyword.toLowerCase()
-        if (
-          !g.studentName.toLowerCase().includes(kw) &&
-          !g.subject.toLowerCase().includes(kw)
-        ) return false
+        if (!g.studentName.toLowerCase().includes(kw) && !g.subject.toLowerCase().includes(kw))
+          return false
       }
       if (filters.subject && g.subject !== filters.subject) return false
       if (filters.semester && g.semester !== filters.semester) return false
@@ -134,9 +138,14 @@ export function GradesPage() {
               onChange={(e) => setDraft((d) => ({ ...d, keyword: e.target.value }))}
             />
           </div>
-          <div className={`grade-filter-form__field${yearError ? ' grade-filter-form__field--error' : ''}`}>
+          <div
+            className={`grade-filter-form__field${yearError ? ' grade-filter-form__field--error' : ''}`}
+          >
             <label htmlFor="gf-year">
-              年度 <span className="grade-filter-form__required" aria-hidden="true">*</span>
+              年度{' '}
+              <span className="grade-filter-form__required" aria-hidden="true">
+                *
+              </span>
             </label>
             <select
               id="gf-year"
@@ -150,7 +159,9 @@ export function GradesPage() {
             >
               <option value="">選択してください</option>
               {YEARS.map((y) => (
-                <option key={y} value={y}>{y}年度</option>
+                <option key={y} value={y}>
+                  {y}年度
+                </option>
               ))}
             </select>
             {yearError && (
@@ -168,7 +179,9 @@ export function GradesPage() {
             >
               <option value="">すべて</option>
               {subjects.map((s) => (
-                <option key={s} value={s}>{s}</option>
+                <option key={s} value={s}>
+                  {s}
+                </option>
               ))}
             </select>
           </div>
@@ -197,14 +210,20 @@ export function GradesPage() {
             >
               <option value="">すべて</option>
               {LETTERS.map((l) => (
-                <option key={l} value={l}>{l}</option>
+                <option key={l} value={l}>
+                  {l}
+                </option>
               ))}
             </select>
           </div>
         </div>
         <div className="grade-filter-form__actions">
-          <button type="button" onClick={handleReset}>リセット</button>
-          <button type="submit" className="grade-filter-form__submit">検索</button>
+          <button type="button" onClick={handleReset}>
+            リセット
+          </button>
+          <button type="submit" className="grade-filter-form__submit">
+            検索
+          </button>
         </div>
       </form>
 

@@ -12,8 +12,12 @@
 }
 
 @keyframes batch-backdrop-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .batch-modal {
@@ -21,7 +25,9 @@
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-lg), 0 24px 48px rgba(15, 23, 42, 0.12);
+  box-shadow:
+    var(--shadow-lg),
+    0 24px 48px rgba(15, 23, 42, 0.12);
   display: flex;
   flex-direction: column;
   outline: none;
@@ -29,12 +35,22 @@
   max-height: 85vh;
 }
 
-.batch-modal--lg { max-width: 640px; }
-.batch-modal--md { max-width: 480px; }
+.batch-modal--lg {
+  max-width: 640px;
+}
+.batch-modal--md {
+  max-width: 480px;
+}
 
 @keyframes batch-modal-in {
-  from { opacity: 0; transform: scale(0.96) translateY(8px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); }
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .batch-modal__header {
@@ -79,11 +95,14 @@
   background: transparent;
   color: var(--color-text-tertiary);
   cursor: pointer;
-  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+  transition:
+    background-color 0.15s,
+    color 0.15s,
+    border-color 0.15s;
 }
 
 .batch-modal__close:hover {
-  background-color: #F1F5F9;
+  background-color: #f1f5f9;
   color: var(--color-text);
   border-color: var(--color-border);
 }
@@ -112,12 +131,14 @@
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.15s, border-color 0.15s;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
 }
 
 .batch-modal__cancel:hover {
-  background-color: #F8FAFC;
-  border-color: #CBD5E1;
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
 }
 
 .batch-modal__save {
@@ -130,7 +151,9 @@
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
-  transition: background-color 0.15s, box-shadow 0.15s;
+  transition:
+    background-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .batch-modal__save:hover:not(:disabled) {
@@ -162,7 +185,7 @@
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  background-color: #F8FAFC;
+  background-color: #f8fafc;
   cursor: pointer;
   user-select: none;
   transition: background-color 0.12s;
@@ -198,12 +221,12 @@
 
 .batch-log__entries {
   border-top: 1px solid var(--color-border);
-  background-color: #0F172A;
+  background-color: #0f172a;
   padding: 0.75rem 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
-  font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+  font-family: "Menlo", "Monaco", "Consolas", monospace;
   font-size: 0.78rem;
   line-height: 1.6;
   max-height: 200px;
@@ -216,17 +239,29 @@
 }
 
 .batch-log__entry-time {
-  color: #64748B;
+  color: #64748b;
   flex-shrink: 0;
 }
 
-.batch-log__entry-level--info  { color: #94A3B8; }
-.batch-log__entry-level--warn  { color: #FBBF24; }
-.batch-log__entry-level--error { color: #F87171; }
+.batch-log__entry-level--info {
+  color: #94a3b8;
+}
+.batch-log__entry-level--warn {
+  color: #fbbf24;
+}
+.batch-log__entry-level--error {
+  color: #f87171;
+}
 
-.batch-log__entry-msg--info  { color: #E2E8F0; }
-.batch-log__entry-msg--warn  { color: #FDE68A; }
-.batch-log__entry-msg--error { color: #FECACA; }
+.batch-log__entry-msg--info {
+  color: #e2e8f0;
+}
+.batch-log__entry-msg--warn {
+  color: #fde68a;
+}
+.batch-log__entry-msg--error {
+  color: #fecaca;
+}
 
 .batch-log__empty {
   padding: 2rem;
@@ -256,8 +291,8 @@
 }
 
 .batch-schedule-form__field select,
-.batch-schedule-form__field input[type='time'],
-.batch-schedule-form__field input[type='number'] {
+.batch-schedule-form__field input[type="time"],
+.batch-schedule-form__field input[type="number"] {
   padding: 0.6em 0.85em;
   font-size: 0.95rem;
   font-family: inherit;
@@ -265,7 +300,9 @@
   border: 1.5px solid var(--color-border);
   background-color: var(--color-surface);
   color: var(--color-text);
-  transition: border-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .batch-schedule-form__field select:focus,

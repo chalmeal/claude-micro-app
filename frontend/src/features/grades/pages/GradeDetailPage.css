@@ -26,7 +26,7 @@
   padding: 0.75rem 1rem;
   border-radius: var(--radius-md);
   background-color: var(--color-error-bg);
-  border: 1px solid #FECACA;
+  border: 1px solid #fecaca;
   color: var(--color-error);
   font-size: 0.875rem;
 }
@@ -45,7 +45,7 @@
 .grade-detail__skeleton-block {
   height: 20px;
   border-radius: var(--radius-sm);
-  background: linear-gradient(90deg, #F1F5F9 0%, #E2E8F0 50%, #F1F5F9 100%);
+  background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
   background-size: 200% 100%;
   animation: skeleton-pulse 1.4s infinite;
 }
@@ -115,13 +115,15 @@
   font-weight: 600;
   text-decoration: none;
   white-space: nowrap;
-  transition: border-color 0.15s, background-color 0.15s;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
   flex-shrink: 0;
 }
 
 .grade-detail__edit-btn:hover {
   border-color: var(--color-primary);
-  background-color: var(--color-primary-light, #EFF6FF);
+  background-color: var(--color-primary-light, #eff6ff);
 }
 
 .grade-detail__delete-btn {
@@ -129,7 +131,7 @@
   align-items: center;
   padding: 0.45em 1.1em;
   border-radius: var(--radius-md);
-  border: 1px solid #FECACA;
+  border: 1px solid #fecaca;
   background-color: var(--color-surface);
   color: var(--color-error);
   font-size: 0.875rem;
@@ -137,7 +139,9 @@
   font-family: inherit;
   cursor: pointer;
   white-space: nowrap;
-  transition: border-color 0.15s, background-color 0.15s;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s;
 }
 
 .grade-detail__delete-btn:hover:not(:disabled) {
@@ -192,7 +196,7 @@
 
 .grade-detail__term-card--current {
   border-color: var(--color-primary);
-  background-color: var(--color-primary-light, #EFF6FF);
+  background-color: var(--color-primary-light, #eff6ff);
 }
 
 .grade-detail__term-card--empty {
@@ -255,9 +259,15 @@
   font-variant-numeric: tabular-nums;
 }
 
-.grade-detail__diff--up     { color: var(--color-success, #16A34A); }
-.grade-detail__diff--down   { color: var(--color-error,   #DC2626); }
-.grade-detail__diff--neutral { color: var(--color-text-tertiary); }
+.grade-detail__diff--up {
+  color: var(--color-success, #16a34a);
+}
+.grade-detail__diff--down {
+  color: var(--color-error, #dc2626);
+}
+.grade-detail__diff--neutral {
+  color: var(--color-text-tertiary);
+}
 
 /* Grade badges (shared) */
 .grade-detail__badge {
@@ -270,12 +280,30 @@
 }
 
 /* Letter icon colors (used on header icon and term cards) */
-.grade-detail__letter--s { background-color: #EDE9FE; color: #7C3AED; }
-.grade-detail__letter--a { background-color: #DCFCE7; color: #16A34A; }
-.grade-detail__letter--b { background-color: #DBEAFE; color: #2563EB; }
-.grade-detail__letter--c { background-color: #FEF9C3; color: #A16207; }
-.grade-detail__letter--d { background-color: #FFEDD5; color: #C2410C; }
-.grade-detail__letter--f { background-color: #FEE2E2; color: #DC2626; }
+.grade-detail__letter--s {
+  background-color: #ede9fe;
+  color: #7c3aed;
+}
+.grade-detail__letter--a {
+  background-color: #dcfce7;
+  color: #16a34a;
+}
+.grade-detail__letter--b {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+.grade-detail__letter--c {
+  background-color: #fef9c3;
+  color: #a16207;
+}
+.grade-detail__letter--d {
+  background-color: #ffedd5;
+  color: #c2410c;
+}
+.grade-detail__letter--f {
+  background-color: #fee2e2;
+  color: #dc2626;
+}
 
 /* Detail row (student ID only) */
 .grade-detail__list {
@@ -341,18 +369,21 @@
   text-decoration: none;
   color: var(--color-text);
   min-width: 110px;
-  transition: border-color 0.15s, background-color 0.15s, box-shadow 0.15s;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s,
+    box-shadow 0.15s;
 }
 
 .grade-detail__term-link:hover {
   border-color: var(--color-primary);
-  background-color: var(--color-primary-light, #EFF6FF);
+  background-color: var(--color-primary-light, #eff6ff);
   box-shadow: var(--shadow-sm);
 }
 
 .grade-detail__term-link--active {
   border-color: var(--color-primary);
-  background-color: var(--color-primary-light, #EFF6FF);
+  background-color: var(--color-primary-light, #eff6ff);
   pointer-events: none;
 }
 

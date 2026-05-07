@@ -13,7 +13,9 @@ export const batches = mysqlTable('batches', {
     .$defaultFn(() => crypto.randomUUID()),
   name: varchar('name', { length: 255 }).notNull(),
   description: varchar('description', { length: 500 }).notNull().default(''),
-  status: mysqlEnum('status', ['success', 'failed', 'running', 'pending']).notNull().default('pending'),
+  status: mysqlEnum('status', ['success', 'failed', 'running', 'pending'])
+    .notNull()
+    .default('pending'),
   schedule: json('schedule').$type<BatchSchedule>().notNull(),
   lastRunAt: timestamp('last_run_at'),
   lastDuration: int('last_duration'),

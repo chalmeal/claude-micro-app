@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import type { Announcement } from '@/shared/types'
-import { getAnnouncements, getRecentAnnouncements } from '@/features/announcements/api/getAnnouncements'
+import {
+  getAnnouncements,
+  getRecentAnnouncements,
+} from '@/features/announcements/api/getAnnouncements'
 
 type AnnouncementsData = {
   announcements: Announcement[]
@@ -36,8 +39,10 @@ function useAnnouncementsBase(fetcher: () => Promise<Announcement[]>): Announcem
     }
 
     load()
-    return () => { cancelled = true }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      cancelled = true
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return { announcements, loading, error }

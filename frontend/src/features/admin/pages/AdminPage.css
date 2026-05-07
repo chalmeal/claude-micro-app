@@ -41,7 +41,10 @@
   box-shadow: var(--shadow-sm);
   text-decoration: none;
   color: inherit;
-  transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s,
+    border-color 0.2s;
 }
 
 .admin-card:hover {
@@ -83,7 +86,9 @@
 .admin-card__arrow {
   color: var(--color-text-tertiary);
   flex-shrink: 0;
-  transition: color 0.15s, transform 0.2s;
+  transition:
+    color 0.15s,
+    transform 0.2s;
 }
 
 .admin-card:hover .admin-card__arrow {

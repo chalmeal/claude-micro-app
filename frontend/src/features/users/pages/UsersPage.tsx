@@ -15,17 +15,13 @@ export function UsersPage() {
   const [filters, setFilters] = useState<UserFilters>(emptyUserFilters)
   const [currentPage, setCurrentPage] = useState(1)
 
-  const filteredUsers = useMemo(
-    () => filterUsers(users, filters),
-    [users, filters],
-  )
+  const filteredUsers = useMemo(() => filterUsers(users, filters), [users, filters])
 
   const totalPages = Math.max(1, Math.ceil(filteredUsers.length / PAGE_SIZE))
   const safePage = Math.min(currentPage, totalPages)
 
   const paginatedUsers = useMemo(
-    () =>
-      filteredUsers.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE),
+    () => filteredUsers.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE),
     [filteredUsers, safePage],
   )
 
@@ -39,8 +35,7 @@ export function UsersPage() {
     setCurrentPage(1)
   }
 
-  const rangeStart =
-    filteredUsers.length === 0 ? 0 : (safePage - 1) * PAGE_SIZE + 1
+  const rangeStart = filteredUsers.length === 0 ? 0 : (safePage - 1) * PAGE_SIZE + 1
   const rangeEnd = Math.min(safePage * PAGE_SIZE, filteredUsers.length)
 
   return (
@@ -55,10 +50,7 @@ export function UsersPage() {
         </Link>
       </section>
 
-      <UserFilterForm
-        onSubmit={handleFilterSubmit}
-        onReset={handleFilterReset}
-      />
+      <UserFilterForm onSubmit={handleFilterSubmit} onReset={handleFilterReset} />
 
       {error && (
         <p className="users-page__error" role="alert">

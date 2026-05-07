@@ -1,8 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import {
-  emptyUserFilters,
-  type UserFilters,
-} from '@/features/users/types'
+import { emptyUserFilters, type UserFilters } from '@/features/users/types'
 
 type Props = {
   onSubmit: (filters: UserFilters) => void
@@ -10,11 +7,7 @@ type Props = {
   initialFilters?: UserFilters
 }
 
-export function UserFilterForm({
-  onSubmit,
-  onReset,
-  initialFilters = emptyUserFilters,
-}: Props) {
+export function UserFilterForm({ onSubmit, onReset, initialFilters = emptyUserFilters }: Props) {
   const [filters, setFilters] = useState<UserFilters>(initialFilters)
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -50,9 +43,7 @@ export function UserFilterForm({
           <select
             id="filter-role"
             value={filters.role}
-            onChange={(e) =>
-              update('role', e.target.value as UserFilters['role'])
-            }
+            onChange={(e) => update('role', e.target.value as UserFilters['role'])}
           >
             <option value="">すべて</option>
             <option value="admin">管理者</option>
@@ -65,9 +56,7 @@ export function UserFilterForm({
           <select
             id="filter-status"
             value={filters.status}
-            onChange={(e) =>
-              update('status', e.target.value as UserFilters['status'])
-            }
+            onChange={(e) => update('status', e.target.value as UserFilters['status'])}
           >
             <option value="">すべて</option>
             <option value="active">有効</option>

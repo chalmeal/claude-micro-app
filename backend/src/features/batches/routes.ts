@@ -131,7 +131,8 @@ const rerunBatchRoute = createRoute({
   path: '/{id}/rerun',
   tags: ['Batches'],
   summary: 'バッチ再実行',
-  description: '指定したバッチジョブを即時再実行します。ステータスが running に変わり、新しい実行レコードが作成されます。',
+  description:
+    '指定したバッチジョブを即時再実行します。ステータスが running に変わり、新しい実行レコードが作成されます。',
   security,
   request: { params: z.object({ id: z.string() }) },
   responses: {

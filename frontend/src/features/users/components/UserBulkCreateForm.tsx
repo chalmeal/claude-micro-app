@@ -27,9 +27,7 @@ export function UserBulkCreateForm({ onSubmit, onCancel, submitting }: Props) {
   ])
 
   function updateRow(key: string, patch: Partial<CreateUserInput>) {
-    setRows((prev) =>
-      prev.map((r) => (r._key === key ? { ...r, ...patch } : r)),
-    )
+    setRows((prev) => prev.map((r) => (r._key === key ? { ...r, ...patch } : r)))
   }
 
   function addRow() {
@@ -37,9 +35,7 @@ export function UserBulkCreateForm({ onSubmit, onCancel, submitting }: Props) {
   }
 
   function removeRow(key: string) {
-    setRows((prev) =>
-      prev.length > 1 ? prev.filter((r) => r._key !== key) : prev,
-    )
+    setRows((prev) => (prev.length > 1 ? prev.filter((r) => r._key !== key) : prev))
   }
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -57,9 +53,7 @@ export function UserBulkCreateForm({ onSubmit, onCancel, submitting }: Props) {
 
   return (
     <form className="bulk-form" onSubmit={handleSubmit}>
-      <p className="bulk-form__hint">
-        空の行は無視されます。同じメールアドレスは登録できません。
-      </p>
+      <p className="bulk-form__hint">空の行は無視されます。同じメールアドレスは登録できません。</p>
 
       <div className="bulk-form__rows">
         <div className="bulk-form__row bulk-form__row--header">
@@ -127,11 +121,7 @@ export function UserBulkCreateForm({ onSubmit, onCancel, submitting }: Props) {
         <button type="button" onClick={onCancel} disabled={submitting}>
           キャンセル
         </button>
-        <button
-          type="submit"
-          className="bulk-form__submit"
-          disabled={submitting}
-        >
+        <button type="submit" className="bulk-form__submit" disabled={submitting}>
           {submitting ? '登録中...' : 'まとめて登録'}
         </button>
       </div>

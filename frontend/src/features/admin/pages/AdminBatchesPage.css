@@ -16,7 +16,9 @@
   text-decoration: none;
   transition: color 0.15s;
 }
-.admin-batches__back:hover { color: var(--color-primary); }
+.admin-batches__back:hover {
+  color: var(--color-primary);
+}
 
 .admin-batches__intro {
   margin-bottom: 2rem;
@@ -39,7 +41,7 @@
   padding: 0.75rem 1rem;
   border-radius: var(--radius-md);
   background-color: var(--color-error-bg);
-  border: 1px solid #FECACA;
+  border: 1px solid #fecaca;
   color: var(--color-error);
   font-size: 0.875rem;
 }
@@ -57,13 +59,17 @@
 .admin-batches__skeleton-row {
   height: 52px;
   border-radius: var(--radius-sm);
-  background: linear-gradient(90deg, #F1F5F9 0%, #E2E8F0 50%, #F1F5F9 100%);
+  background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
   background-size: 200% 100%;
   animation: batch-skeleton 1.4s infinite;
 }
 @keyframes batch-skeleton {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .admin-batches__table-wrap {
@@ -92,15 +98,19 @@
   letter-spacing: 0.04em;
   color: var(--color-text-secondary);
   border-bottom: 1px solid var(--color-border);
-  background-color: #F8FAFC;
+  background-color: #f8fafc;
   white-space: nowrap;
 }
 .admin-batches__table tbody tr {
   border-bottom: 1px solid var(--color-border-subtle);
   transition: background-color 0.12s;
 }
-.admin-batches__table tbody tr:last-child { border-bottom: none; }
-.admin-batches__table tbody tr:hover { background-color: #FAFBFC; }
+.admin-batches__table tbody tr:last-child {
+  border-bottom: none;
+}
+.admin-batches__table tbody tr:hover {
+  background-color: #fafbfc;
+}
 
 .admin-batches__name {
   display: flex;
@@ -134,8 +144,15 @@
   animation: batch-dot-pulse 1.4s ease-in-out infinite;
 }
 @keyframes batch-dot-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.5; transform: scale(0.7); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.7);
+  }
 }
 
 .admin-batches__muted {
@@ -161,7 +178,10 @@
   font-size: 0.78rem;
   font-weight: 500;
   cursor: pointer;
-  transition: border-color 0.15s, background-color 0.15s, color 0.15s;
+  transition:
+    border-color 0.15s,
+    background-color 0.15s,
+    color 0.15s;
 }
 .admin-batches__btn:hover:not(:disabled) {
   border-color: var(--color-primary);
@@ -174,13 +194,13 @@
 }
 
 .admin-batches__btn--rerun {
-  border-color: #FECACA;
+  border-color: #fecaca;
   background-color: var(--color-error-bg);
   color: var(--color-error);
 }
 .admin-batches__btn--rerun:hover:not(:disabled) {
   border-color: var(--color-error);
-  background-color: #FEE2E2;
+  background-color: #fee2e2;
   color: var(--color-error);
 }
 

@@ -9,25 +9,26 @@ import { useSnackbar } from '@/shared/hooks/useSnackbar'
 import './AdminBatchesPage.css'
 
 const STATUS_CONFIG = {
-  success:  { label: '正常',     color: '#10B981' },
-  failed:   { label: '失敗',     color: '#EF4444' },
-  running:  { label: '実行中',   color: '#2563EB' },
-  pending:  { label: '待機中',   color: '#94A3B8' },
+  success: { label: '正常', color: '#10B981' },
+  failed: { label: '失敗', color: '#EF4444' },
+  running: { label: '実行中', color: '#2563EB' },
+  pending: { label: '待機中', color: '#94A3B8' },
 }
 
 function formatDuration(sec: number | null): string {
   if (sec === null) return '—'
   if (sec < 60) return `${sec}秒`
-  const m = Math.floor(sec / 60), s = sec % 60
+  const m = Math.floor(sec / 60),
+    s = sec % 60
   return s ? `${m}分${s}秒` : `${m}分`
 }
 
 function scheduleLabel(job: BatchJob): string {
   const { schedule: s } = job
   const DOW = ['日', '月', '火', '水', '木', '金', '土']
-  if (s.frequency === 'hourly')  return '毎時 0分'
-  if (s.frequency === 'daily')   return `毎日 ${s.time}`
-  if (s.frequency === 'weekly')  return `毎週${DOW[s.dayOfWeek ?? 1]} ${s.time}`
+  if (s.frequency === 'hourly') return '毎時 0分'
+  if (s.frequency === 'daily') return `毎日 ${s.time}`
+  if (s.frequency === 'weekly') return `毎週${DOW[s.dayOfWeek ?? 1]} ${s.time}`
   return `毎月${s.dayOfMonth ?? 1}日 ${s.time}`
 }
 
@@ -35,29 +36,41 @@ export function AdminBatchesPage() {
   const { batches, loading, error, setBatches } = useBatches()
   const snackbar = useSnackbar()
   const [rerunning, setRerunning] = useState<Set<string>>(new Set())
-  const [logBatch, setLogBatch]   = useState<BatchJob | null>(null)
-  const [schBatch, setSchBatch]   = useState<BatchJob | null>(null)
+  const [logBatch, setLogBatch] = useState<BatchJob | null>(null)
+  const [schBatch, setSchBatch] = useState<BatchJob | null>(null)
 
   async function handleRerun(job: BatchJob) {
     if (!window.confirm(`「${job.name}」を再実行しますか？`)) return
     setRerunning((s) => new Set(s).add(job.id))
-    setBatches((prev) =>
-      prev.map((b) => b.id === job.id ? { ...b, status: 'running' } : b),
-    )
+    setBatches((prev) => prev.map((b) => (b.id === job.id ? { ...b, status: 'running' } : b)))
     try {
       await rerunBatch(job.id)
       setBatches((prev) =>
-        prev.map((b) => b.id === job.id ? { ...b, status: 'success', lastRunAt: new Date().toISOString().replace('T', ' ').slice(0, 19) } : b),
+        prev.map((b) =>
+          b.id === job.id
+            ? {
+                ...b,
+                status: 'success',
+                lastRunAt: new Date().toISOString().replace('T', ' ').slice(0, 19),
+              }
+            : b,
+        ),
       )
       snackbar.show(`「${job.name}」を再実行しました`)
     } finally {
-      setRerunning((s) => { const n = new Set(s); n.delete(job.id); return n })
+      setRerunning((s) => {
+        const n = new Set(s)
+        n.delete(job.id)
+        return n
+      })
     }
   }
 
   return (
     <div className="admin-batches">
-      <Link to="/admin" className="admin-batches__back">← 管理に戻る</Link>
+      <Link to="/admin" className="admin-batches__back">
+        ← 管理に戻る
+      </Link>
 
       <div className="admin-batches__intro">
         <div>
@@ -110,15 +123,18 @@ export function AdminBatchesPage() {
                         {st.label}
                       </span>
                     </td>
-                    <td data-label="最終実行" className="admin-batches__muted">{job.lastRunAt ?? '—'}</td>
-                    <td data-label="所要時間" className="admin-batches__muted">{formatDuration(job.lastDuration)}</td>
-                    <td data-label="スケジュール" className="admin-batches__muted">{scheduleLabel(job)}</td>
+                    <td data-label="最終実行" className="admin-batches__muted">
+                      {job.lastRunAt ?? '—'}
+                    </td>
+                    <td data-label="所要時間" className="admin-batches__muted">
+                      {formatDuration(job.lastDuration)}
+                    </td>
+                    <td data-label="スケジュール" className="admin-batches__muted">
+                      {scheduleLabel(job)}
+                    </td>
                     <td>
                       <div className="admin-batches__actions">
-                        <button
-                          className="admin-batches__btn"
-                          onClick={() => setLogBatch(job)}
-                        >
+                        <button className="admin-batches__btn" onClick={() => setLogBatch(job)}>
                           ログ
                         </button>
                         {(job.status === 'failed' || isRerunning) && (
@@ -147,15 +163,13 @@ export function AdminBatchesPage() {
         </div>
       )}
 
-      {logBatch && (
-        <BatchLogModal batch={logBatch} onClose={() => setLogBatch(null)} />
-      )}
+      {logBatch && <BatchLogModal batch={logBatch} onClose={() => setLogBatch(null)} />}
       {schBatch && (
         <BatchScheduleModal
           batch={schBatch}
           onClose={() => setSchBatch(null)}
           onSaved={(updated) => {
-            setBatches((prev) => prev.map((b) => b.id === updated.id ? updated : b))
+            setBatches((prev) => prev.map((b) => (b.id === updated.id ? updated : b)))
             setSchBatch(null)
           }}
         />
