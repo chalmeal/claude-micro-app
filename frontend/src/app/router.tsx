@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom'
+import { createBrowserRouter } from 'react-router-dom'
 import { LoginPage, ForgotPasswordPage, ResetPasswordPage, SetupPasswordPage } from '@/features/auth'
 import {
   AdminPage,
@@ -14,6 +14,7 @@ import { UsersPage, UserDetailPage, UserCreatePage } from '@/features/users'
 import { AppLayout } from '@/shared/components/layout/AppLayout'
 import { ProtectedRoute } from '@/shared/components/ProtectedRoute'
 import { AdminRoute } from '@/shared/components/AdminRoute'
+import { NotFoundPage } from '@/shared/components/NotFoundPage'
 
 export const router = createBrowserRouter([
   {
@@ -118,10 +119,11 @@ export const router = createBrowserRouter([
           </AdminRoute>
         ),
       },
+      { path: '*', element: <NotFoundPage /> },
     ],
   },
   {
     path: '*',
-    element: <Navigate to="/" replace />,
+    element: <NotFoundPage />,
   },
 ])

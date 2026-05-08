@@ -2,6 +2,7 @@ import { swaggerUI } from '@hono/swagger-ui'
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
+import { secureHeaders } from 'hono/secure-headers'
 import { announcementsRoutes } from './features/announcements/routes.js'
 import { auditLogsRoutes } from './features/auditLogs/routes.js'
 import { authRoutes } from './features/auth/routes.js'
@@ -14,6 +15,17 @@ export function createApp() {
   const app = new OpenAPIHono()
 
   app.use(logger())
+  app.use(secureHeaders({
+    xFrameOptions: 'DENY',
+    xContentTypeOptions: 'nosniff',
+    referrerPolicy: 'strict-origin-when-cross-origin',
+    strictTransportSecurity: 'max-age=63072000; includeSubDomains; preload',
+    permissionsPolicy: {
+      camera: [],
+      microphone: [],
+      geolocation: [],
+    },
+  }))
   app.use(cors({ origin: process.env.CORS_ORIGIN ?? 'http://localhost:5173' }))
 
   app.get('/health', (c) => c.json({ status: 'ok' }))
