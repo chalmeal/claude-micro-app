@@ -81,6 +81,7 @@ npm run dev
 | `npm run build` | フロントエンド + バックエンドを本番ビルド |
 | `npm run lint` | フロントエンド ESLint を実行 |
 | `npm run preview` | フロントエンドビルド成果物のローカルプレビュー |
+| `npm test -w frontend` | フロントエンドのユニットテストを実行（Jest） |
 | `npm run db:migrate -w backend` | DB マイグレーションを適用 |
 | `npm run db:seed -w backend` | サンプルデータを投入 |
 | `npm run db:generate -w backend` | スキーマ変更からマイグレーションファイルを生成 |

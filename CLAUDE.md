@@ -36,12 +36,15 @@ claude-micro-app/          # ルート（workspaces 管理）
 | `npm run build` | frontend + backend 本番ビルド |
 | `npm run lint` | frontend ESLint 実行 |
 | `npm run preview` | frontend ビルド成果物のローカルプレビュー |
+| `npm test -w frontend` | frontend ユニットテスト実行（Jest） |
 
 ### frontend ディレクトリで直接実行する場合
 
 ```bash
 cd frontend
 npm run dev / build / lint / preview
+npm test               # ユニットテスト実行
+npm run test:watch     # ウォッチモード
 ```
 
 ### backend ディレクトリで直接実行する場合
@@ -56,7 +59,7 @@ npm run db:migrate   # マイグレーション適用
 npm run db:studio    # Drizzle Studio 起動
 ```
 
-変更後は最低限 `npm run lint`（frontend）と `npm run build` の両方を通すこと。
+変更後は最低限 `npm run lint`（frontend）と `npm run build` の両方を通すこと。テストを追加・修正した場合は `npm test -w frontend` も通すこと。
 
 ---
 
@@ -130,9 +133,84 @@ import { ErrorBoundary } from '@/shared/components/ErrorBoundary'
 2. `hooks/` にロジック、`components/` に UI を配置
 3. `index.ts` で外部公開する API（コンポーネント・フック）を再エクスポート
 4. 利用側は `import { X } from '@/features/<feature>'` で参照
-5. ルートから `npm run lint` と `npm run build` を通す
+5. `__tests__/` にユニットテストを追加する（後述）
+6. ルートから `npm run lint` と `npm run build` と `npm test -w frontend` を通す
 
-参考実装: [frontend/src/features/counter/](frontend/src/features/counter/)
+---
+
+## frontend テスト
+
+**Jest**（v29）+ **@testing-library/react** による単体テスト。
+
+### テスト設定ファイル
+
+| ファイル | 役割 |
+| --- | --- |
+| `frontend/jest.config.cjs` | Jest 設定（ESM モード、`@/` エイリアス、CSS モック） |
+| `frontend/tsconfig.jest.json` | ts-jest 用 tsconfig（`moduleResolution: node`） |
+| `frontend/src/setupTests.ts` | jest-dom 拡張マッチャー・グローバル polyfill |
+| `frontend/src/__mocks__/fileMock.cjs` | CSS インポートのモック |
+| `frontend/src/__tests__/testHelpers.tsx` | Auth コンテキストモックなどの共通テストユーティリティ |
+
+### テストファイルの置き場所
+
+テストファイルはソースファイルと同じ feature/shared のディレクトリ内に `__tests__/` を作り共存させる。
+
+```
+features/grades/
+├── utils/
+│   ├── parseGradesCsv.ts
+│   └── __tests__/
+│       └── parseGradesCsv.test.ts
+└── components/
+    ├── GradeList.tsx
+    └── __tests__/
+        └── GradeList.test.tsx
+```
+
+テストファイルは `*.test.ts` / `*.test.tsx` の命名のみ対象（`__tests__/` 内の非テストファイルは除外される）。
+
+### テストを書くときの注意点
+
+**ESM モードでは `jest` オブジェクトを明示インポートする**
+
+```ts
+import { jest } from '@jest/globals'
+
+const mockFn = jest.fn()          // OK
+jest.spyOn(console, 'error')     // OK
+jest.useFakeTimers()             // OK
+```
+
+`jest.fn()` 等を使うファイルはこのインポートが必須（`describe` / `it` / `expect` は自動注入されるが `jest` オブジェクト本体は注入されない）。
+
+**認証コンテキストを必要とするコンポーネント**
+
+`@/__tests__/testHelpers` の `createMockAuthValue` と `TestWrapper` を使う。
+
+```tsx
+import { createMockAuthValue, TestWrapper } from '@/__tests__/testHelpers'
+
+render(
+  <TestWrapper authValue={{ isAdmin: true }}>
+    <MyComponent />
+  </TestWrapper>
+)
+```
+
+**React Router を必要とするコンポーネント**
+
+`MemoryRouter` でラップする。ただしプログラムナビゲーション（`useNavigate`）は jsdom の制約により実際の遷移をテストできないため、クリック可能なクラスや `aria-label` の存在確認にとどめる。実際のナビゲーション動作は E2E テストに委ねる。
+
+### テスト対象のスコープ
+
+| 対象 | 方針 |
+| --- | --- |
+| 純粋関数（parse・filter・変換など） | 網羅的にテストする |
+| 表示コンポーネント | レンダリング・アクセシビリティ属性をテストする |
+| フォーム | 入力・サブミット・エラー表示をテストする |
+| ページコンポーネント | 原則テストしない（複雑な依存が多いため） |
+| API 呼び出し（`apiFetch` 等） | ユニットテストでは原則モックしない。hook は対象外 |
 
 ---
 
