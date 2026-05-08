@@ -3,7 +3,12 @@ import { Link } from 'react-router-dom'
 import { deleteAnnouncement, getAnnouncements } from '@/shared/api/announcements'
 import type { Announcement } from '@/shared/types'
 import { useAnnouncements } from '@/features/announcements/hooks/useAnnouncements'
+import { CategoryBadge } from '@/shared/components/Badge'
 import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
+import { DataTable, type Column } from '@/shared/components/DataTable'
+import { ErrorAlert } from '@/shared/components/ErrorAlert'
+import { PageHeader } from '@/shared/components/PageHeader'
+import { SkeletonRows } from '@/shared/components/SkeletonRows'
 import './AdminAnnouncementsPage.css'
 
 const CATEGORY_LABELS: Record<Announcement['category'], string> = {
@@ -20,10 +25,6 @@ export function AdminAnnouncementsPage() {
 
   const list = items ?? announcements
 
-  function handleDelete(item: Announcement) {
-    setConfirmItem(item)
-  }
-
   async function doDelete(id: string) {
     setDeleting(id)
     try {
@@ -35,27 +36,61 @@ export function AdminAnnouncementsPage() {
     }
   }
 
+  const columns: Column<Announcement>[] = [
+    {
+      key: 'title',
+      label: 'タイトル',
+      className: 'admin-announcements__title',
+      render: (item) => item.title,
+    },
+    {
+      key: 'category',
+      label: 'カテゴリ',
+      render: (item) => <CategoryBadge category={item.category} />,
+    },
+    {
+      key: 'date',
+      label: '日付',
+      className: 'admin-announcements__date',
+      render: (item) => item.date,
+    },
+    {
+      key: 'actions',
+      label: '',
+      className: 'admin-announcements__actions',
+      render: (item) => (
+        <>
+          <Link to={`/admin/announcements/${item.id}/edit`} className="admin-announcements__edit">
+            編集
+          </Link>
+          <button
+            className="admin-announcements__delete"
+            onClick={(e) => {
+              e.stopPropagation()
+              setConfirmItem(item)
+            }}
+            disabled={deleting === item.id}
+          >
+            {deleting === item.id ? '削除中…' : '削除'}
+          </button>
+        </>
+      ),
+    },
+  ]
+
   return (
     <div className="admin-announcements">
       <Link to="/admin" className="admin-announcements__back">
         ← 管理に戻る
       </Link>
 
-      <div className="admin-announcements__intro">
-        <div>
-          <h1>お知らせ管理</h1>
-          <p>お知らせの作成・編集・削除を行います</p>
-        </div>
-        <Link to="/admin/announcements/new" className="admin-announcements__create">
-          + 新規作成
-        </Link>
-      </div>
+      <PageHeader
+        title="お知らせ管理"
+        description="お知らせの作成・編集・削除を行います"
+        action={{ label: '+ 新規作成', to: '/admin/announcements/new' }}
+      />
 
-      {error && (
-        <p className="admin-announcements__error" role="alert">
-          データの読み込みに失敗しました: {error.message}
-        </p>
-      )}
+      <ErrorAlert error={error} />
 
       {confirmItem && (
         <ConfirmDialog
@@ -64,9 +99,18 @@ export function AdminAnnouncementsPage() {
           details={
             <table className="confirm-detail-table">
               <tbody>
-                <tr><th>タイトル</th><td>{confirmItem.title}</td></tr>
-                <tr><th>カテゴリ</th><td>{CATEGORY_LABELS[confirmItem.category]}</td></tr>
-                <tr><th>日付</th><td>{confirmItem.date}</td></tr>
+                <tr>
+                  <th>タイトル</th>
+                  <td>{confirmItem.title}</td>
+                </tr>
+                <tr>
+                  <th>カテゴリ</th>
+                  <td>{CATEGORY_LABELS[confirmItem.category]}</td>
+                </tr>
+                <tr>
+                  <th>日付</th>
+                  <td>{confirmItem.date}</td>
+                </tr>
               </tbody>
             </table>
           }
@@ -82,64 +126,14 @@ export function AdminAnnouncementsPage() {
       )}
 
       {loading ? (
-        <div className="admin-announcements__skeleton">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div key={i} className="admin-announcements__skeleton-row" />
-          ))}
-        </div>
+        <SkeletonRows count={4} rowHeight={40} />
       ) : (
-        <div className="admin-announcements__table-wrap">
-          <table className="admin-announcements__table">
-            <thead>
-              <tr>
-                <th>タイトル</th>
-                <th>カテゴリ</th>
-                <th>日付</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {list.length === 0 ? (
-                <tr>
-                  <td colSpan={4} className="admin-announcements__empty">
-                    お知らせはありません
-                  </td>
-                </tr>
-              ) : (
-                list.map((item) => (
-                  <tr key={item.id}>
-                    <td data-label="タイトル" className="admin-announcements__title">
-                      {item.title}
-                    </td>
-                    <td data-label="カテゴリ">
-                      <span className={`announcement-badge announcement-badge--${item.category}`}>
-                        {CATEGORY_LABELS[item.category]}
-                      </span>
-                    </td>
-                    <td data-label="日付" className="admin-announcements__date">
-                      {item.date}
-                    </td>
-                    <td className="admin-announcements__actions">
-                      <Link
-                        to={`/admin/announcements/${item.id}/edit`}
-                        className="admin-announcements__edit"
-                      >
-                        編集
-                      </Link>
-                      <button
-                        className="admin-announcements__delete"
-                        onClick={() => handleDelete(item)}
-                        disabled={deleting === item.id}
-                      >
-                        {deleting === item.id ? '削除中…' : '削除'}
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-        </div>
+        <DataTable
+          columns={columns}
+          rows={list}
+          getRowKey={(item) => item.id}
+          emptyMessage="お知らせはありません"
+        />
       )}
     </div>
   )

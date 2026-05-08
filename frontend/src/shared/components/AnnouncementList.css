@@ -144,30 +144,6 @@
   border-top: 1px solid var(--color-border-subtle);
 }
 
-/* Category badge */
-.announcement-badge {
-  display: inline-block;
-  padding: 0.18em 0.6em;
-  border-radius: 999px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-  flex-shrink: 0;
-}
-
-.announcement-badge--important {
-  background-color: #fef2f2;
-  color: #ef4444;
-}
-.announcement-badge--info {
-  background-color: var(--color-primary-tint);
-  color: var(--color-primary);
-}
-.announcement-badge--maintenance {
-  background-color: #fffbeb;
-  color: #d97706;
-}
-
 /* Skeleton */
 .announcement-item--skeleton {
   height: 62px;

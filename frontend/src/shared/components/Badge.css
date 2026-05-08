@@ -1,0 +1,94 @@
+/* Role badge */
+.badge {
+  display: inline-block;
+  padding: 0.2em 0.65em;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.badge--role-admin {
+  background-color: var(--color-primary-tint);
+  color: var(--color-primary);
+}
+
+.badge--role-member {
+  background-color: #f1f5f9;
+  color: var(--color-text-secondary);
+}
+
+/* Status badge */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.status__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+.status--active {
+  color: var(--color-success);
+}
+
+.status--inactive {
+  color: var(--color-text-tertiary);
+}
+
+/* Grade badge */
+.grade-badge {
+  display: inline-block;
+  padding: 0.2em 0.65em;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  min-width: 2em;
+  text-align: center;
+}
+
+.grade-badge--s { background-color: #ede9fe; color: #7c3aed; }
+.grade-badge--a { background-color: #dcfce7; color: #16a34a; }
+.grade-badge--b { background-color: #dbeafe; color: #2563eb; }
+.grade-badge--c { background-color: #fef9c3; color: #a16207; }
+.grade-badge--d { background-color: #ffedd5; color: #c2410c; }
+.grade-badge--f { background-color: #fee2e2; color: #dc2626; }
+
+/* Audit action badge */
+.audit-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2em 0.6em;
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.audit-badge--auth         { background-color: #ede9fe; color: #6d28d9; }
+.audit-badge--user         { background-color: #dbeafe; color: #1d4ed8; }
+.audit-badge--announcement { background-color: #d1fae5; color: #065f46; }
+.audit-badge--batch        { background-color: #fef3c7; color: #92400e; }
+
+/* Announcement category badge */
+.announcement-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.2em 0.65em;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.announcement-badge--important   { background-color: #fee2e2; color: #dc2626; }
+.announcement-badge--info        { background-color: #dbeafe; color: #1d4ed8; }
+.announcement-badge--maintenance { background-color: #fef3c7; color: #92400e; }

@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { GradeList } from '@/features/grades/components/GradeList'
 import { useGrades } from '@/features/grades/hooks/useGrades'
 import {
@@ -9,7 +8,11 @@ import {
   type Semester,
 } from '@/features/grades/types'
 import { getSubjects } from '@/features/grades/api/getGrades'
+import { ErrorAlert } from '@/shared/components/ErrorAlert'
+import { PageHeader } from '@/shared/components/PageHeader'
 import { Pagination } from '@/shared/components/Pagination'
+import { ResultCount } from '@/shared/components/ResultCount'
+import { SkeletonRows } from '@/shared/components/SkeletonRows'
 import './GradesPage.css'
 
 const PAGE_SIZE = 30
@@ -47,14 +50,12 @@ export function GradesPage() {
 
   const subjects = useMemo(() => getSubjects(), [])
 
-  // マウント時に保存済み状態があれば自動で再検索
   useEffect(() => {
     if (shouldRestore) {
       search().then(() => setHasSearched(true))
     }
   }, [search, shouldRestore])
 
-  // 検索条件をセッションストレージに保存
   useEffect(() => {
     if (!hasSearched) return
     try {
@@ -116,15 +117,11 @@ export function GradesPage() {
 
   return (
     <div className="grades-page">
-      <section className="grades-page__intro">
-        <div>
-          <h1>成績一覧</h1>
-          <p>年度を選択して検索してください</p>
-        </div>
-        <Link to="/grades/new" className="grades-page__create-btn">
-          成績を登録
-        </Link>
-      </section>
+      <PageHeader
+        title="成績一覧"
+        description="年度を選択して検索してください"
+        action={{ label: '成績を登録', to: '/grades/new' }}
+      />
 
       <form className="grade-filter-form" onSubmit={handleSubmit}>
         <div className="grade-filter-form__grid">
@@ -227,27 +224,18 @@ export function GradesPage() {
         </div>
       </form>
 
-      {error && (
-        <p className="grades-page__error" role="alert">
-          データの読み込みに失敗しました: {error.message}
-        </p>
-      )}
+      <ErrorAlert error={error} />
 
-      {loading && (
-        <div className="grades-page__skeleton" aria-busy="true">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="grades-page__skeleton-row" />
-          ))}
-        </div>
-      )}
+      {loading && <SkeletonRows count={5} />}
 
       {hasSearched && !loading && (
         <>
-          <p className="grades-page__count">
-            {filtered.length === 0
-              ? '該当する成績データがありません'
-              : `${rangeStart}–${rangeEnd} 件 / ${filtered.length} 件`}
-          </p>
+          <ResultCount
+            total={filtered.length}
+            rangeStart={rangeStart}
+            rangeEnd={rangeEnd}
+            emptyMessage="該当する成績データがありません"
+          />
           <GradeList grades={paginated} />
           <Pagination
             currentPage={safePage}

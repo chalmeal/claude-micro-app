@@ -1,11 +1,14 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { UserFilterForm } from '@/features/users/components/UserFilterForm'
 import { UserList } from '@/features/users/components/UserList'
 import { useUsers } from '@/features/users/hooks/useUsers'
 import { emptyUserFilters, type UserFilters } from '@/features/users/types'
 import { filterUsers } from '@/features/users/utils/filterUsers'
+import { ErrorAlert } from '@/shared/components/ErrorAlert'
+import { PageHeader } from '@/shared/components/PageHeader'
 import { Pagination } from '@/shared/components/Pagination'
+import { ResultCount } from '@/shared/components/ResultCount'
+import { SkeletonRows } from '@/shared/components/SkeletonRows'
 import './UsersPage.css'
 
 const PAGE_SIZE = 30
@@ -40,37 +43,27 @@ export function UsersPage() {
 
   return (
     <div className="users-page">
-      <section className="users-page__intro">
-        <div>
-          <h1>ユーザー</h1>
-          <p>システムに登録されているユーザーの一覧です</p>
-        </div>
-        <Link to="/users/new" className="users-page__create">
-          ユーザー登録
-        </Link>
-      </section>
+      <PageHeader
+        title="ユーザー"
+        description="システムに登録されているユーザーの一覧です"
+        action={{ label: 'ユーザー登録', to: '/users/new' }}
+      />
 
       <UserFilterForm onSubmit={handleFilterSubmit} onReset={handleFilterReset} />
 
-      {error && (
-        <p className="users-page__error" role="alert">
-          データの読み込みに失敗しました: {error.message}
-        </p>
-      )}
+      <ErrorAlert error={error} />
 
       {loading ? (
-        <div className="users-page__skeleton" aria-busy="true">
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="users-page__skeleton-row" />
-          ))}
-        </div>
+        <SkeletonRows count={5} />
       ) : (
         <>
-          <p className="users-page__count">
-            {filteredUsers.length === 0
-              ? '該当するユーザーはいません'
-              : `${rangeStart}–${rangeEnd} 件 / ${filteredUsers.length} 件 (全 ${users.length} 件)`}
-          </p>
+          <ResultCount
+            total={filteredUsers.length}
+            rangeStart={rangeStart}
+            rangeEnd={rangeEnd}
+            emptyMessage="該当するユーザーはいません"
+            totalRaw={users.length}
+          />
           <UserList users={paginatedUsers} />
           <Pagination
             currentPage={safePage}
