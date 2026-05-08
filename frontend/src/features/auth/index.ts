@@ -1,5 +1,8 @@
 export { AuthProvider } from './components/AuthProvider'
 export { useAuth } from './hooks/useAuth'
 export { LoginPage } from './pages/LoginPage'
+export { ForgotPasswordPage } from './pages/ForgotPasswordPage'
+export { ResetPasswordPage } from './pages/ResetPasswordPage'
+export { SetupPasswordPage } from './pages/SetupPasswordPage'
 export { LoginForm } from './components/LoginForm'
 export type { User, LoginCredentials, AuthState, UserRole } from './types'

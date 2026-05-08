@@ -160,7 +160,8 @@ backend/src/
 │   └── types.ts               # HonoEnv・JwtPayload など共通型
 ├── lib/
 │   ├── jwt.ts                 # JWT 署名・検証
-│   └── password.ts            # bcrypt ハッシュ・比較
+│   ├── password.ts            # bcrypt ハッシュ・比較
+│   └── email.ts               # nodemailer によるメール送信（Mailhog）
 ├── app.ts                     # OpenAPIHono インスタンス生成・ルート登録
 └── index.ts                   # @hono/node-server でサーバ起動
 ```
@@ -169,7 +170,10 @@ backend/src/
 
 | 機能 | パス | 認証 |
 | --- | --- | --- |
-| 認証 | `/api/auth` | 一部不要 |
+| ログイン | `POST /api/auth/login` | 不要 |
+| パスワード変更 | `POST /api/auth/change-password` | 要認証 |
+| パスワードリセット要求 | `POST /api/auth/reset-password/request` | 不要 |
+| パスワードリセット確定 | `POST /api/auth/reset-password/confirm` | 不要 |
 | ユーザー管理 | `/api/users` | admin のみ |
 | 成績管理 | `/api/grades` | 要認証 |
 | お知らせ管理 | `/api/announcements` | 要認証（書き込みは admin のみ） |
@@ -200,6 +204,10 @@ backend/src/
 | `CORS_ORIGIN` | フロントエンドのオリジン |
 | `DB_HOST` / `DB_PORT` / `DB_USER` / `DB_PASSWORD` / `DB_NAME` | MySQL 接続情報 |
 | `JWT_SECRET` | JWT 署名シークレット（本番では必ず変更する） |
+| `SMTP_HOST` | SMTP サーバホスト（開発: `localhost`） |
+| `SMTP_PORT` | SMTP サーバポート（開発: `1025` = Mailhog） |
+| `SMTP_FROM` | 送信元メールアドレス |
+| `APP_URL` | フロントエンドの URL（リセットメールのリンク生成に使用） |
 
 ---
 

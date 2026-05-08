@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 vi.mock('./repository.js')
 vi.mock('../../lib/password.js')
+vi.mock('../../lib/email.js')
 
 import * as password from '../../lib/password.js'
 import * as repo from './repository.js'
@@ -14,6 +15,8 @@ const mockUser = {
   passwordHash: 'hash',
   role: 'member' as const,
   status: 'active' as const,
+  passwordResetToken: null,
+  passwordResetExpiresAt: null,
   createdAt: new Date(),
   updatedAt: new Date(),
 }
@@ -21,25 +24,25 @@ const mockUser = {
 describe('usersService.create', () => {
   beforeEach(() => vi.clearAllMocks())
 
-  it('新規ユーザーを作成できる', async () => {
+  it('新規ユーザーを作成しセットアップメールを送信できる', async () => {
     vi.mocked(repo.usersRepository.findByEmail).mockResolvedValue(undefined)
     vi.mocked(password.hashPassword).mockResolvedValue('hashed')
     vi.mocked(repo.usersRepository.create).mockResolvedValue(mockUser)
+    vi.mocked(repo.usersRepository.setSetupToken).mockResolvedValue(undefined)
 
     const result = await usersService.create({
       name: 'Alice',
       email: 'alice@example.com',
-      temporaryPassword: 'password123',
     })
 
     expect(result.email).toBe('alice@example.com')
     expect(repo.usersRepository.create).toHaveBeenCalledWith(
       expect.objectContaining({
         email: 'alice@example.com',
-        passwordHash: 'hashed',
         role: 'member',
       }),
     )
+    expect(repo.usersRepository.setSetupToken).toHaveBeenCalledOnce()
   })
 
   it('メール重複 → ConflictError', async () => {
@@ -49,7 +52,6 @@ describe('usersService.create', () => {
       usersService.create({
         name: 'Bob',
         email: 'alice@example.com',
-        temporaryPassword: 'password123',
       }),
     ).rejects.toThrow('Email already in use')
   })

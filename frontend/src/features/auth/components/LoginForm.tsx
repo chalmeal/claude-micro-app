@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from 'react'
+import { Link } from 'react-router-dom'
 import { useAuth } from '@/features/auth/hooks/useAuth'
 
 type Props = {
@@ -56,6 +57,10 @@ export function LoginForm({ onSuccess }: Props) {
           required
         />
       </div>
+
+      <p className="login-form__forgot">
+        <Link to="/forgot-password">パスワードを忘れた方はこちら</Link>
+      </p>
 
       {error && (
         <p className="login-form__error" role="alert">

@@ -16,6 +16,8 @@ const mockUser = {
   passwordHash: 'hashed_password',
   role: 'member' as const,
   status: 'active' as const,
+  passwordResetToken: null,
+  passwordResetExpiresAt: null,
   createdAt: new Date(),
   updatedAt: new Date(),
 }

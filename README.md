@@ -8,7 +8,7 @@ npm workspaces によるモノレポ構成。フロントエンド（React）と
 
 ## 環境構築
 
-Dev Container（Docker Compose）での起動を推奨します。VS Code の「Reopen in Container」で起動すると、MySQL を含む開発環境が自動的にセットアップされます。
+Dev Container（Docker Compose）での起動を推奨します。VS Code の「Reopen in Container」で起動すると、MySQL・Mailhog を含む開発環境が自動的にセットアップされます。
 
 ## 初回セットアップ
 
@@ -97,6 +97,14 @@ npm run dev
 
 「Authorize」ボタンに `/api/auth/login` で取得した JWT を入力することで、認証が必要なエンドポイントも試せます。
 
+## メール確認（開発環境）
+
+開発環境ではメール送信に [Mailhog](https://github.com/mailhog/MailHog) を使用します。パスワードリセットメールなど、アプリが送信したメールは以下の URL で確認できます。
+
+| URL | 内容 |
+| --- | --- |
+| http://localhost:8025 | Mailhog Web UI |
+
 ## アーキテクチャ
 
 ### モノレポ構成
@@ -128,7 +136,7 @@ frontend/src/
 ```
 backend/src/
 ├── features/           # 機能スライス（routes / service / repository）
-│   ├── auth/           # 認証・パスワード変更
+│   ├── auth/           # 認証・パスワード変更・パスワードリセット
 │   ├── users/          # ユーザー管理（管理者専用）
 │   ├── grades/         # 成績管理
 │   ├── announcements/  # お知らせ管理
@@ -154,6 +162,12 @@ backend/src/
 
 ### 認証フロー
 
+**ログイン**
 1. `POST /api/auth/login` でメールアドレスとパスワードを送信して JWT を取得
 2. 以降のリクエストは `Authorization: Bearer <token>` ヘッダで認証
 3. 管理者専用エンドポイントはさらに `role: admin` を検証
+
+**パスワードリセット**
+1. `POST /api/auth/reset-password/request` にメールアドレスを送信（未登録でも同じ 200 を返す）
+2. 登録済みの場合、1 時間有効なリセットリンクをメール送信
+3. リンクから遷移した画面で `POST /api/auth/reset-password/confirm` に新パスワードを送信

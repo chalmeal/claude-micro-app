@@ -23,6 +23,15 @@ const ChangePasswordBodySchema = z.object({
   newPassword: z.string().min(8),
 })
 
+const RequestResetBodySchema = z.object({
+  email: z.string().email(),
+})
+
+const ConfirmResetBodySchema = z.object({
+  token: z.string().min(1),
+  password: z.string().min(8),
+})
+
 const loginRoute = createRoute({
   method: 'post',
   path: '/login',
@@ -58,6 +67,41 @@ const changePasswordRoute = createRoute({
   },
 })
 
+const requestResetRoute = createRoute({
+  method: 'post',
+  path: '/reset-password/request',
+  tags: ['Auth'],
+  summary: 'パスワードリセット要求',
+  description:
+    'メールアドレスが登録済みの場合、パスワード再設定用リンクをメール送信します。未登録の場合も同じ 200 を返します。',
+  request: {
+    body: { content: { 'application/json': { schema: RequestResetBodySchema } }, required: true },
+  },
+  responses: {
+    200: {
+      content: { 'application/json': { schema: z.object({ success: z.boolean() }) } },
+      description: 'リクエスト受付完了',
+    },
+  },
+})
+
+const confirmResetRoute = createRoute({
+  method: 'post',
+  path: '/reset-password/confirm',
+  tags: ['Auth'],
+  summary: 'パスワードリセット確定',
+  description: 'リセットトークンと新しいパスワードを受け取り、パスワードを更新します。',
+  request: {
+    body: { content: { 'application/json': { schema: ConfirmResetBodySchema } }, required: true },
+  },
+  responses: {
+    200: {
+      content: { 'application/json': { schema: z.object({ success: z.boolean() }) } },
+      description: 'パスワード更新成功',
+    },
+  },
+})
+
 export const authRoutes = new OpenAPIHono<HonoEnv>()
 
 authRoutes.use('/change-password', authMiddleware)
@@ -72,5 +116,17 @@ authRoutes.openapi(changePasswordRoute, async (c) => {
   const body = c.req.valid('json')
   const { sub } = c.get('jwtPayload')
   await authService.changePassword({ userId: sub, ...body })
+  return c.json({ success: true }, 200)
+})
+
+authRoutes.openapi(requestResetRoute, async (c) => {
+  const body = c.req.valid('json')
+  await authService.requestPasswordReset(body)
+  return c.json({ success: true }, 200)
+})
+
+authRoutes.openapi(confirmResetRoute, async (c) => {
+  const body = c.req.valid('json')
+  await authService.confirmPasswordReset(body)
   return c.json({ success: true }, 200)
 })

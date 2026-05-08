@@ -1,3 +1,5 @@
+import { randomBytes } from 'node:crypto'
+import { sendPasswordResetEmail } from '../../lib/email.js'
 import { signToken } from '../../lib/jwt.js'
 import { comparePassword, hashPassword } from '../../lib/password.js'
 import { BadRequestError, UnauthorizedError } from '../../shared/errors.js'
@@ -5,6 +7,10 @@ import { authRepository } from './repository.js'
 
 type LoginInput = { email: string; password: string }
 type ChangePasswordInput = { userId: string; currentPassword: string; newPassword: string }
+type RequestResetInput = { email: string }
+type ConfirmResetInput = { token: string; password: string }
+
+const RESET_TOKEN_EXPIRES_MS = 60 * 60 * 1000 // 1 hour
 
 export const authService = {
   login: async (input: LoginInput) => {
@@ -32,5 +38,31 @@ export const authService = {
       throw new BadRequestError('Password must be at least 8 characters')
     const passwordHash = await hashPassword(input.newPassword)
     await authRepository.updatePasswordHash(user.id, passwordHash)
+  },
+
+  requestPasswordReset: async (input: RequestResetInput): Promise<void> => {
+    const user = await authRepository.findByEmail(input.email)
+    // セキュリティのため、メールが存在しない場合も正常終了
+    if (!user || user.status === 'inactive') return
+    const token = randomBytes(32).toString('hex')
+    const expiresAt = new Date(Date.now() + RESET_TOKEN_EXPIRES_MS)
+    await authRepository.setResetToken(user.id, token, expiresAt)
+    await sendPasswordResetEmail(user.email, token)
+  },
+
+  confirmPasswordReset: async (input: ConfirmResetInput): Promise<void> => {
+    const user = await authRepository.findByResetToken(input.token)
+    if (
+      !user ||
+      !user.passwordResetExpiresAt ||
+      user.passwordResetExpiresAt < new Date()
+    ) {
+      throw new BadRequestError('Invalid or expired reset token')
+    }
+    if (input.password.length < 8)
+      throw new BadRequestError('Password must be at least 8 characters')
+    const passwordHash = await hashPassword(input.password)
+    await authRepository.updatePasswordHash(user.id, passwordHash)
+    await authRepository.clearResetToken(user.id)
   },
 }

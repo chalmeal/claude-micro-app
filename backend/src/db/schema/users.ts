@@ -9,6 +9,8 @@ export const users = mysqlTable('users', {
   passwordHash: varchar('password_hash', { length: 255 }).notNull(),
   role: mysqlEnum('role', ['admin', 'member']).notNull().default('member'),
   status: mysqlEnum('status', ['active', 'inactive']).notNull().default('active'),
+  passwordResetToken: varchar('password_reset_token', { length: 255 }),
+  passwordResetExpiresAt: timestamp('password_reset_expires_at'),
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().onUpdateNow().notNull(),
 })
