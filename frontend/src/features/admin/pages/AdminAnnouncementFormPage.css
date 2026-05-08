@@ -129,6 +129,26 @@
   color: var(--color-text-tertiary);
 }
 
+.announcement-form__required {
+  color: var(--color-error);
+  margin-left: 0.15em;
+}
+
+.announcement-form__field--error label {
+  color: var(--color-error);
+}
+
+.announcement-form__field--error input,
+.announcement-form__field--error textarea {
+  border-color: var(--color-error) !important;
+}
+
+.announcement-form__error-msg {
+  font-size: 0.75rem;
+  color: var(--color-error);
+  font-weight: 500;
+}
+
 .announcement-form__field input:disabled,
 .announcement-form__field select:disabled,
 .announcement-form__field textarea:disabled {

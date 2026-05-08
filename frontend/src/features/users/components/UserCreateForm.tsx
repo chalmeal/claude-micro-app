@@ -16,6 +16,8 @@ const initialValues: CreateUserInput = {
 
 export function UserCreateForm({ onSubmit, onCancel, submitting }: Props) {
   const [values, setValues] = useState<CreateUserInput>(initialValues)
+  const [nameError, setNameError] = useState(false)
+  const [emailError, setEmailError] = useState(false)
 
   function update<K extends keyof CreateUserInput>(key: K, value: CreateUserInput[K]) {
     setValues((prev) => ({ ...prev, [key]: value }))
@@ -23,33 +25,70 @@ export function UserCreateForm({ onSubmit, onCancel, submitting }: Props) {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    const hasNameError = !values.name.trim()
+    const hasEmailError = !values.email.trim()
+    setNameError(hasNameError)
+    setEmailError(hasEmailError)
+    if (hasNameError || hasEmailError) return
     onSubmit(values)
   }
 
   return (
-    <form className="user-create-form" onSubmit={handleSubmit}>
-      <div className="user-create-form__field">
-        <label htmlFor="create-name">名前</label>
+    <form className="user-create-form" onSubmit={handleSubmit} noValidate>
+      <div
+        className={`user-create-form__field${nameError ? ' user-create-form__field--error' : ''}`}
+      >
+        <label htmlFor="create-name">
+          名前{' '}
+          <span className="user-create-form__required" aria-hidden="true">
+            *
+          </span>
+        </label>
         <input
           id="create-name"
           type="text"
           autoComplete="name"
-          required
+          aria-required="true"
+          aria-invalid={nameError}
           value={values.name}
-          onChange={(e) => update('name', e.target.value)}
+          onChange={(e) => {
+            update('name', e.target.value)
+            if (e.target.value.trim()) setNameError(false)
+          }}
         />
+        {nameError && (
+          <span className="user-create-form__error-msg" role="alert">
+            名前を入力してください
+          </span>
+        )}
       </div>
 
-      <div className="user-create-form__field">
-        <label htmlFor="create-email">メールアドレス</label>
+      <div
+        className={`user-create-form__field${emailError ? ' user-create-form__field--error' : ''}`}
+      >
+        <label htmlFor="create-email">
+          メールアドレス{' '}
+          <span className="user-create-form__required" aria-hidden="true">
+            *
+          </span>
+        </label>
         <input
           id="create-email"
           type="email"
           autoComplete="email"
-          required
+          aria-required="true"
+          aria-invalid={emailError}
           value={values.email}
-          onChange={(e) => update('email', e.target.value)}
+          onChange={(e) => {
+            update('email', e.target.value)
+            if (e.target.value.trim()) setEmailError(false)
+          }}
         />
+        {emailError && (
+          <span className="user-create-form__error-msg" role="alert">
+            メールアドレスを入力してください
+          </span>
+        )}
       </div>
 
       <div className="user-create-form__field">

@@ -10,7 +10,7 @@ export const appConfig = {
   name: 'claude-micro-app',
 
   /** 補足説明（ヘッダーブランド名の下に小さく表示） */
-  description: '管理アプリケーション',
+  description: '成績管理アプリ',
 
   /**
    * ブランドカラー（HEX）

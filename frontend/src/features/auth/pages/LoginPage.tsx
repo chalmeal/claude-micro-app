@@ -1,6 +1,7 @@
 import { useNavigate, useLocation, Navigate } from 'react-router-dom'
 import { LoginForm } from '@/features/auth/components/LoginForm'
 import { useAuth } from '@/features/auth/hooks/useAuth'
+import { appConfig } from '@/app/config'
 import './LoginPage.css'
 
 type LocationState = {
@@ -21,10 +22,11 @@ export function LoginPage() {
   return (
     <div className="login-page">
       <div className="login-page__card">
+        <div className="login-page__brand">
+          <p className="login-page__app-name">{appConfig.name}</p>
+          <p className="login-page__description">{appConfig.description}</p>
+        </div>
         <h1 className="login-page__title">ログイン</h1>
-        <p className="login-page__hint">
-          任意のメールアドレスとパスワード(4文字以上)でログインできます
-        </p>
         <LoginForm onSuccess={() => navigate(redirectTo, { replace: true })} />
       </div>
     </div>

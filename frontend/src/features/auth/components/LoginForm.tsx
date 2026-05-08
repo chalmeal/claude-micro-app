@@ -20,7 +20,12 @@ export function LoginForm({ onSuccess }: Props) {
       await login({ email, password })
       onSuccess?.()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'ログインに失敗しました')
+      const msg = err instanceof Error ? err.message : ''
+      setError(
+        msg === 'Invalid email or password'
+          ? 'メールアドレスまたはパスワードに誤りがあります。'
+          : 'ログインに失敗しました',
+      )
     } finally {
       setSubmitting(false)
     }

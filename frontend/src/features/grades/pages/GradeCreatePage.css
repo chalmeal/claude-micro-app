@@ -143,6 +143,25 @@
   color: var(--color-text-tertiary);
 }
 
+.grade-create-form__required {
+  color: var(--color-error);
+  margin-left: 0.15em;
+}
+
+.grade-create-form__field--error label {
+  color: var(--color-error);
+}
+
+.grade-create-form__field--error input {
+  border-color: var(--color-error) !important;
+}
+
+.grade-create-form__error-msg {
+  font-size: 0.75rem;
+  color: var(--color-error);
+  font-weight: 500;
+}
+
 .grade-create-form__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

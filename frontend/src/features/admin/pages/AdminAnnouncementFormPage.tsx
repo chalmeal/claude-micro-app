@@ -33,8 +33,12 @@ export function AdminAnnouncementFormPage() {
   const [values, setValues] = useState<FormValues>(EMPTY)
   const [loading, setLoading] = useState(isEdit)
   const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState('')
+  const [saveError, setSaveError] = useState('')
   const [showConfirm, setShowConfirm] = useState(false)
+
+  const [titleError, setTitleError] = useState(false)
+  const [dateError, setDateError] = useState(false)
+  const [bodyError, setBodyError] = useState(false)
 
   useEffect(() => {
     if (!isEdit) return
@@ -63,20 +67,17 @@ export function AdminAnnouncementFormPage() {
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setError('')
+    setSaveError('')
 
-    if (!values.title.trim()) {
-      setError('タイトルを入力してください')
-      return
-    }
-    if (!values.body.trim()) {
-      setError('本文を入力してください')
-      return
-    }
-    if (!values.date) {
-      setError('日付を入力してください')
-      return
-    }
+    const hasTitleError = !values.title.trim()
+    const hasDateError = !values.date
+    const hasBodyError = !values.body.trim()
+
+    setTitleError(hasTitleError)
+    setDateError(hasDateError)
+    setBodyError(hasBodyError)
+
+    if (hasTitleError || hasDateError || hasBodyError) return
 
     setShowConfirm(true)
   }
@@ -92,7 +93,7 @@ export function AdminAnnouncementFormPage() {
       snackbar.show(isEdit ? 'お知らせを更新しました' : 'お知らせを作成しました')
       navigate('/admin/announcements')
     } catch {
-      setError('保存に失敗しました。もう一度お試しください。')
+      setSaveError('保存に失敗しました。もう一度お試しください。')
       setSubmitting(false)
     }
   }
@@ -115,24 +116,40 @@ export function AdminAnnouncementFormPage() {
         </div>
       ) : (
         <div className="announcement-form-page__card">
-          {error && (
+          {saveError && (
             <p className="announcement-form-page__error" role="alert">
-              {error}
+              {saveError}
             </p>
           )}
 
-          <form className="announcement-form" onSubmit={handleSubmit}>
-            <div className="announcement-form__field">
-              <label htmlFor="af-title">タイトル</label>
+          <form className="announcement-form" onSubmit={handleSubmit} noValidate>
+            <div
+              className={`announcement-form__field${titleError ? ' announcement-form__field--error' : ''}`}
+            >
+              <label htmlFor="af-title">
+                タイトル{' '}
+                <span className="announcement-form__required" aria-hidden="true">
+                  *
+                </span>
+              </label>
               <input
                 id="af-title"
                 type="text"
                 value={values.title}
-                onChange={(e) => set('title', e.target.value)}
+                onChange={(e) => {
+                  set('title', e.target.value)
+                  if (e.target.value.trim()) setTitleError(false)
+                }}
                 placeholder="お知らせのタイトルを入力"
                 disabled={submitting}
-                required
+                aria-required="true"
+                aria-invalid={titleError}
               />
+              {titleError && (
+                <span className="announcement-form__error-msg" role="alert">
+                  タイトルを入力してください
+                </span>
+              )}
             </div>
 
             <div className="announcement-form__row">
@@ -150,30 +167,62 @@ export function AdminAnnouncementFormPage() {
                 </select>
               </div>
 
-              <div className="announcement-form__field">
-                <label htmlFor="af-date">日付</label>
+              <div
+                className={`announcement-form__field${dateError ? ' announcement-form__field--error' : ''}`}
+              >
+                <label htmlFor="af-date">
+                  日付{' '}
+                  <span className="announcement-form__required" aria-hidden="true">
+                    *
+                  </span>
+                </label>
                 <input
                   id="af-date"
                   type="date"
                   value={values.date}
-                  onChange={(e) => set('date', e.target.value)}
+                  onChange={(e) => {
+                    set('date', e.target.value)
+                    if (e.target.value) setDateError(false)
+                  }}
                   disabled={submitting}
-                  required
+                  aria-required="true"
+                  aria-invalid={dateError}
                 />
+                {dateError && (
+                  <span className="announcement-form__error-msg" role="alert">
+                    日付を入力してください
+                  </span>
+                )}
               </div>
             </div>
 
-            <div className="announcement-form__field">
-              <label htmlFor="af-body">本文</label>
+            <div
+              className={`announcement-form__field${bodyError ? ' announcement-form__field--error' : ''}`}
+            >
+              <label htmlFor="af-body">
+                本文{' '}
+                <span className="announcement-form__required" aria-hidden="true">
+                  *
+                </span>
+              </label>
               <textarea
                 id="af-body"
                 value={values.body}
-                onChange={(e) => set('body', e.target.value)}
+                onChange={(e) => {
+                  set('body', e.target.value)
+                  if (e.target.value.trim()) setBodyError(false)
+                }}
                 placeholder="お知らせの内容を入力"
                 rows={6}
                 disabled={submitting}
-                required
+                aria-required="true"
+                aria-invalid={bodyError}
               />
+              {bodyError && (
+                <span className="announcement-form__error-msg" role="alert">
+                  本文を入力してください
+                </span>
+              )}
             </div>
 
             <div className="announcement-form__actions">

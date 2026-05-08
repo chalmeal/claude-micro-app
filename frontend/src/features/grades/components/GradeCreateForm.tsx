@@ -36,6 +36,8 @@ const initialValues: CreateGradeInput = {
 export function GradeCreateForm({ onSubmit, submitting }: Props) {
   const [values, setValues] = useState<CreateGradeInput>(initialValues)
   const [scoreInput, setScoreInput] = useState('0')
+  const [studentNameError, setStudentNameError] = useState(false)
+  const [scoreSubmitError, setScoreSubmitError] = useState(false)
 
   function update<K extends keyof CreateGradeInput>(key: K, value: CreateGradeInput[K]) {
     setValues((prev) => ({ ...prev, [key]: value }))
@@ -46,9 +48,16 @@ export function GradeCreateForm({ onSubmit, submitting }: Props) {
     !isNaN(parsedScore) && Number.isInteger(parsedScore) && parsedScore >= 0 && parsedScore <= 100
   const previewLetter = isValidScore ? scoreToLetter(parsedScore) : null
 
+  const showScoreError = !isValidScore && (scoreInput !== '' || scoreSubmitError)
+
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (!isValidScore) return
+    const hasStudentNameError = !values.studentName.trim()
+    setStudentNameError(hasStudentNameError)
+    if (!isValidScore) {
+      setScoreSubmitError(true)
+    }
+    if (hasStudentNameError || !isValidScore) return
     onSubmit({ ...values, score: parsedScore })
   }
 
@@ -83,16 +92,27 @@ export function GradeCreateForm({ onSubmit, submitting }: Props) {
             <option value="fall">後期</option>
           </select>
         </div>
-        <div className="grade-create-form__field">
-          <label htmlFor="gc-student">学生名</label>
+        <div
+          className={`grade-create-form__field${studentNameError ? ' grade-create-form__field--error' : ''}`}
+        >
+          <label htmlFor="gc-student">
+            学生名{' '}
+            <span className="grade-create-form__required" aria-hidden="true">
+              *
+            </span>
+          </label>
           <input
             id="gc-student"
             type="text"
             list="gc-student-list"
-            required
+            aria-required="true"
+            aria-invalid={studentNameError}
             placeholder="例) 田中 太郎"
             value={values.studentName}
-            onChange={(e) => update('studentName', e.target.value)}
+            onChange={(e) => {
+              update('studentName', e.target.value)
+              if (e.target.value.trim()) setStudentNameError(false)
+            }}
             disabled={submitting}
           />
           <datalist id="gc-student-list">
@@ -100,6 +120,11 @@ export function GradeCreateForm({ onSubmit, submitting }: Props) {
               <option key={s.id} value={s.name} />
             ))}
           </datalist>
+          {studentNameError && (
+            <span className="grade-create-form__error-msg" role="alert">
+              学生名を入力してください
+            </span>
+          )}
         </div>
 
         <div className="grade-create-form__field">
@@ -120,7 +145,12 @@ export function GradeCreateForm({ onSubmit, submitting }: Props) {
       </div>
 
       <div className="grade-create-form__field">
-        <label htmlFor="gc-score">点数</label>
+        <label htmlFor="gc-score">
+          点数{' '}
+          <span className="grade-create-form__required" aria-hidden="true">
+            *
+          </span>
+        </label>
         <div className="grade-create-form__score-row">
           <input
             id="gc-score"
@@ -129,9 +159,14 @@ export function GradeCreateForm({ onSubmit, submitting }: Props) {
             max={100}
             step={1}
             value={scoreInput}
-            onChange={(e) => setScoreInput(e.target.value)}
-            className={`grade-create-form__score-input${!isValidScore && scoreInput !== '' ? ' grade-create-form__score-input--invalid' : ''}`}
+            onChange={(e) => {
+              setScoreInput(e.target.value)
+              setScoreSubmitError(false)
+            }}
+            className={`grade-create-form__score-input${showScoreError ? ' grade-create-form__score-input--invalid' : ''}`}
             disabled={submitting}
+            aria-required="true"
+            aria-invalid={showScoreError}
             aria-describedby="gc-score-hint"
           />
           <span className="grade-create-form__score-max">/ 100</span>
@@ -144,7 +179,7 @@ export function GradeCreateForm({ onSubmit, submitting }: Props) {
         <p id="gc-score-hint" className="grade-create-form__hint">
           0〜100 の整数を入力してください。評価は自動で計算されます。
         </p>
-        {!isValidScore && scoreInput !== '' && (
+        {showScoreError && (
           <p className="grade-create-form__field-error" role="alert">
             0〜100 の整数を入力してください
           </p>
@@ -155,7 +190,7 @@ export function GradeCreateForm({ onSubmit, submitting }: Props) {
         <button
           type="submit"
           className="grade-create-form__submit"
-          disabled={!isValidScore || !values.studentName.trim() || submitting}
+          disabled={submitting}
         >
           {submitting ? '登録中...' : '登録'}
         </button>
