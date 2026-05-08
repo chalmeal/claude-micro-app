@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { type ReactNode, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { createGrade, createGrades } from '@/features/grades/api/getGrades'
 import { GradeBulkCreateForm } from '@/features/grades/components/GradeBulkCreateForm'
 import { GradeCreateForm } from '@/features/grades/components/GradeCreateForm'
 import { GradeCsvImportForm } from '@/features/grades/components/GradeCsvImportForm'
-import { type CreateGradeInput } from '@/features/grades/types'
+import { type CreateGradeInput, scoreToLetter } from '@/features/grades/types'
+import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
 import { useSnackbar } from '@/shared/hooks/useSnackbar'
 import './GradeCreatePage.css'
 
@@ -28,12 +29,63 @@ const tabs: { value: Mode; label: string; description: string }[] = [
   },
 ]
 
+const SEMESTER_LABEL = { spring: '前期', fall: '後期' } as const
+
+function buildSingleDetails(input: CreateGradeInput): ReactNode {
+  return (
+    <table className="confirm-detail-table">
+      <tbody>
+        <tr><th>年度</th><td>{input.year}年度</td></tr>
+        <tr><th>学期</th><td>{SEMESTER_LABEL[input.semester]}</td></tr>
+        <tr><th>学生名</th><td>{input.studentName}</td></tr>
+        <tr><th>科目</th><td>{input.subject}</td></tr>
+        <tr><th>点数</th><td>{input.score}点</td></tr>
+        <tr><th>評価</th><td>{scoreToLetter(input.score)}</td></tr>
+      </tbody>
+    </table>
+  )
+}
+
+function buildBulkDetails(inputs: CreateGradeInput[]): ReactNode {
+  return (
+    <div className="confirm-dialog__details--scroll">
+      <table className="confirm-detail-table">
+        <thead>
+          <tr>
+            <th>学生名</th>
+            <th>科目</th>
+            <th>点数</th>
+            <th>評価</th>
+            <th>年度</th>
+            <th>学期</th>
+          </tr>
+        </thead>
+        <tbody>
+          {inputs.map((r, i) => (
+            <tr key={i}>
+              <td>{r.studentName}</td>
+              <td>{r.subject}</td>
+              <td>{r.score}点</td>
+              <td>{scoreToLetter(r.score)}</td>
+              <td>{r.year}年度</td>
+              <td>{SEMESTER_LABEL[r.semester]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+type Confirm = { message: string; details: ReactNode; callback: () => void }
+
 export function GradeCreatePage() {
   const navigate = useNavigate()
   const snackbar = useSnackbar()
   const [mode, setMode] = useState<Mode>('single')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<Error | null>(null)
+  const [confirm, setConfirm] = useState<Confirm | null>(null)
 
   async function runSubmit(action: () => Promise<unknown>, successMessage: string) {
     setSubmitting(true)
@@ -49,7 +101,11 @@ export function GradeCreatePage() {
   }
 
   function handleSingleSubmit(input: CreateGradeInput) {
-    runSubmit(() => createGrade(input), '成績を登録しました')
+    setConfirm({
+      message: '以下の内容で成績を登録しますか？',
+      details: buildSingleDetails(input),
+      callback: () => runSubmit(() => createGrade(input), '成績を登録しました'),
+    })
   }
 
   function handleBulkSubmit(inputs: CreateGradeInput[]) {
@@ -57,7 +113,11 @@ export function GradeCreatePage() {
       setError(new Error('登録する行がありません'))
       return
     }
-    runSubmit(() => createGrades(inputs), `${inputs.length}件の成績を登録しました`)
+    setConfirm({
+      message: `以下 ${inputs.length}件の成績を登録しますか？`,
+      details: buildBulkDetails(inputs),
+      callback: () => runSubmit(() => createGrades(inputs), `${inputs.length}件の成績を登録しました`),
+    })
   }
 
   function handleTabChange(next: Mode) {
@@ -113,6 +173,21 @@ export function GradeCreatePage() {
           <GradeCsvImportForm onSubmit={handleBulkSubmit} submitting={submitting} />
         )}
       </div>
+
+      {confirm && (
+        <ConfirmDialog
+          title="登録の確認"
+          message={confirm.message}
+          details={confirm.details}
+          confirmLabel="登録する"
+          onConfirm={() => {
+            const cb = confirm.callback
+            setConfirm(null)
+            cb()
+          }}
+          onCancel={() => setConfirm(null)}
+        />
+      )}
     </div>
   )
 }

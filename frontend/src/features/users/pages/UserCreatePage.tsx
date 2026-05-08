@@ -1,10 +1,11 @@
-import { useState } from 'react'
+import { type ReactNode, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { createUser, createUsers } from '@/features/users/api/getUsers'
 import { UserBulkCreateForm } from '@/features/users/components/UserBulkCreateForm'
 import { UserCreateForm } from '@/features/users/components/UserCreateForm'
 import { UserCsvImportForm } from '@/features/users/components/UserCsvImportForm'
 import type { CreateUserInput } from '@/features/users/types'
+import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
 import { useSnackbar } from '@/shared/hooks/useSnackbar'
 import './UserCreatePage.css'
 
@@ -28,12 +29,58 @@ const tabs: { value: Mode; label: string; description: string }[] = [
   },
 ]
 
+const ROLE_LABEL = { admin: '管理者', member: 'メンバー' } as const
+const STATUS_LABEL = { active: '有効', inactive: '無効' } as const
+
+function buildSingleDetails(input: CreateUserInput): ReactNode {
+  return (
+    <table className="confirm-detail-table">
+      <tbody>
+        <tr><th>氏名</th><td>{input.name}</td></tr>
+        <tr><th>メール</th><td>{input.email}</td></tr>
+        <tr><th>権限</th><td>{ROLE_LABEL[input.role]}</td></tr>
+        <tr><th>ステータス</th><td>{STATUS_LABEL[input.status]}</td></tr>
+      </tbody>
+    </table>
+  )
+}
+
+function buildBulkDetails(inputs: CreateUserInput[]): ReactNode {
+  return (
+    <div className="confirm-dialog__details--scroll">
+      <table className="confirm-detail-table">
+        <thead>
+          <tr>
+            <th>氏名</th>
+            <th>メール</th>
+            <th>権限</th>
+            <th>ステータス</th>
+          </tr>
+        </thead>
+        <tbody>
+          {inputs.map((u, i) => (
+            <tr key={i}>
+              <td>{u.name}</td>
+              <td>{u.email}</td>
+              <td>{ROLE_LABEL[u.role]}</td>
+              <td>{STATUS_LABEL[u.status]}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+type Confirm = { message: string; details: ReactNode; callback: () => void }
+
 export function UserCreatePage() {
   const navigate = useNavigate()
   const snackbar = useSnackbar()
   const [mode, setMode] = useState<Mode>('single')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<Error | null>(null)
+  const [confirm, setConfirm] = useState<Confirm | null>(null)
 
   async function runSubmit(action: () => Promise<unknown>, successMessage: string) {
     setSubmitting(true)
@@ -49,7 +96,11 @@ export function UserCreatePage() {
   }
 
   function handleSingleSubmit(input: CreateUserInput) {
-    runSubmit(() => createUser(input), 'ユーザーを登録しました')
+    setConfirm({
+      message: '以下の内容でユーザーを登録しますか？',
+      details: buildSingleDetails(input),
+      callback: () => runSubmit(() => createUser(input), 'ユーザーを登録しました'),
+    })
   }
 
   function handleBulkSubmit(inputs: CreateUserInput[]) {
@@ -57,7 +108,11 @@ export function UserCreatePage() {
       setError(new Error('登録する行がありません'))
       return
     }
-    runSubmit(() => createUsers(inputs), `${inputs.length}件のユーザーを登録しました`)
+    setConfirm({
+      message: `以下 ${inputs.length}件のユーザーを登録しますか？`,
+      details: buildBulkDetails(inputs),
+      callback: () => runSubmit(() => createUsers(inputs), `${inputs.length}件のユーザーを登録しました`),
+    })
   }
 
   function handleCancel() {
@@ -129,6 +184,21 @@ export function UserCreatePage() {
           />
         )}
       </div>
+
+      {confirm && (
+        <ConfirmDialog
+          title="登録の確認"
+          message={confirm.message}
+          details={confirm.details}
+          confirmLabel="登録する"
+          onConfirm={() => {
+            const cb = confirm.callback
+            setConfirm(null)
+            cb()
+          }}
+          onCancel={() => setConfirm(null)}
+        />
+      )}
     </div>
   )
 }

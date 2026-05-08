@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { updateGrade } from '@/features/grades/api/getGrades'
 import { useGrade } from '@/features/grades/hooks/useGrade'
 import { scoreToLetter, type GradeLetter, type Semester } from '@/features/grades/types'
+import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
 import { useSnackbar } from '@/shared/hooks/useSnackbar'
 import './GradeEditPage.css'
 
@@ -30,6 +31,7 @@ export function GradeEditPage() {
   const [syncedId, setSyncedId] = useState<string | undefined>()
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<Error | null>(null)
+  const [showConfirm, setShowConfirm] = useState(false)
 
   if (grade && grade.id !== syncedId) {
     setSyncedId(grade.id)
@@ -42,9 +44,14 @@ export function GradeEditPage() {
   const previewLetter = isValidScore ? scoreToLetter(parsedScore) : null
   const isDirty = isValidScore && grade !== null && parsedScore !== grade.score
 
-  async function handleSave(e: React.FormEvent) {
+  function handleSave(e: React.FormEvent) {
     e.preventDefault()
     if (!grade || !isValidScore) return
+    setShowConfirm(true)
+  }
+
+  async function doSave() {
+    if (!grade) return
     setSaving(true)
     setSaveError(null)
     try {
@@ -81,6 +88,27 @@ export function GradeEditPage() {
         <div className="grade-edit__not-found">
           <h1>成績データが見つかりません</h1>
         </div>
+      )}
+
+      {showConfirm && grade && previewLetter && (
+        <ConfirmDialog
+          title="更新の確認"
+          message="以下の内容で点数を更新しますか？"
+          details={
+            <table className="confirm-detail-table">
+              <tbody>
+                <tr><th>学生名</th><td>{grade.studentName}</td></tr>
+                <tr><th>科目</th><td>{grade.subject}</td></tr>
+                <tr><th>年度・学期</th><td>{grade.year}年度 {semesterLabel[grade.semester]}</td></tr>
+                <tr><th>変更前</th><td>{grade.score}点 ({grade.letter})</td></tr>
+                <tr><th>変更後</th><td>{parsedScore}点 ({previewLetter})</td></tr>
+              </tbody>
+            </table>
+          }
+          confirmLabel="更新する"
+          onConfirm={() => { setShowConfirm(false); doSave() }}
+          onCancel={() => setShowConfirm(false)}
+        />
       )}
 
       {grade && (

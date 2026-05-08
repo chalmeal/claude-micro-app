@@ -33,6 +33,10 @@
   animation: dialog-in 0.18s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.confirm-dialog--wide {
+  max-width: 560px;
+}
+
 @keyframes dialog-in {
   from {
     opacity: 0;
@@ -57,6 +61,62 @@
   font-size: 0.9rem;
   color: var(--color-text-secondary);
   line-height: 1.6;
+}
+
+.confirm-dialog__message--compact {
+  margin-bottom: 0.75rem;
+}
+
+.confirm-dialog__details {
+  margin: 0 0 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.confirm-detail-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.83rem;
+}
+
+.confirm-detail-table th,
+.confirm-detail-table td {
+  padding: 0.45rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+
+.confirm-detail-table thead th {
+  background: var(--color-surface-alt, #f1f5f9);
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+}
+
+.confirm-detail-table tbody th {
+  background: var(--color-surface-alt, #f8fafc);
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  white-space: nowrap;
+  width: 6rem;
+}
+
+.confirm-detail-table tbody td {
+  color: var(--color-text);
+  word-break: break-all;
+}
+
+.confirm-detail-table tr:last-child th,
+.confirm-detail-table tr:last-child td {
+  border-bottom: none;
+}
+
+.confirm-dialog__details--scroll {
+  max-height: 210px;
+  overflow-y: auto;
 }
 
 .confirm-dialog__actions {

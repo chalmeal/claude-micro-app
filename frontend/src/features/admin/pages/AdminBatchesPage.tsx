@@ -5,6 +5,7 @@ import { rerunBatch } from '@/features/admin/api/batches'
 import { useBatches } from '@/features/admin/hooks/useBatches'
 import { BatchLogModal } from '@/features/admin/components/BatchLogModal'
 import { BatchScheduleModal } from '@/features/admin/components/BatchScheduleModal'
+import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
 import { useSnackbar } from '@/shared/hooks/useSnackbar'
 import './AdminBatchesPage.css'
 
@@ -38,9 +39,13 @@ export function AdminBatchesPage() {
   const [rerunning, setRerunning] = useState<Set<string>>(new Set())
   const [logBatch, setLogBatch] = useState<BatchJob | null>(null)
   const [schBatch, setSchBatch] = useState<BatchJob | null>(null)
+  const [confirmRerun, setConfirmRerun] = useState<BatchJob | null>(null)
 
-  async function handleRerun(job: BatchJob) {
-    if (!window.confirm(`「${job.name}」を再実行しますか？`)) return
+  function handleRerun(job: BatchJob) {
+    setConfirmRerun(job)
+  }
+
+  async function doRerun(job: BatchJob) {
     setRerunning((s) => new Set(s).add(job.id))
     setBatches((prev) => prev.map((b) => (b.id === job.id ? { ...b, status: 'running' } : b)))
     try {
@@ -172,6 +177,29 @@ export function AdminBatchesPage() {
             setBatches((prev) => prev.map((b) => (b.id === updated.id ? updated : b)))
             setSchBatch(null)
           }}
+        />
+      )}
+
+      {confirmRerun && (
+        <ConfirmDialog
+          title="再実行の確認"
+          message={`「${confirmRerun.name}」を再実行しますか？`}
+          details={
+            <table className="confirm-detail-table">
+              <tbody>
+                <tr><th>バッチ名</th><td>{confirmRerun.name}</td></tr>
+                <tr><th>説明</th><td>{confirmRerun.description}</td></tr>
+                <tr><th>現在のステータス</th><td>{STATUS_CONFIG[confirmRerun.status].label}</td></tr>
+              </tbody>
+            </table>
+          }
+          confirmLabel="再実行する"
+          onConfirm={() => {
+            const job = confirmRerun
+            setConfirmRerun(null)
+            doRerun(job)
+          }}
+          onCancel={() => setConfirmRerun(null)}
         />
       )}
     </div>

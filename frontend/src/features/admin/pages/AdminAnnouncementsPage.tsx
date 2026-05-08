@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { deleteAnnouncement, getAnnouncements } from '@/shared/api/announcements'
 import type { Announcement } from '@/shared/types'
 import { useAnnouncements } from '@/features/announcements/hooks/useAnnouncements'
+import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
 import './AdminAnnouncementsPage.css'
 
 const CATEGORY_LABELS: Record<Announcement['category'], string> = {
@@ -15,11 +16,15 @@ export function AdminAnnouncementsPage() {
   const { announcements, loading, error } = useAnnouncements()
   const [items, setItems] = useState<Announcement[] | null>(null)
   const [deleting, setDeleting] = useState<string | null>(null)
+  const [confirmItem, setConfirmItem] = useState<Announcement | null>(null)
 
   const list = items ?? announcements
 
-  async function handleDelete(id: string) {
-    if (!window.confirm('このお知らせを削除しますか？')) return
+  function handleDelete(item: Announcement) {
+    setConfirmItem(item)
+  }
+
+  async function doDelete(id: string) {
     setDeleting(id)
     try {
       await deleteAnnouncement(id)
@@ -50,6 +55,30 @@ export function AdminAnnouncementsPage() {
         <p className="admin-announcements__error" role="alert">
           データの読み込みに失敗しました: {error.message}
         </p>
+      )}
+
+      {confirmItem && (
+        <ConfirmDialog
+          title="削除の確認"
+          message="このお知らせを削除しますか？"
+          details={
+            <table className="confirm-detail-table">
+              <tbody>
+                <tr><th>タイトル</th><td>{confirmItem.title}</td></tr>
+                <tr><th>カテゴリ</th><td>{CATEGORY_LABELS[confirmItem.category]}</td></tr>
+                <tr><th>日付</th><td>{confirmItem.date}</td></tr>
+              </tbody>
+            </table>
+          }
+          confirmLabel="削除する"
+          dangerous
+          onConfirm={() => {
+            const id = confirmItem.id
+            setConfirmItem(null)
+            doDelete(id)
+          }}
+          onCancel={() => setConfirmItem(null)}
+        />
       )}
 
       {loading ? (
@@ -99,7 +128,7 @@ export function AdminAnnouncementsPage() {
                       </Link>
                       <button
                         className="admin-announcements__delete"
-                        onClick={() => handleDelete(item.id)}
+                        onClick={() => handleDelete(item)}
                         disabled={deleting === item.id}
                       >
                         {deleting === item.id ? '削除中…' : '削除'}

@@ -6,6 +6,7 @@ import {
   updateAnnouncement,
 } from '@/shared/api/announcements'
 import type { Announcement } from '@/shared/types'
+import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
 import { useSnackbar } from '@/shared/hooks/useSnackbar'
 import './AdminAnnouncementFormPage.css'
 
@@ -33,6 +34,7 @@ export function AdminAnnouncementFormPage() {
   const [loading, setLoading] = useState(isEdit)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [showConfirm, setShowConfirm] = useState(false)
 
   useEffect(() => {
     if (!isEdit) return
@@ -59,7 +61,7 @@ export function AdminAnnouncementFormPage() {
     setValues((v) => ({ ...v, [key]: value }))
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError('')
 
@@ -76,6 +78,10 @@ export function AdminAnnouncementFormPage() {
       return
     }
 
+    setShowConfirm(true)
+  }
+
+  async function doSave() {
     setSubmitting(true)
     try {
       if (isEdit) {
@@ -180,6 +186,37 @@ export function AdminAnnouncementFormPage() {
             </div>
           </form>
         </div>
+      )}
+
+      {showConfirm && (
+        <ConfirmDialog
+          title={isEdit ? '更新の確認' : '登録の確認'}
+          message={isEdit ? '以下の内容でお知らせを更新しますか？' : '以下の内容でお知らせを作成しますか？'}
+          details={
+            <table className="confirm-detail-table">
+              <tbody>
+                <tr><th>タイトル</th><td>{values.title}</td></tr>
+                <tr>
+                  <th>カテゴリ</th>
+                  <td>
+                    {{ info: 'お知らせ', important: '重要', maintenance: 'メンテナンス' }[values.category]}
+                  </td>
+                </tr>
+                <tr><th>日付</th><td>{values.date}</td></tr>
+                <tr>
+                  <th>本文</th>
+                  <td>{values.body.length > 80 ? `${values.body.slice(0, 80)}…` : values.body}</td>
+                </tr>
+              </tbody>
+            </table>
+          }
+          confirmLabel={isEdit ? '更新する' : '作成する'}
+          onConfirm={() => {
+            setShowConfirm(false)
+            doSave()
+          }}
+          onCancel={() => setShowConfirm(false)}
+        />
       )}
     </div>
   )

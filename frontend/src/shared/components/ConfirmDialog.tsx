@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { type ReactNode, useEffect, useRef } from 'react'
 import './ConfirmDialog.css'
 
 type Props = {
   title: string
   message: string
+  details?: ReactNode
   confirmLabel?: string
   cancelLabel?: string
   dangerous?: boolean
@@ -14,6 +15,7 @@ type Props = {
 export function ConfirmDialog({
   title,
   message,
+  details,
   confirmLabel = 'OK',
   cancelLabel = 'キャンセル',
   dangerous = false,
@@ -42,13 +44,14 @@ export function ConfirmDialog({
       aria-labelledby="confirm-title"
       aria-describedby="confirm-message"
     >
-      <div className="confirm-dialog">
+      <div className={`confirm-dialog${details ? ' confirm-dialog--wide' : ''}`}>
         <h2 id="confirm-title" className="confirm-dialog__title">
           {title}
         </h2>
-        <p id="confirm-message" className="confirm-dialog__message">
+        <p id="confirm-message" className={`confirm-dialog__message${details ? ' confirm-dialog__message--compact' : ''}`}>
           {message}
         </p>
+        {details && <div className="confirm-dialog__details">{details}</div>}
         <div className="confirm-dialog__actions">
           <button
             ref={cancelRef}

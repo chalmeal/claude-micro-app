@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import type { BatchFrequency, BatchJob, BatchSchedule } from '@/features/admin/types'
 import { updateBatchSchedule } from '@/features/admin/api/batches'
+import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
 import './BatchModal.css'
 
 type Props = {
@@ -32,6 +33,7 @@ export function BatchScheduleModal({ batch, onClose, onSaved }: Props) {
   const [dow, setDow] = useState(batch.schedule.dayOfWeek ?? 1)
   const [dom, setDom] = useState(batch.schedule.dayOfMonth ?? 1)
   const [saving, setSaving] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false)
 
   const schedule: BatchSchedule = {
     frequency: freq,
@@ -48,7 +50,11 @@ export function BatchScheduleModal({ batch, onClose, onSaved }: Props) {
     return () => document.removeEventListener('keydown', fn)
   }, [onClose])
 
-  async function handleSave() {
+  function handleSave() {
+    setShowConfirm(true)
+  }
+
+  async function doSave() {
     setSaving(true)
     try {
       await updateBatchSchedule(batch.id, schedule)
@@ -159,6 +165,25 @@ export function BatchScheduleModal({ batch, onClose, onSaved }: Props) {
           </button>
         </div>
       </div>
+
+      {showConfirm && (
+        <ConfirmDialog
+          title="スケジュール更新の確認"
+          message="以下のスケジュールに変更しますか？"
+          details={
+            <table className="confirm-detail-table">
+              <tbody>
+                <tr><th>バッチ名</th><td>{batch.name}</td></tr>
+                <tr><th>変更前</th><td>{scheduleText(batch.schedule)}</td></tr>
+                <tr><th>変更後</th><td>{scheduleText(schedule)}</td></tr>
+              </tbody>
+            </table>
+          }
+          confirmLabel="更新する"
+          onConfirm={() => { setShowConfirm(false); doSave() }}
+          onCancel={() => setShowConfirm(false)}
+        />
+      )}
     </div>
   )
 }

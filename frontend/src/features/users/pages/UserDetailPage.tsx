@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { type ReactNode, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { updateUser } from '@/features/users/api/getUsers'
 import { useUser } from '@/features/users/hooks/useUser'
 import type { UpdateUserPatch, UserRole, UserStatus } from '@/features/users/types'
+import { ConfirmDialog } from '@/shared/components/ConfirmDialog'
 import { useSnackbar } from '@/shared/hooks/useSnackbar'
 import './UserDetailPage.css'
 
@@ -25,6 +26,7 @@ export function UserDetailPage() {
   const [draftRole, setDraftRole] = useState<UserRole | undefined>()
   const [draftStatus, setDraftStatus] = useState<UserStatus | undefined>()
   const [syncedId, setSyncedId] = useState<string | undefined>()
+  const [confirmUpdate, setConfirmUpdate] = useState<{ patch: UpdateUserPatch; details: ReactNode } | null>(null)
 
   if (id !== syncedId) {
     setSyncedId(id)
@@ -47,27 +49,46 @@ export function UserDetailPage() {
     setActionError(null)
   }
 
-  async function handleUpdate() {
+  function handleUpdate() {
     if (!user || !isDirty) return
 
     const patch: UpdateUserPatch = {}
-    const changes: string[] = []
+    const rows: { label: string; from: string; to: string }[] = []
     if (draftRole !== undefined && draftRole !== user.role) {
       patch.role = draftRole
-      changes.push(`ロール: ${roleLabel[user.role]} → ${roleLabel[draftRole]}`)
+      rows.push({ label: 'ロール', from: roleLabel[user.role], to: roleLabel[draftRole] })
     }
     if (draftStatus !== undefined && draftStatus !== user.status) {
       patch.status = draftStatus
-      changes.push(`ステータス: ${statusLabel[user.status]} → ${statusLabel[draftStatus]}`)
+      rows.push({ label: 'ステータス', from: statusLabel[user.status], to: statusLabel[draftStatus] })
     }
 
-    const ok = window.confirm(`次の項目を更新します:\n${changes.join('\n')}\n\nよろしいですか?`)
-    if (!ok) return
+    setConfirmUpdate({
+      patch,
+      details: (
+        <table className="confirm-detail-table">
+          <thead>
+            <tr><th>項目</th><th>変更前</th><th>変更後</th></tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr key={r.label}>
+                <td>{r.label}</td>
+                <td>{r.from}</td>
+                <td>{r.to}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ),
+    })
+  }
 
+  async function doUpdate(patch: UpdateUserPatch) {
     setUpdating(true)
     setActionError(null)
     try {
-      await updateUser(user.id, patch)
+      await updateUser(user!.id, patch)
       setDraftRole(undefined)
       setDraftStatus(undefined)
       refetch()
@@ -105,6 +126,21 @@ export function UserDetailPage() {
           <h1>ユーザーが見つかりません</h1>
           <p>指定された ID のユーザーは存在しないか、削除された可能性があります。</p>
         </div>
+      )}
+
+      {confirmUpdate && (
+        <ConfirmDialog
+          title="更新の確認"
+          message="次の内容でユーザー情報を更新しますか？"
+          details={confirmUpdate.details}
+          confirmLabel="更新する"
+          onConfirm={() => {
+            const patch = confirmUpdate.patch
+            setConfirmUpdate(null)
+            doUpdate(patch)
+          }}
+          onCancel={() => setConfirmUpdate(null)}
+        />
       )}
 
       {user && (
