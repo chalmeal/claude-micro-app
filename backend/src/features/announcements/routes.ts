@@ -1,4 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import { auditLogsService } from '../auditLogs/service.js'
 import { adminMiddleware, authMiddleware } from '../../shared/middleware/auth.js'
 import type { HonoEnv } from '../../shared/types.js'
 import { announcementsService } from './service.js'
@@ -133,16 +134,55 @@ announcementsRoutes.use('/:id', adminMiddleware)
 announcementsRoutes.openapi(createAnnouncementRoute, async (c) => {
   const body = c.req.valid('json')
   const item = await announcementsService.create(body)
+  const { sub, email } = c.get('jwtPayload')
+  auditLogsService
+    .log({
+      userId: sub,
+      userEmail: email,
+      action: 'announcement.create',
+      targetType: 'announcement',
+      targetId: item.id,
+      detail: { title: item.title, category: item.category },
+    })
+    .catch(() => {})
   return c.json(item, 201)
 })
 
 announcementsRoutes.openapi(updateAnnouncementRoute, async (c) => {
   const body = c.req.valid('json')
   const item = await announcementsService.update(c.req.param('id'), body)
+  if (item) {
+    const { sub, email } = c.get('jwtPayload')
+    auditLogsService
+      .log({
+        userId: sub,
+        userEmail: email,
+        action: 'announcement.update',
+        targetType: 'announcement',
+        targetId: item.id,
+        detail: body as Record<string, unknown>,
+      })
+      .catch(() => {})
+  }
   return c.json(item, 200)
 })
 
 announcementsRoutes.openapi(deleteAnnouncementRoute, async (c) => {
-  await announcementsService.delete(c.req.param('id'))
+  const id = c.req.param('id')
+  const item = await announcementsService.getById(id)
+  await announcementsService.delete(id)
+  if (item) {
+    const { sub, email } = c.get('jwtPayload')
+    auditLogsService
+      .log({
+        userId: sub,
+        userEmail: email,
+        action: 'announcement.delete',
+        targetType: 'announcement',
+        targetId: id,
+        detail: { title: item.title },
+      })
+      .catch(() => {})
+  }
   return c.body(null, 204)
 })

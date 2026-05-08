@@ -5,6 +5,7 @@ import {
   AdminAnnouncementsPage,
   AdminAnnouncementFormPage,
   AdminBatchesPage,
+  AdminAuditLogsPage,
 } from '@/features/admin'
 import { AnnouncementsPage } from '@/features/announcements'
 import { DashboardPage } from '@/features/dashboard'
@@ -78,6 +79,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <AdminBatchesPage />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: 'admin/audit-logs',
+        element: (
+          <AdminRoute>
+            <AdminAuditLogsPage />
           </AdminRoute>
         ),
       },

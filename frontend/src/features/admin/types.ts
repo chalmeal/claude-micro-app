@@ -34,3 +34,32 @@ export type BatchRun = {
   duration: number | null
   logs?: BatchLogEntry[]
 }
+
+export type AuditAction =
+  | 'auth.login'
+  | 'auth.change_password'
+  | 'user.create'
+  | 'user.update'
+  | 'announcement.create'
+  | 'announcement.update'
+  | 'announcement.delete'
+  | 'batch.rerun'
+  | 'batch.schedule_update'
+  | 'batch.toggle_enabled'
+
+export type AuditLogsFilter = {
+  action: string
+  from: string
+  to: string
+}
+
+export type AuditLog = {
+  id: string
+  userId: string
+  userEmail: string
+  action: string
+  targetType: string | null
+  targetId: string | null
+  detail: Record<string, unknown> | null
+  createdAt: string
+}

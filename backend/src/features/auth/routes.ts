@@ -1,4 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import { auditLogsService } from '../auditLogs/service.js'
 import { authMiddleware } from '../../shared/middleware/auth.js'
 import type { HonoEnv } from '../../shared/types.js'
 import { authService } from './service.js'
@@ -109,13 +110,23 @@ authRoutes.use('/change-password', authMiddleware)
 authRoutes.openapi(loginRoute, async (c) => {
   const body = c.req.valid('json')
   const result = await authService.login(body)
+  auditLogsService
+    .log({
+      userId: result.user.id,
+      userEmail: result.user.email,
+      action: 'auth.login',
+    })
+    .catch(() => {})
   return c.json(result, 200)
 })
 
 authRoutes.openapi(changePasswordRoute, async (c) => {
   const body = c.req.valid('json')
-  const { sub } = c.get('jwtPayload')
+  const { sub, email } = c.get('jwtPayload')
   await authService.changePassword({ userId: sub, ...body })
+  auditLogsService
+    .log({ userId: sub, userEmail: email, action: 'auth.change_password' })
+    .catch(() => {})
   return c.json({ success: true }, 200)
 })
 

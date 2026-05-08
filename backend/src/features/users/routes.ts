@@ -1,4 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import { auditLogsService } from '../auditLogs/service.js'
 import { adminMiddleware, authMiddleware } from '../../shared/middleware/auth.js'
 import type { HonoEnv } from '../../shared/types.js'
 import { usersService } from './service.js'
@@ -125,11 +126,35 @@ usersRoutes.openapi(getUserRoute, async (c) => {
 usersRoutes.openapi(createUserRoute, async (c) => {
   const body = c.req.valid('json')
   const user = await usersService.create(body)
+  const { sub, email } = c.get('jwtPayload')
+  auditLogsService
+    .log({
+      userId: sub,
+      userEmail: email,
+      action: 'user.create',
+      targetType: 'user',
+      targetId: user.id,
+      detail: { name: user.name, email: user.email, role: user.role },
+    })
+    .catch(() => {})
   return c.json(user, 201)
 })
 
 usersRoutes.openapi(updateUserRoute, async (c) => {
   const body = c.req.valid('json')
   const user = await usersService.update(c.req.param('id'), body)
+  if (user) {
+    const { sub, email } = c.get('jwtPayload')
+    auditLogsService
+      .log({
+        userId: sub,
+        userEmail: email,
+        action: 'user.update',
+        targetType: 'user',
+        targetId: user.id,
+        detail: body as Record<string, unknown>,
+      })
+      .catch(() => {})
+  }
   return c.json(user, 200)
 })

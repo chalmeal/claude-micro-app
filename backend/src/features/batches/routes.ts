@@ -1,4 +1,5 @@
 import { createRoute, OpenAPIHono, z } from '@hono/zod-openapi'
+import { auditLogsService } from '../auditLogs/service.js'
 import { adminMiddleware, authMiddleware } from '../../shared/middleware/auth.js'
 import type { HonoEnv } from '../../shared/types.js'
 import { batchesService } from './service.js'
@@ -213,16 +214,52 @@ batchesRoutes.openapi(getBatchRunLogsRoute, async (c) => {
 batchesRoutes.openapi(updateBatchScheduleRoute, async (c) => {
   const body = c.req.valid('json')
   const item = await batchesService.updateSchedule(c.req.param('id'), body)
+  if (item) {
+    const { sub, email } = c.get('jwtPayload')
+    auditLogsService
+      .log({
+        userId: sub,
+        userEmail: email,
+        action: 'batch.schedule_update',
+        targetType: 'batch',
+        targetId: item.id,
+        detail: { name: item.name, schedule: body as unknown as Record<string, unknown> },
+      })
+      .catch(() => {})
+  }
   return c.json(item, 200)
 })
 
 batchesRoutes.openapi(updateBatchEnabledRoute, async (c) => {
   const { enabled } = c.req.valid('json')
   const item = await batchesService.updateEnabled(c.req.param('id'), enabled)
+  if (item) {
+    const { sub, email } = c.get('jwtPayload')
+    auditLogsService
+      .log({
+        userId: sub,
+        userEmail: email,
+        action: 'batch.toggle_enabled',
+        targetType: 'batch',
+        targetId: item.id,
+        detail: { name: item.name, enabled },
+      })
+      .catch(() => {})
+  }
   return c.json(item, 200)
 })
 
 batchesRoutes.openapi(rerunBatchRoute, async (c) => {
   const result = await batchesService.rerun(c.req.param('id'))
+  const { sub, email } = c.get('jwtPayload')
+  auditLogsService
+    .log({
+      userId: sub,
+      userEmail: email,
+      action: 'batch.rerun',
+      targetType: 'batch',
+      targetId: result.batchId,
+    })
+    .catch(() => {})
   return c.json(result as { batchId: string; runId: string; status: 'running' }, 202)
 })

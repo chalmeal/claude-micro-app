@@ -6,6 +6,7 @@ export default defineConfig({
     './src/db/schema/grades.ts',
     './src/db/schema/announcements.ts',
     './src/db/schema/batches.ts',
+    './src/db/schema/auditLogs.ts',
   ],
   out: './drizzle',
   dialect: 'mysql',

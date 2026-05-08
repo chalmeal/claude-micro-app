@@ -3,6 +3,7 @@ import { OpenAPIHono } from '@hono/zod-openapi'
 import { cors } from 'hono/cors'
 import { logger } from 'hono/logger'
 import { announcementsRoutes } from './features/announcements/routes.js'
+import { auditLogsRoutes } from './features/auditLogs/routes.js'
 import { authRoutes } from './features/auth/routes.js'
 import { batchesRoutes } from './features/batches/routes.js'
 import { gradesRoutes } from './features/grades/routes.js'
@@ -22,6 +23,7 @@ export function createApp() {
   app.route('/api/grades', gradesRoutes)
   app.route('/api/announcements', announcementsRoutes)
   app.route('/api/batches', batchesRoutes)
+  app.route('/api/audit-logs', auditLogsRoutes)
 
   app.openAPIRegistry.registerComponent('securitySchemes', 'bearerAuth', {
     type: 'http',
