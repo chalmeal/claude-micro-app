@@ -53,7 +53,7 @@ const createUserRoute = createRoute({
   tags: ['Users'],
   summary: 'ユーザー作成',
   description:
-    '新規ユーザーを作成します。初期パスワードは一時パスワードとして設定されます。管理者のみ実行可能です。',
+    '新規ユーザーを作成し、パスワード設定メールを送信します。管理者のみ実行可能です。',
   security,
   request: {
     body: {
@@ -63,7 +63,6 @@ const createUserRoute = createRoute({
             name: z.string().min(1),
             email: z.string().email(),
             role: z.enum(['admin', 'member']).optional(),
-            temporaryPassword: z.string().min(8),
           }),
         },
       },

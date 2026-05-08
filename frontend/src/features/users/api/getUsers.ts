@@ -46,10 +46,6 @@ export async function updateUser(id: string, patch: UpdateUserPatch): Promise<Us
   )
 }
 
-function generateTemporaryPassword(): string {
-  return crypto.randomUUID().replace(/-/g, '').slice(0, 12)
-}
-
 export async function createUser(input: CreateUserInput): Promise<User> {
   return toUser(
     await apiFetch<ApiUser>('/users', {
@@ -58,7 +54,6 @@ export async function createUser(input: CreateUserInput): Promise<User> {
         name: input.name.trim(),
         email: input.email.trim(),
         role: input.role,
-        temporaryPassword: generateTemporaryPassword(),
       }),
     }),
   )
@@ -90,7 +85,6 @@ export async function createUsers(inputs: CreateUserInput[]): Promise<User[]> {
             name: input.name.trim(),
             email: input.email.trim(),
             role: input.role,
-            temporaryPassword: generateTemporaryPassword(),
           }),
         }),
       )

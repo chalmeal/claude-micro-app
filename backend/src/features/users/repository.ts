@@ -35,4 +35,11 @@ export const usersRepository = {
     const [updated] = await db.select().from(users).where(eq(users.id, id))
     return updated
   },
+
+  setSetupToken: async (id: string, token: string, expiresAt: Date): Promise<void> => {
+    await db
+      .update(users)
+      .set({ passwordResetToken: token, passwordResetExpiresAt: expiresAt })
+      .where(eq(users.id, id))
+  },
 }
