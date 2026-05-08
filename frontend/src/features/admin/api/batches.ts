@@ -10,6 +10,7 @@ type ApiBatch = {
   lastRunAt: string | null
   lastDuration: number | null
   nextRunAt: string | null
+  enabled: boolean
   createdAt: string
   updatedAt: string
 }
@@ -43,6 +44,7 @@ function toBatchJob(b: ApiBatch): BatchJob {
     lastRunAt: b.lastRunAt,
     lastDuration: b.lastDuration,
     nextRunAt: b.nextRunAt,
+    enabled: b.enabled,
   }
 }
 
@@ -51,25 +53,31 @@ export async function getBatches(signal?: AbortSignal): Promise<BatchJob[]> {
   return data.map(toBatchJob)
 }
 
-export async function getBatchRuns(batchId: string): Promise<BatchRun[]> {
-  const runs = await apiFetch<ApiBatchRun[]>(`/batches/${batchId}/runs`)
-
-  const runsWithLogs = await Promise.all(
-    runs.map(async (run) => {
-      const logs = await apiFetch<ApiBatchLog[]>(`/batches/runs/${run.id}/logs`)
-      const batchRun: BatchRun = {
-        id: run.id,
-        startedAt: run.startedAt,
-        finishedAt: run.finishedAt,
-        status: run.status,
-        duration: run.duration,
-        logs: logs.map((l) => ({ timestamp: l.timestamp, level: l.level, message: l.message })),
-      }
-      return batchRun
-    }),
+export async function getBatchRuns(
+  batchId: string,
+  offset: number,
+  limit: number,
+  signal?: AbortSignal,
+): Promise<{ items: BatchRun[]; total: number }> {
+  const data = await apiFetch<{ items: ApiBatchRun[]; total: number }>(
+    `/batches/${batchId}/runs?offset=${offset}&limit=${limit}`,
+    { signal },
   )
+  return {
+    items: data.items.map((run) => ({
+      id: run.id,
+      startedAt: run.startedAt,
+      finishedAt: run.finishedAt,
+      status: run.status,
+      duration: run.duration,
+    })),
+    total: data.total,
+  }
+}
 
-  return runsWithLogs
+export async function getBatchRunLogs(runId: string): Promise<BatchLogEntry[]> {
+  const logs = await apiFetch<ApiBatchLog[]>(`/batches/runs/${runId}/logs`)
+  return logs.map((l) => ({ timestamp: l.timestamp, level: l.level, message: l.message }))
 }
 
 export async function rerunBatch(batchId: string): Promise<void> {
@@ -81,4 +89,12 @@ export async function updateBatchSchedule(batchId: string, schedule: BatchSchedu
     method: 'PUT',
     body: JSON.stringify(schedule),
   })
+}
+
+export async function updateBatchEnabled(batchId: string, enabled: boolean): Promise<BatchJob> {
+  const data = await apiFetch<ApiBatch>(`/batches/${batchId}/enabled`, {
+    method: 'PATCH',
+    body: JSON.stringify({ enabled }),
+  })
+  return toBatchJob(data)
 }

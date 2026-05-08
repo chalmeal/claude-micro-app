@@ -1,0 +1,1 @@
+ALTER TABLE `batches` ADD `enabled` boolean DEFAULT true NOT NULL;

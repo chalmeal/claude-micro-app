@@ -13,13 +13,22 @@ export const batchesService = {
     return batch
   },
 
-  getRuns: async (batchId: string) => {
-    await batchesService.getById(batchId)
-    return batchesRepository.findRuns(batchId)
+  getRuns: async (batchId: string, offset: number, limit: number) => {
+    const [items, total] = await Promise.all([
+      batchesRepository.findRuns(batchId, offset, limit),
+      batchesRepository.countRuns(batchId),
+    ])
+    return { items, total }
   },
 
   getLogs: async (batchRunId: string) => {
     return batchesRepository.findLogs(batchRunId)
+  },
+
+  updateEnabled: async (id: string, enabled: boolean) => {
+    const batch = await batchesRepository.findById(id)
+    if (!batch) throw new NotFoundError('Batch not found')
+    return batchesRepository.updateEnabled(id, enabled)
   },
 
   updateSchedule: async (id: string, schedule: BatchSchedule) => {

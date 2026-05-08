@@ -11,6 +11,7 @@ type Props = {
 }
 
 const FREQ_LABELS: Record<BatchFrequency, string> = {
+  minutely: '毎分',
   hourly: '毎時',
   daily: '毎日',
   weekly: '毎週',
@@ -20,6 +21,7 @@ const FREQ_LABELS: Record<BatchFrequency, string> = {
 const DOW_LABELS = ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日']
 
 function scheduleText(s: BatchSchedule): string {
+  if (s.frequency === 'minutely') return '毎分'
   if (s.frequency === 'hourly') return '毎時 0分'
   if (s.frequency === 'daily') return `毎日 ${s.time}`
   if (s.frequency === 'weekly') return `毎週 ${DOW_LABELS[s.dayOfWeek ?? 1]} ${s.time}`
@@ -140,7 +142,7 @@ export function BatchScheduleModal({ batch, onClose, onSaved }: Props) {
               </div>
             )}
 
-            {freq !== 'hourly' && (
+            {freq !== 'minutely' && freq !== 'hourly' && (
               <div className="batch-schedule-form__field">
                 <label htmlFor="bs-time">実行時刻</label>
                 <input

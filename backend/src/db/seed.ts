@@ -1,7 +1,7 @@
 import { drizzle } from 'drizzle-orm/mysql2'
 import mysql from 'mysql2/promise'
 import bcrypt from 'bcryptjs'
-import { announcements, grades, users } from './schema/index.js'
+import { announcements, batches, grades, users } from './schema/index.js'
 
 const SUBJECTS = [
   '数学I',
@@ -245,6 +245,16 @@ async function main() {
     }
   }
   console.log(`  ${gradeCount} grades created`)
+
+  console.log('Seeding batches...')
+  await db.insert(batches).values({
+    id: crypto.randomUUID(),
+    name: '死活監視バッチ',
+    description: '毎分ヘルスチェックを行うバッチ。DBサーバーの動作確認のため SELECT 1 を実行する。',
+    status: 'pending',
+    schedule: { frequency: 'minutely', time: '00:00' },
+  })
+  console.log('  1 batch created')
 
   await conn.end()
   console.log('Seed complete.')

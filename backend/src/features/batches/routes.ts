@@ -4,7 +4,7 @@ import type { HonoEnv } from '../../shared/types.js'
 import { batchesService } from './service.js'
 
 const ScheduleSchema = z.object({
-  frequency: z.enum(['hourly', 'daily', 'weekly', 'monthly']),
+  frequency: z.enum(['minutely', 'hourly', 'daily', 'weekly', 'monthly']),
   time: z.string().regex(/^\d{2}:\d{2}$/),
   dayOfWeek: z.number().int().min(0).max(6).optional(),
   dayOfMonth: z.number().int().min(1).max(31).optional(),
@@ -19,6 +19,7 @@ const BatchSchema = z.object({
   lastRunAt: z.date().nullable(),
   lastDuration: z.number().int().nullable(),
   nextRunAt: z.date().nullable(),
+  enabled: z.boolean(),
   createdAt: z.date(),
   updatedAt: z.date(),
 })
@@ -80,12 +81,22 @@ const getBatchRunsRoute = createRoute({
   path: '/{id}/runs',
   tags: ['Batches'],
   summary: 'バッチ実行履歴取得',
-  description: '指定したバッチジョブの実行履歴一覧を返します。',
+  description: '指定したバッチジョブの実行履歴一覧をページネーション付きで返します。',
   security,
-  request: { params: z.object({ id: z.string() }) },
+  request: {
+    params: z.object({ id: z.string() }),
+    query: z.object({
+      offset: z.coerce.number().int().min(0).default(0),
+      limit: z.coerce.number().int().min(1).max(100).default(30),
+    }),
+  },
   responses: {
     200: {
-      content: { 'application/json': { schema: z.array(BatchRunSchema) } },
+      content: {
+        'application/json': {
+          schema: z.object({ items: z.array(BatchRunSchema), total: z.number().int() }),
+        },
+      },
       description: 'バッチ実行履歴一覧',
     },
   },
@@ -122,6 +133,28 @@ const updateBatchScheduleRoute = createRoute({
     200: {
       content: { 'application/json': { schema: BatchSchema } },
       description: 'スケジュール更新後のバッチ情報',
+    },
+  },
+})
+
+const updateBatchEnabledRoute = createRoute({
+  method: 'patch',
+  path: '/{id}/enabled',
+  tags: ['Batches'],
+  summary: 'バッチ有効/無効切り替え',
+  description: '指定したバッチジョブの有効・無効を切り替えます。無効化されたバッチはスケジュール実行されません。',
+  security,
+  request: {
+    params: z.object({ id: z.string() }),
+    body: {
+      content: { 'application/json': { schema: z.object({ enabled: z.boolean() }) } },
+      required: true,
+    },
+  },
+  responses: {
+    200: {
+      content: { 'application/json': { schema: BatchSchema } },
+      description: '更新後のバッチ情報',
     },
   },
 })
@@ -167,8 +200,9 @@ batchesRoutes.openapi(getBatchRoute, async (c) => {
 })
 
 batchesRoutes.openapi(getBatchRunsRoute, async (c) => {
-  const runs = await batchesService.getRuns(c.req.param('id'))
-  return c.json(runs, 200)
+  const { offset, limit } = c.req.valid('query')
+  const result = await batchesService.getRuns(c.req.param('id'), offset, limit)
+  return c.json(result, 200)
 })
 
 batchesRoutes.openapi(getBatchRunLogsRoute, async (c) => {
@@ -179,6 +213,12 @@ batchesRoutes.openapi(getBatchRunLogsRoute, async (c) => {
 batchesRoutes.openapi(updateBatchScheduleRoute, async (c) => {
   const body = c.req.valid('json')
   const item = await batchesService.updateSchedule(c.req.param('id'), body)
+  return c.json(item, 200)
+})
+
+batchesRoutes.openapi(updateBatchEnabledRoute, async (c) => {
+  const { enabled } = c.req.valid('json')
+  const item = await batchesService.updateEnabled(c.req.param('id'), enabled)
   return c.json(item, 200)
 })
 
