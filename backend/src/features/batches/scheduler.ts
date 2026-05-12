@@ -27,6 +27,18 @@ async function tick(): Promise<void> {
   }
 }
 
+export async function runBatch(batchId: string, batchName: string): Promise<void> {
+  if (running.has(batchId)) throw new Error(`Batch ${batchName} is already running`)
+  const runner = RUNNERS[batchName]
+  if (!runner) throw new Error(`No runner registered for batch: ${batchName}`)
+  running.add(batchId)
+  try {
+    await runner(batchId)
+  } finally {
+    running.delete(batchId)
+  }
+}
+
 export function startScheduler(): void {
   tick().catch((err) => console.error('[scheduler] tick error:', err))
   setInterval(() => tick().catch((err) => console.error('[scheduler] tick error:', err)), 60_000)

@@ -194,6 +194,16 @@
   background: #fee2e2;
 }
 
+.batch-btn--primary {
+  border-color: #bfdbfe;
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+}
+.batch-btn--primary:hover:not(:disabled) {
+  border-color: var(--color-primary);
+  background: #dbeafe;
+}
+
 /* toggle */
 .batch-toggle {
   position: relative;

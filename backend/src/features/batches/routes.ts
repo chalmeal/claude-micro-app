@@ -176,7 +176,7 @@ const rerunBatchRoute = createRoute({
           schema: z.object({
             batchId: z.string(),
             runId: z.string(),
-            status: z.literal('running'),
+            status: z.enum(['success', 'failed', 'running']),
           }),
         },
       },

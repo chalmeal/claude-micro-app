@@ -1,6 +1,7 @@
-import { NotFoundError } from '../../shared/errors.js'
+import { BadRequestError, NotFoundError } from '../../shared/errors.js'
 import type { BatchSchedule } from '../../shared/types.js'
 import { batchesRepository } from './repository.js'
+import { runBatch } from './scheduler.js'
 
 export const batchesService = {
   getAll: async () => {
@@ -40,8 +41,16 @@ export const batchesService = {
   rerun: async (id: string) => {
     const batch = await batchesRepository.findById(id)
     if (!batch) throw new NotFoundError('Batch not found')
-    await batchesRepository.updateStatus(id, { status: 'running' })
-    const run = await batchesRepository.createRun(id)
-    return { batchId: id, runId: run.id, status: 'running' }
+    try {
+      await runBatch(id, batch.name)
+    } catch (err) {
+      if (err instanceof Error && err.message.startsWith('No runner')) {
+        throw new BadRequestError(err.message)
+      }
+      throw err
+    }
+    const updated = await batchesRepository.findById(id)
+    const [latestRun] = await batchesRepository.findRuns(id, 0, 1)
+    return { batchId: id, runId: latestRun?.id ?? '', status: updated?.status ?? 'success' }
   },
 }

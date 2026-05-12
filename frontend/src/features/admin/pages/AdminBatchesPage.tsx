@@ -49,18 +49,16 @@ export function AdminBatchesPage() {
   }
 
   async function doRerun(job: BatchJob) {
+    const label = job.status === 'failed' ? '再実行' : '手動実行'
     setRerunning((s) => new Set(s).add(job.id))
     setBatches((prev) => prev.map((b) => (b.id === job.id ? { ...b, status: 'running' } : b)))
     try {
       await rerunBatch(job.id)
-      setBatches((prev) =>
-        prev.map((b) =>
-          b.id === job.id
-            ? { ...b, status: 'success', lastRunAt: new Date().toISOString().replace('T', ' ').slice(0, 19) }
-            : b
-        )
-      )
-      snackbar.show(`「${job.name}」を再実行しました`)
+      refresh()
+      snackbar.show(`「${job.name}」を${label}しました`)
+    } catch {
+      setBatches((prev) => prev.map((b) => (b.id === job.id ? { ...b, status: job.status } : b)))
+      snackbar.show(`${label}に失敗しました`, 'error')
     } finally {
       setRerunning((s) => { const n = new Set(s); n.delete(job.id); return n })
     }
@@ -152,15 +150,13 @@ export function AdminBatchesPage() {
                   >
                     スケジュール
                   </button>
-                  {(job.status === 'failed' || isRerunning) && (
-                    <button
-                      className="batch-btn batch-btn--warn"
-                      onClick={() => setConfirmRerun(job)}
-                      disabled={isRerunning}
-                    >
-                      {isRerunning ? '実行中…' : '再実行'}
-                    </button>
-                  )}
+                  <button
+                    className={`batch-btn ${job.status === 'failed' ? 'batch-btn--warn' : 'batch-btn--primary'}`}
+                    onClick={() => setConfirmRerun(job)}
+                    disabled={isRerunning}
+                  >
+                    {isRerunning ? '実行中…' : job.status === 'failed' ? '再実行' : '手動実行'}
+                  </button>
                 </div>
               </div>
             )
@@ -182,8 +178,8 @@ export function AdminBatchesPage() {
 
       {confirmRerun && (
         <ConfirmDialog
-          title="再実行の確認"
-          message={`「${confirmRerun.name}」を再実行しますか？`}
+          title={`${confirmRerun.status === 'failed' ? '再実行' : '手動実行'}の確認`}
+          message={`「${confirmRerun.name}」を${confirmRerun.status === 'failed' ? '再実行' : '手動実行'}しますか？`}
           details={
             <table className="confirm-detail-table">
               <tbody>
@@ -193,7 +189,7 @@ export function AdminBatchesPage() {
               </tbody>
             </table>
           }
-          confirmLabel="再実行する"
+          confirmLabel={confirmRerun.status === 'failed' ? '再実行する' : '手動実行する'}
           onConfirm={() => {
             const job = confirmRerun
             setConfirmRerun(null)
