@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react
 import * as authApi from '@/features/auth/api/login'
 import { clearToken } from '@/shared/api/client'
 import { AuthContext, type AuthContextValue } from '@/features/auth/hooks/authContext'
+import { useSnackbar } from '@/shared/hooks/useSnackbar'
 import type { LoginCredentials, User } from '@/features/auth/types'
 
 const STORAGE_KEY = 'claude-micro-app:auth-user'
@@ -17,6 +18,7 @@ function readStoredUser(): User | null {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(() => readStoredUser())
+  const { show } = useSnackbar()
 
   useEffect(() => {
     if (user) {
@@ -25,6 +27,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem(STORAGE_KEY)
     }
   }, [user])
+
+  useEffect(() => {
+    const handleUnauthorized = () => {
+      clearToken()
+      setUser(null)
+      show('セッションの有効期限が切れました。再度ログインしてください。', 'error')
+    }
+    window.addEventListener('auth:unauthorized', handleUnauthorized)
+    return () => window.removeEventListener('auth:unauthorized', handleUnauthorized)
+  }, [show])
 
   const login = useCallback(async (credentials: LoginCredentials) => {
     const loggedInUser = await authApi.login(credentials)

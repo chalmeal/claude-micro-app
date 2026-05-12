@@ -20,6 +20,9 @@ async function attempt<T>(path: string, init: RequestInit, headers: Record<strin
   const res = await fetch(`/api${path}`, { ...init, headers })
 
   if (!res.ok) {
+    if (res.status === 401) {
+      window.dispatchEvent(new CustomEvent('auth:unauthorized'))
+    }
     const text = await res.text().catch(() => '')
     let message = `HTTP ${res.status}`
     try {

@@ -1,6 +1,11 @@
 import { render, screen } from '@testing-library/react'
 import { AuthProvider } from '../AuthProvider'
 import { useAuth } from '@/features/auth/hooks/useAuth'
+import { SnackbarProvider } from '@/shared/components/Snackbar'
+
+function renderWithSnackbar(ui: React.ReactElement) {
+  return render(<SnackbarProvider>{ui}</SnackbarProvider>)
+}
 
 const STORAGE_KEY = 'claude-micro-app:auth-user'
 
@@ -21,7 +26,7 @@ describe('AuthProvider', () => {
   })
 
   it('localStorage にユーザーがない場合は未認証状態で起動する', () => {
-    render(
+    renderWithSnackbar(
       <AuthProvider>
         <AuthConsumer />
       </AuthProvider>,
@@ -34,7 +39,7 @@ describe('AuthProvider', () => {
     const storedUser = { id: '1', name: 'テスト', email: 'test@example.com', role: 'member' }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(storedUser))
 
-    render(
+    renderWithSnackbar(
       <AuthProvider>
         <AuthConsumer />
       </AuthProvider>,
@@ -47,7 +52,7 @@ describe('AuthProvider', () => {
     const adminUser = { id: '2', name: '管理者', email: 'admin@example.com', role: 'admin' }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(adminUser))
 
-    render(
+    renderWithSnackbar(
       <AuthProvider>
         <AuthConsumer />
       </AuthProvider>,
@@ -59,7 +64,7 @@ describe('AuthProvider', () => {
     const memberUser = { id: '3', name: 'メンバー', email: 'member@example.com', role: 'member' }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(memberUser))
 
-    render(
+    renderWithSnackbar(
       <AuthProvider>
         <AuthConsumer />
       </AuthProvider>,
@@ -70,7 +75,7 @@ describe('AuthProvider', () => {
   it('localStorage の JSON が壊れている場合は未認証で起動する', () => {
     localStorage.setItem(STORAGE_KEY, 'invalid-json')
 
-    render(
+    renderWithSnackbar(
       <AuthProvider>
         <AuthConsumer />
       </AuthProvider>,
@@ -79,7 +84,7 @@ describe('AuthProvider', () => {
   })
 
   it('children を表示する', () => {
-    render(
+    renderWithSnackbar(
       <AuthProvider>
         <p>子コンテンツ</p>
       </AuthProvider>,
@@ -91,7 +96,7 @@ describe('AuthProvider', () => {
     const user = { id: '1', name: 'テスト', email: 'test@example.com', role: 'member' as const }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(user))
 
-    render(
+    renderWithSnackbar(
       <AuthProvider>
         <AuthConsumer />
       </AuthProvider>,
