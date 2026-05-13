@@ -11,6 +11,7 @@
 ```
 claude-micro-app/          # ルート（workspaces 管理）
 ├── package.json           # npm workspaces の定義
+├── docs/                  # 設計書（機能・画面・API・DB）
 ├── frontend/              # React アプリ（Vite + React 18 + TypeScript）
 │   ├── package.json
 │   ├── index.html
@@ -18,11 +19,13 @@ claude-micro-app/          # ルート（workspaces 管理）
 │   ├── tsconfig*.json
 │   ├── eslint.config.js
 │   └── src/
-└── backend/               # Hono API サーバ（Node.js + TypeScript）
-    ├── package.json
-    ├── tsconfig.json
-    ├── drizzle.config.ts
-    └── src/
+├── backend/               # Hono API サーバ（Node.js + TypeScript）
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── drizzle.config.ts
+│   └── src/
+└── .claude/
+    └── skills/            # Claude Code カスタムスキル
 ```
 
 ## 開発コマンド
@@ -256,6 +259,7 @@ backend/src/
 | 成績管理 | `/api/grades` | 要認証 |
 | お知らせ管理 | `/api/announcements` | 要認証（書き込みは admin のみ） |
 | バッチ管理 | `/api/batches` | admin のみ |
+| 監査ログ | `/api/audit-logs` | admin のみ |
 
 ### Swagger / OpenAPI
 
@@ -286,6 +290,41 @@ backend/src/
 | `SMTP_PORT` | SMTP サーバポート（開発: `1025` = Mailhog） |
 | `SMTP_FROM` | 送信元メールアドレス |
 | `APP_URL` | フロントエンドの URL（リセットメールのリンク生成に使用） |
+
+---
+
+## 設計書 (docs/)
+
+新機能の実装前に設計書を作成し、`docs/` 配下で管理する。設計書は Claude が実装時のコンテキストとして読み込む。
+
+### ディレクトリ構成・命名規則
+
+ドメイン名（英語スラッグ）ごとにフォルダを切る。
+
+```
+docs/
+├── features/<slug>/<slug>.md     # 機能設計書（ユーザーストーリー・要件・受け入れ条件）
+├── screens/<slug>/<screen>.md    # 画面設計書（ワイヤーフレーム・操作・遷移）
+├── api/<slug>/<slug>.md          # API設計書（エンドポイント・リクエスト/レスポンス）
+└── database/<slug>/<slug>.md     # DB設計書（テーブル定義・インデックス・Drizzleスキーマ）
+```
+
+例（orders ドメイン）:
+```
+docs/features/orders/orders.md
+docs/screens/orders/list.md
+docs/screens/orders/detail.md
+docs/api/orders/orders.md
+docs/database/orders/orders.md
+```
+
+### 開発フロー
+
+```
+/design-doc          要件をヒアリングしながら設計書を対話的に作成
+    ↓
+/implement-design    設計書を読み込んで backend + frontend を実装
+```
 
 ---
 

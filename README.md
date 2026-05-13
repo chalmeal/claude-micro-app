@@ -106,6 +106,24 @@ npm run dev
 | --- | --- |
 | http://localhost:8025 | Mailhog Web UI |
 
+## 開発フロー（AI駆動）
+
+Claude Code スキルを使った設計 → 実装のフローです。
+
+```
+/design-doc          要件をヒアリングしながら設計書（docs/）を対話的に作成
+    ↓
+/implement-design    docs/ の設計書を読み込んで backend + frontend を実装
+```
+
+| スキル | 起動ワード例 | 説明 |
+| --- | --- | --- |
+| `/design-doc` | 「〇〇の設計書を作成して」 | 機能設計書・画面設計書・API設計書・DB設計書を順番に作成 |
+| `/implement-design` | 「〇〇の設計書を実装して」 | `docs/` の設計書を読み込んで backend + frontend を実装 |
+| `/add-feature` | 「〇〇機能を追加して」 | 設計書なしで CRUD 機能を一式追加（ヒアリングベース） |
+
+---
+
 ## アーキテクチャ
 
 ### モノレポ構成
@@ -113,6 +131,7 @@ npm run dev
 ```
 claude-micro-app/
 ├── package.json        # npm workspaces の定義
+├── docs/               # 設計書（features / screens / api / database）
 ├── frontend/           # React アプリ（Vite + React 18 + TypeScript）
 └── backend/            # Hono API サーバ（Node.js + TypeScript）
 ```
